@@ -14,11 +14,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
 @Entity
-@Table(name = "application_user")
+@Table(name = "account")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationUser {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,7 +35,7 @@ public class ApplicationUser {
     @OneToOne
     private Role role;
 
-    public ApplicationUser(String username, String password, String email) {
+    public Account(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;

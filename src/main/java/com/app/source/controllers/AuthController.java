@@ -1,7 +1,7 @@
 package com.app.source.controllers;
 
 import com.app.source.configuration.security.services.UserDetailsImpl;
-import com.app.source.entities.ApplicationUser;
+import com.app.source.entities.Account;
 import com.app.source.entities.Role;
 import com.app.source.enums.RoleEnum;
 import com.app.source.exceptions.CrudException;
@@ -82,7 +82,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<DataResponse<ApplicationUser>> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws UsernameAlreadyExistedException, EmailAlreadyExistedException {
+    public ResponseEntity<DataResponse<Account>> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws UsernameAlreadyExistedException, EmailAlreadyExistedException {
         RuntimeException runtimeException = new RuntimeException("Error: Role is not found.");
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername()))) {
             throw new UsernameAlreadyExistedException();
@@ -93,7 +93,7 @@ public class AuthController {
         }
 
         // Create new user's account
-        ApplicationUser user = new ApplicationUser(signUpRequest.getUsername(),
+        Account user = new Account(signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getEmail());
 
