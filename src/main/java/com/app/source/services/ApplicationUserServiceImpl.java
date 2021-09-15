@@ -1,6 +1,6 @@
 package com.app.source.services;
 
-import com.app.source.entities.ApplicationUser;
+import com.app.source.entities.Account;
 import com.app.source.repositories.ApplicationUserRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     }
 
     @Override
-    public List<ApplicationUser> getAllUsers() {
+    public List<Account> getAllUsers() {
         return applicationUserRepository.findAll();
     }
 }

@@ -1,6 +1,6 @@
 package com.app.source.configuration.security.services;
 
-import com.app.source.entities.ApplicationUser;
+import com.app.source.entities.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +34,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(ApplicationUser user) {
+    public static UserDetailsImpl build(Account user) {
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName().name()));
         return new UserDetailsImpl(
                 user.getId(),
