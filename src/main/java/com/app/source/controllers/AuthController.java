@@ -12,7 +12,7 @@ import com.app.source.payload.request.SignupRequest;
 import com.app.source.payload.response.DataResponse;
 import com.app.source.payload.response.JwtResponse;
 import com.app.source.payload.response.Response;
-import com.app.source.repositories.ApplicationUserRepository;
+import com.app.source.repositories.AccountRepository;
 import com.app.source.repositories.RoleRepository;
 import com.app.source.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
 
-    private final ApplicationUserRepository userRepository;
+    private final AccountRepository userRepository;
 
     private final RoleRepository roleRepository;
 
@@ -50,7 +50,7 @@ public class AuthController {
 
     private final JwtUtils jwtUtils;
 
-    public AuthController(AuthenticationManager authenticationManager, ApplicationUserRepository userRepository,
+    public AuthController(AuthenticationManager authenticationManager, AccountRepository userRepository,
                           RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;

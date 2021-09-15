@@ -4,6 +4,6 @@ import com.app.source.entities.Account;
 
 import java.util.List;
 
-public interface ApplicationUserService {
+public interface AccountService {
     List<Account> getAllUsers();
 }
