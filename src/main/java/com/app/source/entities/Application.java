@@ -1,6 +1,6 @@
 package com.app.source.entities;
 
-import com.sun.istack.Nullable;
+import org.springframework.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

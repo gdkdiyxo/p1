@@ -111,8 +111,7 @@ public class AuthController {
         // Create new user's account
         Account account = new Account(signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getFirstName(),
-                signUpRequest.getLastName(),
+                signUpRequest.getName(),
                 signUpRequest.getPhone());
         account = accountRepository.save(account);
         String strRole = signUpRequest.getRole();
