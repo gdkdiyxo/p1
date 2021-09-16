@@ -58,10 +58,14 @@ public class Application implements Serializable {
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
 
-    @Column(name = "is_removed")
-    private boolean isRemoved;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
-    public Application(String experience, String cvKey) {
+    @Column(name = "is_disabled")
+    private boolean disabled;
+
+    public Application(String experience, String cvKey){
         this.experience = experience;
         this.cvKey = cvKey;
     }

@@ -52,8 +52,8 @@ public class Job implements Serializable {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "is_removed")
-    private boolean isRemoved;
+    @Column(name = "is_disabled")
+    private boolean disabled;
 
     public Job(String name, String description, String title) {
         this.name = name;
