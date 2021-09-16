@@ -34,7 +34,7 @@ public class SignupRequest {
 
 
     // Constructor or admin creation
-    public SignupRequest(String email, String password, String name,  String role, String phone) {
+    public SignupRequest(String email, String password, String name, String role, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -43,7 +43,7 @@ public class SignupRequest {
     }
 
     // constructor for representative
-    public SignupRequest(String email, String password, String name,  String role, String phone, Long companyId) {
+    public SignupRequest(String email, String password, String name, String role, String phone, Long companyId) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -53,7 +53,7 @@ public class SignupRequest {
     }
 
     // constructor for student
-    public SignupRequest(String email, String password, String name,String role, String phone, String address, String studentCode, Long majorId) {
+    public SignupRequest(String email, String password, String name, String role, String phone, String address, String studentCode, Long majorId) {
         this.email = email;
         this.password = password;
         this.name = name;
