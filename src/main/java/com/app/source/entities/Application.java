@@ -23,12 +23,6 @@ public class Application {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "student_id")
-    private Long studentId;
-
-    @Column(name = "job_id")
-    private Long jobId;
-
     @Column(name = "experience", length=1000)
     private String experience;
 
@@ -38,14 +32,14 @@ public class Application {
     @Column(name = "is_company_accepted")
     private boolean isCompanyAccepted;
 
-    @Column(name = "acceptedd_at")
+    @Column(name = "accepted_at")
     private Date acceptedAt;
 
     @Column(name = "is_student_comfirmed")
     private boolean isStudentComfirmed;
 
-    @Column(name = "comfirmed_at")
-    private Date comfirmeddAt;
+    @Column(name = "confirmed_at")
+    private Date confirmedAt;
 
     @OneToOne
     private Evaluation evaluation;
@@ -60,8 +54,12 @@ public class Application {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @Column(name = "is_removed")
-    private boolean isRemoved;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @Column(name = "is_disabled")
+    private boolean disabled;
 
     public Application(String experience, String cvKey){
         this.experience = experience;

@@ -32,9 +32,6 @@ public class Job {
     @Column(name = "title", length=250)
     private String title;
 
-    @Column(name = "company_id")
-    private Long companyId;
-
     @ManyToOne
     private Company company;
 
@@ -49,8 +46,8 @@ public class Job {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "is_removed")
-    private boolean isRemoved;
+    @Column(name = "is_disabled")
+    private boolean isDisabled;
 
     public Job(String name, String description, String title) {
         this.name = name;

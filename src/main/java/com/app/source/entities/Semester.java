@@ -43,8 +43,8 @@ public class Semester {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "is_removed")
-    private boolean isRemoved;
+    @Column(name = "is_disabled")
+    private boolean disabled;
 
     public Semester(String name) {this.name = name;}
 }
