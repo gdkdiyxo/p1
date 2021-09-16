@@ -43,4 +43,28 @@ public class SignupRequest {
         this.role = role;
         this.phone = phone;
     }
+
+    // constructor for representative
+    public SignupRequest(String email, String password, String firstName, String lastName, String role, String phone, Long companyId) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.phone = phone;
+        this.companyId = companyId;
+    }
+
+    // constructor for student
+    public SignupRequest(String email, String password, String firstName, String lastName, String role, String phone, String address, String studentCode, Long majorId) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.phone = phone;
+        this.address = address;
+        this.studentCode = studentCode;
+        this.majorId = majorId;
+    }
 }

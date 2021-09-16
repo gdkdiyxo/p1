@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "account")
+@Table(name = "major")
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -39,4 +39,8 @@ public class Major {
 
     @Column(name = "is_disabled")
     private boolean disabled;
+
+    public Major(String name) {
+        this.name = name;
+    }
 }
