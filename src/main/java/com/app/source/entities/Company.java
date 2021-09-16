@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -43,12 +44,8 @@ public class Company implements Serializable {
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "company_semester",
-            joinColumns = @JoinColumn(name = "company_id"),
-            inverseJoinColumns = @JoinColumn(name = "semester_id"))
-    private Set<Semester> semesters = new HashSet<>();
+    @OneToMany(mappedBy = "company")
+    private List<Job> jobList;
     //----------[End]Mapping relationship----------
 
     public Company(String name, String description) {

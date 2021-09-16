@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -53,6 +54,13 @@ public class Job implements Serializable {
 
     @ManyToMany(mappedBy = "jobs")
     private Set<Major> majors = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "semester_id", nullable = false)
+    private Semester semester;
+
+    @OneToMany(mappedBy = "job")
+    private List<Application> applicationList;
     //----------[End]Mapping relationship----------
 
     public Job(String name, String description, String title) {

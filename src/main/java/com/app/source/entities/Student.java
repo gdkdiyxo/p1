@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "student")
@@ -35,6 +36,9 @@ public class Student implements Serializable {
     @ManyToOne
     @JoinColumn(name = "semester_id", nullable = false)
     private Semester semester;
+
+    @OneToMany(mappedBy = "student")
+    private List<Application> applicationList;
     //----------[End]Mapping relationship----------
 
 }

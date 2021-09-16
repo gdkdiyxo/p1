@@ -1,5 +1,6 @@
 package com.app.source.entities;
 
+import com.sun.istack.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,9 +51,11 @@ public class Account implements Serializable {
     private boolean isDisabled;
 
     //----------[Start]Mapping relationship----------
+    @Nullable
     @OneToOne(mappedBy = "account")
     private Student student;
 
+    @Nullable
     @OneToOne(mappedBy = "account")
     private Representative representative;
     //----------[End]Mapping relationship----------

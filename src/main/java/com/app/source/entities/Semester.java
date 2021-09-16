@@ -56,8 +56,8 @@ public class Semester implements Serializable {
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @ManyToMany(mappedBy = "semesters")
-    private Set<Company> companies = new HashSet<>();
+    @OneToMany(mappedBy = "semester")
+    private Set<Student> students = new HashSet<>();
     //----------[End]Mapping relationship----------
 
 }

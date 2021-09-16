@@ -1,5 +1,6 @@
 package com.app.source.entities;
 
+import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,6 +55,7 @@ public class Application implements Serializable {
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
+    @Nullable
     @OneToOne(mappedBy = "application")
     private Evaluation evaluation;
 

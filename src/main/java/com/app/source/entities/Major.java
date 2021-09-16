@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -44,6 +45,9 @@ public class Major implements Serializable {
             joinColumns = @JoinColumn(name = "major_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))
     private Set<Job> jobs = new HashSet<>();
+
+    @OneToMany(mappedBy = "student")
+    private List<Student> studentList;
     //----------[End]Mapping relationship----------
 
     public Major(String name) {
