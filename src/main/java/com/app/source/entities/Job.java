@@ -8,7 +8,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "job")
@@ -17,37 +20,37 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class Job {
+public class Job implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", length=250)
+    @Column(name = "name", length = 250, nullable = false)
     private String name;
 
-    @Column(name = "description", length=2000)
+    @Column(name = "description", length = 2000, nullable = false)
     private String description;
 
-    @Column(name = "title", length=250)
+    @Column(name = "title", length = 250, nullable = false)
     private String title;
 
-    @Column(name = "company_id")
-    private Long companyId;
-
+    //----------[Start]Mapping relationship----------
     @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @ManyToOne
-    private Major major;
+    @ManyToMany(mappedBy = "jobs")
+    private Set<Major> majors = new HashSet<>();
+    //----------[End]Mapping relationship----------
 
     @CreatedDate
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @Column(name = "is_removed")
     private boolean isRemoved;

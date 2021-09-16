@@ -8,7 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "evaluation")
@@ -17,28 +18,38 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class Evaluation {
+public class Evaluation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "grade")
+    @Column(name = "grade", nullable = false)
     private Long grade;
 
-    @Column(name = "comment", length=500)
+    @Column(name = "comment", length = 500)
     private String comment;
 
     @CreatedDate
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @Column(name = "is_pass")
     private boolean isPass;
 
-    public Evaluation(String comment) {this.comment = comment;}
+    @Column(name = "application_id")
+    private int applicationId;
+
+    //----------[Start]Mapping relationship----------
+    @OneToOne(mappedBy = "application")
+    private Application application;
+    //----------[End]Mapping relationship----------
+
+    public Evaluation(String comment) {
+        this.comment = comment;
+    }
 }

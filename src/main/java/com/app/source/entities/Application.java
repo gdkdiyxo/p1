@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "application")
@@ -17,19 +17,13 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 
-public class Application {
+public class Application implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "student_id")
-    private Long studentId;
-
-    @Column(name = "job_id")
-    private Long jobId;
-
-    @Column(name = "experience", length=1000)
+    @Column(name = "experience", length = 1000)
     private String experience;
 
     @Column(name = "cv_key", nullable = false)
@@ -38,32 +32,36 @@ public class Application {
     @Column(name = "is_company_accepted")
     private boolean isCompanyAccepted;
 
-    @Column(name = "acceptedd_at")
-    private Date acceptedAt;
+    @Column(name = "accepted_at")
+    private Timestamp acceptedAt;
 
     @Column(name = "is_student_comfirmed")
     private boolean isStudentComfirmed;
 
     @Column(name = "comfirmed_at")
-    private Date comfirmeddAt;
+    private Timestamp comfirmedAt;
 
-    @OneToOne
+    //----------[Start]Mapping relationship----------
+    @OneToOne(mappedBy = "evaluation")
     private Evaluation evaluation;
 
     @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
     private Student student;
 
     @ManyToOne
+    @JoinColumn(name = "job_id", nullable = false)
     private Job job;
+    //----------[End]Mapping relationship----------
 
     @CreatedDate
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
 
     @Column(name = "is_removed")
     private boolean isRemoved;
 
-    public Application(String experience, String cvKey){
+    public Application(String experience, String cvKey) {
         this.experience = experience;
         this.cvKey = cvKey;
     }

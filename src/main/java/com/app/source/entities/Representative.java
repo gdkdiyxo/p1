@@ -4,28 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "representative")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Representative {
+public class Representative implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    //----------[Start]Mapping relationship----------
+    @OneToOne(mappedBy = "company")
     private Company company;
 
-    @OneToOne
+    @OneToOne(mappedBy = "account")
     private Account account;
+    //----------[End]Mapping relationship----------
+
 }

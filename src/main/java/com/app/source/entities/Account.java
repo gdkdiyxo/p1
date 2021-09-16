@@ -6,23 +6,17 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "account")
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Account {
+public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,40 +29,36 @@ public class Account {
     @Column(name = "password", length = 1024)
     private String password;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "phone", length = 15)
+    @Column(name = "phone", length = 13)
     private String phone;
 
     @Column(name = "is_admin")
     private boolean admin;
-
+    //----------[Start]Mapping relationship----------
     @OneToOne(mappedBy = "account")
     private Student student;
 
     @OneToOne(mappedBy = "account")
     private Representative representative;
-
+    //----------[End]Mapping relationship----------
     @CreatedDate
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @Column(name = "is_disabled")
-    private boolean disabled;
+    private boolean isDisabled;
 
-    public Account(String email, String password, String firstName, String lastName, String phone) {
+    public Account(String email, String password, String name, String phone) {
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.phone = phone;
     }
 }
