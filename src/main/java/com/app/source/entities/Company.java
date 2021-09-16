@@ -28,6 +28,9 @@ public class Company {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "description", length = 255)
     private String description;
 
@@ -41,4 +44,9 @@ public class Company {
 
     @Column(name = "is_disabled")
     private boolean disabled;
+
+    public Company(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

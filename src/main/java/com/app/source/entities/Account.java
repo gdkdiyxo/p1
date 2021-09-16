@@ -18,7 +18,7 @@ import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Entity
-@Table(name = "user_account")
+@Table(name = "account")
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
