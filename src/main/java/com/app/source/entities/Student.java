@@ -35,4 +35,7 @@ public class Student {
 
     @ManyToOne
     private Major major;
+
+    @ManyToOne
+    private Semester semester;
 }
