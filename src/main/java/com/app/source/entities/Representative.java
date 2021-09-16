@@ -11,33 +11,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 
 @Entity
-@Table(name = "application_user")
+@Table(name = "representative")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationUser {
+public class Representative {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "username", unique = true)
-    private String username;
-    @Column(name = "password")
-    private String password;
-
-    @Email
-    @Column(name = "email", unique = true)
-    private String email;
 
     @OneToOne
-    private Role role;
+    private Company company;
 
-    public ApplicationUser(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+    @OneToOne
+    private Account account;
 }

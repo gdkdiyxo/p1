@@ -1,5 +1,6 @@
 package com.app.source.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,46 +13,26 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Entity
-@Table(name = "account")
+@Table(name = "company")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Account {
+public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Email
-    @Column(name = "email", length = 320, unique = true)
-    private String email;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "password", length = 1024)
-    private String password;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "phone", length = 15)
-    private String phone;
-
-    @Column(name = "is_admin")
-    private boolean admin;
-
-    @OneToOne(mappedBy = "account")
-    private Student student;
-
-    @OneToOne(mappedBy = "account")
-    private Representative representative;
+    @Column(name = "description", length = 255)
+    private String description;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -64,11 +45,8 @@ public class Account {
     @Column(name = "is_disabled")
     private boolean disabled;
 
-    public Account(String email, String password, String firstName, String lastName, String phone) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
+    public Company(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 }

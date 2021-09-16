@@ -12,46 +12,22 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Entity
-@Table(name = "account")
+@Table(name = "major")
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Account {
+public class Major {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Email
-    @Column(name = "email", length = 320, unique = true)
-    private String email;
-
-    @Column(name = "password", length = 1024)
-    private String password;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "phone", length = 15)
-    private String phone;
-
-    @Column(name = "is_admin")
-    private boolean admin;
-
-    @OneToOne(mappedBy = "account")
-    private Student student;
-
-    @OneToOne(mappedBy = "account")
-    private Representative representative;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -64,11 +40,7 @@ public class Account {
     @Column(name = "is_disabled")
     private boolean disabled;
 
-    public Account(String email, String password, String firstName, String lastName, String phone) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
+    public Major(String name) {
+        this.name = name;
     }
 }
