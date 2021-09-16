@@ -3,7 +3,10 @@ package com.app.source;
 import com.app.source.controllers.AuthController;
 import com.app.source.entities.Role;
 import com.app.source.enums.RoleEnum;
+import com.app.source.exceptions.CompanyNotExistedException;
 import com.app.source.exceptions.EmailAlreadyExistedException;
+import com.app.source.exceptions.EmptyRoleException;
+import com.app.source.exceptions.MajorNotExistedException;
 import com.app.source.exceptions.UsernameAlreadyExistedException;
 import com.app.source.payload.request.SignupRequest;
 import com.app.source.repositories.AccountRepository;
@@ -12,7 +15,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -41,24 +44,22 @@ public class Seeder {
     }
 
     private void seedRole() {
-        List<Role> roles = new ArrayList<Role>() {{
-            add(new Role(null, RoleEnum.SYS_ADMIN));
-            add(new Role(null, RoleEnum.COMPANY_REPRESENTATIVE));
-            add(new Role(null, RoleEnum.STUDENT));
-        }};
+
+        List<Role> roles = Arrays.asList(
+                new Role(null, RoleEnum.SYS_ADMIN),
+                new Role(null, RoleEnum.COMPANY_REPRESENTATIVE),
+                new Role(null, RoleEnum.STUDENT));
         roleRepository.saveAll(roles);
     }
 
     private void seedAccount() {
-        List<SignupRequest> signupRequests = new ArrayList<SignupRequest>() {{
-            add(new SignupRequest("admin", "anonymousvhb@gmail.com", "123456", "SYS_ADMIN"));
-        }};
+        List<SignupRequest> signupRequests = Arrays.asList(
+                new SignupRequest("thanhthu0321@gmail.com", "123456", "Thu", "Cao", "SYS_ADMIN", "0988388736"));
+
         signupRequests.stream().forEach(signupRequest -> {
             try {
                 authController.registerUser(signupRequest);
-            } catch (UsernameAlreadyExistedException e) {
-                e.printStackTrace();
-            } catch (EmailAlreadyExistedException e) {
+            } catch (UsernameAlreadyExistedException | EmailAlreadyExistedException | EmptyRoleException | CompanyNotExistedException | MajorNotExistedException e) {
                 e.printStackTrace();
             }
         });
