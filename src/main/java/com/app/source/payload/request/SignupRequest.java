@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 public class SignupRequest {
     private String email;
     private String password;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String role;
     private String phone;
     /**
@@ -35,32 +34,29 @@ public class SignupRequest {
 
 
     // Constructor or admin creation
-    public SignupRequest(String email, String password, String firstName, String lastName, String role, String phone) {
+    public SignupRequest(String email, String password, String name, String role, String phone) {
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.role = role;
         this.phone = phone;
     }
 
     // constructor for representative
-    public SignupRequest(String email, String password, String firstName, String lastName, String role, String phone, Long companyId) {
+    public SignupRequest(String email, String password, String name, String role, String phone, Long companyId) {
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.role = role;
         this.phone = phone;
         this.companyId = companyId;
     }
 
     // constructor for student
-    public SignupRequest(String email, String password, String firstName, String lastName, String role, String phone, String address, String studentCode, Long majorId) {
+    public SignupRequest(String email, String password, String name, String role, String phone, String address, String studentCode, Long majorId) {
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.role = role;
         this.phone = phone;
         this.address = address;

@@ -10,27 +10,31 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "company")
+@Table(name = "semester")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Company implements Serializable {
+
+public class Semester implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", length = 250, nullable = false)
     private String name;
 
-    @Column(name = "description", length = 500)
-    private String description;
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
+
+    @Column(name = "end_date", nullable = false)
+    private Date endDate;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -43,13 +47,20 @@ public class Company implements Serializable {
     @Column(name = "is_disabled")
     private boolean disabled;
 
+    public Semester(String name) {
+        this.name = name;
+    }
+
     //----------[Start]Mapping relationship----------
-    @OneToMany(mappedBy = "company")
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "semester_job",
+            joinColumns = @JoinColumn(name = "semester_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id"))
     private Set<Job> jobs;
+
+    @OneToMany(mappedBy = "semester")
+    private Set<Student> students;
     //----------[End]Mapping relationship----------
 
-    public Company(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 }

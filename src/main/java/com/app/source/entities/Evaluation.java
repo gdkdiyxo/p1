@@ -10,27 +10,25 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
-@Table(name = "company")
+@Table(name = "evaluation")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Company implements Serializable {
+
+public class Evaluation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "grade", nullable = false)
+    private Long grade;
 
-    @Column(name = "description", length = 500)
-    private String description;
+    @Column(name = "comment", length = 500)
+    private String comment;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -40,16 +38,15 @@ public class Company implements Serializable {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "is_disabled")
-    private boolean disabled;
+    @Column(name = "is_pass")
+    private boolean isPass;
 
     //----------[Start]Mapping relationship----------
-    @OneToMany(mappedBy = "company")
-    private Set<Job> jobs;
+    @OneToOne(mappedBy = "evaluation")
+    private Application application;
     //----------[End]Mapping relationship----------
 
-    public Company(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Evaluation(String comment) {
+        this.comment = comment;
     }
 }
