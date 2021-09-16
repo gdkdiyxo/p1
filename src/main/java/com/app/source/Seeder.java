@@ -63,11 +63,11 @@ public class Seeder {
     private void seedAccount() {
         List<SignupRequest> signupRequests = Arrays.asList(
                 new SignupRequest("thanhthu0321@gmail.com", "123456", "Thu", "SYS_ADMIN", "0988988796"),
-                new SignupRequest("student1@gmailcom", "123456", "Sutdent", "First", "STUDENT", "0123456789", "123 Street, Ward 11, A District, ABC city", "SE150099", Long.valueOf(1)),
-                new SignupRequest("student2@gmailcom", "123456", "Sutdent", "Second", "STUDENT", "9876443210", "124 Street, Ward 11, A District, ABC city", "SE150098", Long.valueOf(1)),
-                new SignupRequest("student3@gmailcom", "123456", "Sutdent", "Third", "STUDENT", "0123416789", "125 Street, Ward 11, A District, ABC city", "BA150097", Long.valueOf(2)),
-                new SignupRequest("representative1@gmail.com", "123456", "Representative", "First", "COMPANY_REPRESENTATIVE", "1237894560", Long.valueOf(1)),
-                new SignupRequest("representative2@gmail.com", "123456", "Representative", "Second", "COMPANY_REPRESENTATIVE", "1237894560", Long.valueOf(2)));
+                new SignupRequest("student1@gmailcom", "123456", "Sutdent", "First", "STUDENT", "123 Street, Ward 11, A District, ABC city", "SE150099", Long.valueOf(1)),
+                new SignupRequest("student2@gmailcom", "123456", "Sutdent", "Second", "STUDENT", "124 Street, Ward 11, A District, ABC city", "SE150098", Long.valueOf(1)),
+                new SignupRequest("studentd3@gmailcom", "123456", "Sutdent", "Third", "STUDENT", "125 Street, Ward 11, A District, ABC city", "BA150097", Long.valueOf(2)),
+                new SignupRequest("representative1@gmail.com", "123456", "REPRESENTATIVE First", "COMPANY_REPRESENTATIVE", "1237894560", Long.valueOf(1)),
+                new SignupRequest("representative2@gmail.com", "123456", "REPRESENTATIVE Second", "COMPANY_REPRESENTATIVE", "1237894560", Long.valueOf(2)));
 
         signupRequests.stream().forEach(signupRequest -> {
             try {
