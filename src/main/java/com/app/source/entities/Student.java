@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "student")
@@ -26,19 +27,17 @@ public class Student implements Serializable {
     private String studentCode;
 
     //----------[Start]Mapping relationship----------
-    @OneToOne(mappedBy = "student")
+    @OneToOne
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "major_id", nullable = false)
     private Major major;
 
     @ManyToOne
-    @JoinColumn(name = "semester_id", nullable = false)
     private Semester semester;
 
     @OneToMany(mappedBy = "student")
-    private List<Application> applicationList;
+    private Set<Application> applications;
     //----------[End]Mapping relationship----------
 
 }

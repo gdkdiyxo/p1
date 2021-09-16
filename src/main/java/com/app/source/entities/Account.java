@@ -40,7 +40,7 @@ public class Account implements Serializable {
     private boolean admin;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
     @LastModifiedDate
@@ -51,11 +51,9 @@ public class Account implements Serializable {
     private boolean isDisabled;
 
     //----------[Start]Mapping relationship----------
-    @Nullable
     @OneToOne(mappedBy = "account")
     private Student student;
 
-    @Nullable
     @OneToOne(mappedBy = "account")
     private Representative representative;
     //----------[End]Mapping relationship----------

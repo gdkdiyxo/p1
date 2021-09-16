@@ -41,9 +41,6 @@ public class Evaluation implements Serializable {
     @Column(name = "is_pass")
     private boolean isPass;
 
-    @Column(name = "application_id")
-    private int applicationId;
-
     //----------[Start]Mapping relationship----------
     @OneToOne(mappedBy = "evaluation")
     private Application application;

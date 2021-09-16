@@ -44,10 +44,10 @@ public class Major implements Serializable {
             name = "job_major",
             joinColumns = @JoinColumn(name = "major_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))
-    private Set<Job> jobs = new HashSet<>();
+    private Set<Job> jobs;
 
-    @OneToMany(mappedBy = "student")
-    private List<Student> studentList;
+    @OneToMany(mappedBy = "major")
+    private Set<Student> students;
     //----------[End]Mapping relationship----------
 
     public Major(String name) {

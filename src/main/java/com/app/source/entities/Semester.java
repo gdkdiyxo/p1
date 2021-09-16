@@ -52,12 +52,15 @@ public class Semester implements Serializable {
     }
 
     //----------[Start]Mapping relationship----------
-    @ManyToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "semester_job",
+            joinColumns = @JoinColumn(name = "semester_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id"))
+    private Set<Job> jobs;
 
     @OneToMany(mappedBy = "semester")
-    private Set<Student> students = new HashSet<>();
+    private Set<Student> students;
     //----------[End]Mapping relationship----------
 
 }

@@ -19,10 +19,10 @@ public class Representative implements Serializable {
     private Long id;
 
     //----------[Start]Mapping relationship----------
-    @OneToOne(mappedBy = "representative")
+    @OneToOne
     private Company company;
 
-    @OneToOne(mappedBy = "representative")
+    @OneToOne
     private Account account;
     //----------[End]Mapping relationship----------
 

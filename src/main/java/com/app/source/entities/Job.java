@@ -55,12 +55,11 @@ public class Job implements Serializable {
     @ManyToMany(mappedBy = "jobs")
     private Set<Major> majors = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "semester_id", nullable = false)
-    private Semester semester;
+    @ManyToMany(mappedBy = "jobs")
+    private Set<Semester> semesters;
 
     @OneToMany(mappedBy = "job")
-    private List<Application> applicationList;
+    private Set<Application> applications;
     //----------[End]Mapping relationship----------
 
     public Job(String name, String description, String title) {

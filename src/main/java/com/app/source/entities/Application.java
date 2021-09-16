@@ -1,6 +1,5 @@
 package com.app.source.entities;
 
-import org.springframework.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,20 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "application")
@@ -28,8 +38,8 @@ public class Application implements Serializable {
     @Column(name = "experience", length = 1000)
     private String experience;
 
-    @Column(name = "cv_key", nullable = false)
-    private String cvKey;
+    @OneToMany(mappedBy = "application")
+    private Set<Attachment> attachments;
 
     @Column(name = "is_company_accepted")
     private boolean isCompanyAccepted;
@@ -40,8 +50,8 @@ public class Application implements Serializable {
     @Column(name = "is_student_comfirmed")
     private boolean isStudentComfirmed;
 
-    @Column(name = "comfirmed_at")
-    private Timestamp comfirmedAt;
+    @Column(name = "confirmed_at")
+    private Timestamp confirmedAt;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -55,8 +65,8 @@ public class Application implements Serializable {
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
-    @Nullable
-    @OneToOne(mappedBy = "application")
+
+    @OneToOne
     private Evaluation evaluation;
 
     @ManyToOne
@@ -68,9 +78,9 @@ public class Application implements Serializable {
     private Job job;
     //----------[End]Mapping relationship----------
 
-    public Application(String experience, String cvKey){
+    public Application(String experience, Set<Attachment> attachments) {
         this.experience = experience;
-        this.cvKey = cvKey;
+        this.attachments = attachments;
     }
 
 }

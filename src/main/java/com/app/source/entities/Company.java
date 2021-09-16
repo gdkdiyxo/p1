@@ -45,7 +45,7 @@ public class Company implements Serializable {
 
     //----------[Start]Mapping relationship----------
     @OneToMany(mappedBy = "company")
-    private List<Job> jobList;
+    private Set<Job> jobs;
     //----------[End]Mapping relationship----------
 
     public Company(String name, String description) {
