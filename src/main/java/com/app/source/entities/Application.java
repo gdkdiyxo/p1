@@ -54,7 +54,7 @@ public class Application implements Serializable {
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
-    @OneToOne(mappedBy = "evaluation")
+    @OneToOne(mappedBy = "application")
     private Evaluation evaluation;
 
     @ManyToOne

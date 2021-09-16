@@ -45,7 +45,7 @@ public class Evaluation implements Serializable {
     private int applicationId;
 
     //----------[Start]Mapping relationship----------
-    @OneToOne(mappedBy = "application")
+    @OneToOne(mappedBy = "evaluation")
     private Application application;
     //----------[End]Mapping relationship----------
 

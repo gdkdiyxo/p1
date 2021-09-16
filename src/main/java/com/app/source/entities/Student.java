@@ -25,7 +25,7 @@ public class Student implements Serializable {
     private String studentCode;
 
     //----------[Start]Mapping relationship----------
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "student")
     private Account account;
 
     @ManyToOne
