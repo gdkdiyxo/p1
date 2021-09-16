@@ -47,7 +47,7 @@ public class Job {
     private Date updatedAt;
 
     @Column(name = "is_disabled")
-    private boolean isDisabled;
+    private boolean disabled;
 
     public Job(String name, String description, String title) {
         this.name = name;
