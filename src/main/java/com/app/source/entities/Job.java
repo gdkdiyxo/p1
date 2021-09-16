@@ -35,15 +35,6 @@ public class Job implements Serializable {
     @Column(name = "title", length = 250, nullable = false)
     private String title;
 
-    //----------[Start]Mapping relationship----------
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
-
-    @ManyToMany(mappedBy = "jobs")
-    private Set<Major> majors = new HashSet<>();
-    //----------[End]Mapping relationship----------
-
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
@@ -54,6 +45,15 @@ public class Job implements Serializable {
 
     @Column(name = "is_disabled")
     private boolean disabled;
+
+    //----------[Start]Mapping relationship----------
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
+    @ManyToMany(mappedBy = "jobs")
+    private Set<Major> majors = new HashSet<>();
+    //----------[End]Mapping relationship----------
 
     public Job(String name, String description, String title) {
         this.name = name;

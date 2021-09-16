@@ -37,13 +37,7 @@ public class Account implements Serializable {
 
     @Column(name = "is_admin")
     private boolean admin;
-    //----------[Start]Mapping relationship----------
-    @OneToOne(mappedBy = "account")
-    private Student student;
 
-    @OneToOne(mappedBy = "account")
-    private Representative representative;
-    //----------[End]Mapping relationship----------
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
@@ -54,6 +48,14 @@ public class Account implements Serializable {
 
     @Column(name = "is_disabled")
     private boolean isDisabled;
+
+    //----------[Start]Mapping relationship----------
+    @OneToOne(mappedBy = "account")
+    private Student student;
+
+    @OneToOne(mappedBy = "account")
+    private Representative representative;
+    //----------[End]Mapping relationship----------
 
     public Account(String email, String password, String name, String phone) {
         this.email = email;

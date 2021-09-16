@@ -26,15 +26,6 @@ public class Major implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    //----------[Start]Mapping relationship----------
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "job_major",
-            joinColumns = @JoinColumn(name = "major_id"),
-            inverseJoinColumns = @JoinColumn(name = "job_id"))
-    private Set<Job> jobs = new HashSet<>();
-    //----------[End]Mapping relationship----------
-
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
@@ -45,6 +36,15 @@ public class Major implements Serializable {
 
     @Column(name = "is_disabled")
     private boolean disabled;
+
+    //----------[Start]Mapping relationship----------
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "job_major",
+            joinColumns = @JoinColumn(name = "major_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id"))
+    private Set<Job> jobs = new HashSet<>();
+    //----------[End]Mapping relationship----------
 
     public Major(String name) {
         this.name = name;

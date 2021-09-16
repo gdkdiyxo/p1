@@ -36,15 +36,6 @@ public class Semester implements Serializable {
     @Column(name = "end_date", nullable = false)
     private Date endDate;
 
-    //----------[Start]Mapping relationship----------
-    @ManyToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
-
-    @ManyToMany(mappedBy = "semesters")
-    private Set<Company> companies = new HashSet<>();
-    //----------[End]Mapping relationship----------
-
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
@@ -59,4 +50,14 @@ public class Semester implements Serializable {
     public Semester(String name) {
         this.name = name;
     }
+
+    //----------[Start]Mapping relationship----------
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
+
+    @ManyToMany(mappedBy = "semesters")
+    private Set<Company> companies = new HashSet<>();
+    //----------[End]Mapping relationship----------
+
 }
