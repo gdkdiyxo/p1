@@ -1,5 +1,6 @@
 package com.app.source.payload.dto;
 
+import com.app.source.entities.Account;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDTO {
     private Long id;
-    private String username;
+    private String name;
     private String email;
-    private RoleDTO role;
+    private String role;
 }
