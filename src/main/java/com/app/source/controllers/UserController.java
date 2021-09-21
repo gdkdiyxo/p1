@@ -1,14 +1,10 @@
 package com.app.source.controllers;
 
-import com.app.source.entities.Account;
 import com.app.source.mappers.UserMapper;
 import com.app.source.payload.dto.UserDTO;
 import com.app.source.services.AccountService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +29,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserDTO> getUserById(Long id) {
+    public Optional<UserDTO> getUserById(@PathVariable Long id) {
         return accountService.getUserById(id).map(userMapper::userToUserDTO);
+    }
+
+    @GetMapping("/search")
+    public List<UserDTO> searchUser(@RequestParam(value = "name", required = false) String name,
+                                    @RequestParam(value = "email", required = false) String email,
+                                    @RequestParam(value = "phone", required = false) String phone) {
+        return accountService.searchUser(name, email, phone).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
+
     }
 }

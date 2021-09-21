@@ -10,4 +10,6 @@ public interface AccountService {
     List<Account> getAllUsers();
 
     Optional<Account> getUserById(Long id);
+
+    List<Account> searchUser(String name, String email, String phone);
 }

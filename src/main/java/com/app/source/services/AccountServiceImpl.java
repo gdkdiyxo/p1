@@ -27,4 +27,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findById(id);
     }
 
+    @Override
+    public List<Account> searchUser(String name, String email, String phone) { return accountRepository.searchUser(name, email, phone); }
+
 }
