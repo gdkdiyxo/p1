@@ -7,13 +7,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-   @Mapping(source = "account", target = "role", qualifiedByName = "roleName")
+    @Mapping(source = "account", target = "role", qualifiedByName = "role")
     UserDTO userToUserDTO(Account account);
 
     Account userDTOToUser(UserDTO userDTO);
-//<<<<<<< Updated upstream
+
 
     @Named(("roleName"))
     default String convertRole(Account account){
@@ -28,6 +29,5 @@ public interface UserMapper {
         return role;
     }
 
-//=======
-//>>>>>>> Stashed changes
+
 }
