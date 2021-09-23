@@ -15,7 +15,7 @@ public interface UserMapper {
     Account userDTOToUser(UserDTO userDTO);
 
 
-    @Named(("roleName"))
+    @Named(("role"))
     default String convertRole(Account account){
         String role;
         if (account.isAdmin()) {
