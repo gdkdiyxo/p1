@@ -5,12 +5,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.mappers.UserMapper;
 import ojt.management.payload.dto.UserDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<UserDTO> getUserById(@PathVariable Long id) {
-        return accountService.getUserById(id).map(userMapper::userToUserDTO);
+    public UserDTO getUserById(@PathVariable Long id) {
+        return  userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
     @GetMapping("/search")
@@ -43,6 +40,13 @@ public class UserController {
                                     @RequestParam(value = "email", required = false) String email,
                                     @RequestParam(value = "phone", required = false) String phone) {
         return accountService.searchUser(name, email, phone).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
+    }
 
+    @PutMapping("/update/{id}")
+    public UserDTO updateUser(@RequestParam(value = "phone", required = false) String phone,
+                              @RequestParam(value = "address", required = false) String address,
+                              @RequestParam(value = "password", required = false) String password,
+                              @RequestParam(value = "updateAt", required = false) Timestamp updateAt) {
+        return userMapper.userToUserDTO(accountService.updateUser(phone, address, password, updateAt));
     }
 }
