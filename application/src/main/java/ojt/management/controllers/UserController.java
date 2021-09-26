@@ -1,15 +1,12 @@
 package ojt.management.controllers;
 
-
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.mappers.UserMapper;
-import ojt.management.payload.dto.UserDTO;
+import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,11 +39,15 @@ public class UserController {
         return accountService.searchUser(name, email, phone).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
     }
 
-    @PutMapping("/update/{id}")
-    public UserDTO updateUser(@RequestParam(value = "phone", required = false) String phone,
-                              @RequestParam(value = "address", required = false) String address,
-                              @RequestParam(value = "password", required = false) String password,
-                              @RequestParam(value = "updateAt", required = false) Timestamp updateAt) {
-        return userMapper.userToUserDTO(accountService.updateUser(phone, address, password, updateAt));
+    @PutMapping("/{id}")
+    public UserDTO updateUser(@RequestBody(required = false) String phone,
+                              @RequestBody(required = false) String address,
+                              @RequestBody(required = false) String password) {
+        return userMapper.userToUserDTO(accountService.updateUser(phone, address, password));
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteUser(@PathVariable Long id) {
+        return accountService.deleteUser(id);
     }
 }

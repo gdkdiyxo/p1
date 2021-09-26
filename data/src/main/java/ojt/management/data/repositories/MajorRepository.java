@@ -2,6 +2,13 @@ package ojt.management.data.repositories;
 
 import ojt.management.data.entities.Major;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface MajorRepository extends JpaRepository<Major, Long> {
+
+    @Query("SELECT a FROM Major a where a.name = :name")
+    Major searchMajor(@Param("name") String name);
 }

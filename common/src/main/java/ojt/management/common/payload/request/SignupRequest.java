@@ -1,4 +1,4 @@
-package ojt.management.payload.request;
+package ojt.management.common.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

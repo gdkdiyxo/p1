@@ -11,7 +11,7 @@ import ojt.management.exceptions.EmailAlreadyExistedException;
 import ojt.management.exceptions.EmptyRoleException;
 import ojt.management.exceptions.MajorNotExistedException;
 import ojt.management.exceptions.UsernameAlreadyExistedException;
-import ojt.management.payload.request.SignupRequest;
+import ojt.management.common.payload.request.SignupRequest;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
