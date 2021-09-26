@@ -1,4 +1,4 @@
-package ojt.management.payload.dto;
+package ojt.management.common.payload.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

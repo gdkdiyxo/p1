@@ -3,7 +3,7 @@ package ojt.management.business.services;
 
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
-import ojt.management.payload.request.LoginRequest;
+import ojt.management.common.payload.request.LoginRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;

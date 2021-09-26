@@ -4,12 +4,11 @@ package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.mappers.UserMapper;
-import ojt.management.payload.dto.UserDTO;
+import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
