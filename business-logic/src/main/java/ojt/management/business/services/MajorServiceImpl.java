@@ -14,18 +14,16 @@ public class MajorServiceImpl implements MajorService{
     public MajorServiceImpl(MajorRepository majorRepository) {this.majorRepository = majorRepository;}
 
     @Override
-    public List<Major> getAllMajors () {return majorRepository.findAll();}
-
-    @Override
     public Major getMajorById (Long id) {return majorRepository.getById(id);}
 
     @Override
-    public Major searchMajor (String name) {return  majorRepository.searchMajor(name);}
+    public List<Major> searchMajor (String name) {return  majorRepository.searchMajor(name);}
 
     @Override
     public Major updateMajor (Long id, String name) {
         Major major = majorRepository.getById(id);
         major.setName(name);
+        majorRepository.save(major);
         return majorRepository.getById(id);
     }
 
@@ -33,7 +31,7 @@ public class MajorServiceImpl implements MajorService{
     public boolean deleteMajor (Long id) {
         Major major = majorRepository.getById(id);
         boolean response = false;
-        if (major != null) {
+        if (major != null || major.isDisabled()==false) {
             major.setDisabled(true);
             response = true;
             return response;

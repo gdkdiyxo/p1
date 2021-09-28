@@ -22,19 +22,14 @@ public class MajorController {
         this.majorService = majorSevice;
     }
 
-    @GetMapping
-    public List<MajorDTO> getAllMajors() {
-        return majorService.getAllMajors().stream().map(majorMapper::majorToMajorDTO).collect(Collectors.toList());
-    }
-
     @GetMapping("/{id}")
     public MajorDTO getMajorById(@PathVariable Long id){
         return majorMapper.majorToMajorDTO(majorService.getMajorById(id));
     }
 
-    @GetMapping("/search")
-    public MajorDTO searchMajor(@RequestParam(value = "name", required = true) String name) {
-        return majorMapper.majorToMajorDTO(majorService.searchMajor(name));
+    @GetMapping()
+    public List<MajorDTO> searchMajor(@RequestParam(value = "name", required = true) String name) {
+        return majorService.searchMajor(name).stream().map(majorMapper::majorToMajorDTO).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")

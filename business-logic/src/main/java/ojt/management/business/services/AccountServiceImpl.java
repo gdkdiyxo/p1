@@ -18,11 +18,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAllUsers() {
-        return accountRepository.findAll();
-    }
-
-    @Override
     public Account getUserById(Long id) {
         return accountRepository.getById(id);
     }
@@ -46,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean deleteUser(Long id) {
         Account account = accountRepository.getById(id);
         boolean response=false;
-        if (account != null) {
+        if (account != null || account.isDisabled()==false) {
             account.setDisabled(true);
             response = true;
             return response;

@@ -5,8 +5,6 @@ import ojt.management.data.entities.Account;
 import java.util.List;
 
 public interface AccountService {
-    List<Account> getAllUsers();
-
     Account getUserById(Long id);
 
     List<Account> searchUser(String name, String email, String phone);
