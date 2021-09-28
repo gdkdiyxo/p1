@@ -2,6 +2,7 @@ package ojt.management.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
+import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +37,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@RequestBody(required = false) String phone,
-                              @RequestBody(required = false) String address,
-                              @RequestBody(required = false) String password) {
-        return userMapper.userToUserDTO(accountService.updateUser(phone, address, password));
+    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) {
+        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getPhone(),
+                accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
     }
 
     @DeleteMapping("/{id}")

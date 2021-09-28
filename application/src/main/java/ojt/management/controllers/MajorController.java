@@ -3,9 +3,11 @@ package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.MajorService;
 import ojt.management.common.payload.dto.MajorDTO;
+import ojt.management.common.payload.request.MajorUpdateRequest;
 import ojt.management.mappers.MajorMapper;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +35,8 @@ public class MajorController {
     }
 
     @PutMapping("/{id}")
-    public MajorDTO updateMajor(@RequestBody Long id,
-                                @RequestBody String name) {
-        return majorMapper.majorToMajorDTO(majorService.updateMajor(id, name));
+    public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest) {
+        return majorMapper.majorToMajorDTO(majorService.updateMajor(majorUpdateRequest.getId(), majorUpdateRequest.getName()));
     }
 
     @DeleteMapping("/{id}")
