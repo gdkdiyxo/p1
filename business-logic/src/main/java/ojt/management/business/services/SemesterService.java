@@ -13,4 +13,5 @@ public interface SemesterService {
     Semester updateSemester(Long id, String name, Date startDate, Date endDate);
 
     boolean deleteSemester(Long id);
+    // test comment
 }
