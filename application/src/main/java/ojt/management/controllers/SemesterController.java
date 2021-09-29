@@ -1,10 +1,12 @@
 package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.SemesterService;
+import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.dto.SemesterDTO;
 import ojt.management.common.payload.request.SemesterCreateRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
-import ojt.management.data.entities.Semester;
+import ojt.management.data.repositories.SemesterRepository;
 import ojt.management.mappers.SemesterMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +22,21 @@ public class SemesterController {
 
     private final SemesterService semesterService;
     private final SemesterMapper semesterMapper;
+    private final SemesterRepository semesterRepository;
 
-    public SemesterController(SemesterService semesterService, SemesterMapper semesterMapper) {
+    public SemesterController(SemesterService semesterService, SemesterMapper semesterMapper, SemesterRepository semesterRepository) {
         this.semesterService = semesterService;
         this.semesterMapper = semesterMapper;
+        this.semesterRepository = semesterRepository;
     }
 
     @GetMapping("/{id}")
-    public SemesterDTO getById(@PathVariable Long id) {
-        return semesterMapper.semesterToSemesterDTO(semesterService.getById(id));
+    public SemesterDTO getById(@PathVariable Long id) throws SemesterNotExistedException {
+        if (Boolean.FALSE.equals(semesterRepository.existsById(id))) {
+            throw new SemesterNotExistedException();
+        } else {
+            return semesterMapper.semesterToSemesterDTO(semesterService.getById(id));
+        }
     }
 
     @GetMapping()
@@ -39,9 +47,16 @@ public class SemesterController {
     }
 
     @PutMapping("/{id}")
-    public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest) {
-        return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(semesterUpdateRequest.getId(),
-                semesterUpdateRequest.getName(), semesterUpdateRequest.getStartDate(), semesterUpdateRequest.getEndDate()));
+    public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest) throws SemesterNotExistedException, SemesterAlreadyExistedException {
+        if (Boolean.FALSE.equals(semesterRepository.existsById(semesterUpdateRequest.getId()))) {
+            throw new SemesterNotExistedException();
+        } else if (Boolean.TRUE.equals(semesterRepository.existsByNameAndAndStartDateAndEndDate(semesterUpdateRequest.getName(),
+                semesterUpdateRequest.getStartDate(), semesterUpdateRequest.getEndDate()))) {
+            throw new SemesterAlreadyExistedException();
+        }else {
+            return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(semesterUpdateRequest.getId(),
+                    semesterUpdateRequest.getName(), semesterUpdateRequest.getStartDate(), semesterUpdateRequest.getEndDate()));
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -50,8 +65,13 @@ public class SemesterController {
     }
 
     @PostMapping()
-    public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest) {
-        return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(semesterCreateRequest.getName(),
-                semesterCreateRequest.getStartDate(), semesterCreateRequest.getEndDate()));
+    public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest) throws SemesterAlreadyExistedException {
+        if (Boolean.TRUE.equals(semesterRepository.existsByNameAndAndStartDateAndEndDate(semesterCreateRequest.getName(), semesterCreateRequest.getStartDate(),
+                semesterCreateRequest.getEndDate()))) {
+            throw new SemesterAlreadyExistedException();
+        } else {
+            return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(semesterCreateRequest.getName(),
+                    semesterCreateRequest.getStartDate(), semesterCreateRequest.getEndDate()));
+        }
     }
 }

@@ -13,4 +13,8 @@ public interface MajorRepository extends JpaRepository<Major, Long> {
 
     @Query("SELECT a FROM Major a where a.name = :name")
     List<Major> searchMajor(@Param("name") String name);
+
+    boolean existsByName(String name);
+
+    boolean existsById(Long id);
 }

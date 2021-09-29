@@ -14,4 +14,8 @@ public interface SemesterRepository  extends JpaRepository<Semester, Long> {
 
     @Query("SELECT a FROM Semester a where a.name = :name or a.startDate = :startDate or a.endDate = :endDate")
     List<Semester> searchSemester(@Param("name") String name, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    boolean existsByNameAndAndStartDateAndEndDate(String name, Date startDate, Date endDate);
+
+    boolean existsById(Long id);
 }

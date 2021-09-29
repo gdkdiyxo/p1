@@ -1,5 +1,7 @@
 package ojt.management.business.services;
 
+import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
+import ojt.management.common.exceptions.MajorNotExistedException;
 import ojt.management.data.entities.Major;
 
 import java.util.List;

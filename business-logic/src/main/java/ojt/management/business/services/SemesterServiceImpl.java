@@ -15,20 +15,26 @@ public class SemesterServiceImpl implements SemesterService{
     public SemesterServiceImpl(SemesterRepository semesterRepository) { this.semesterRepository = semesterRepository;}
 
     @Override
-    public Semester getById(Long id) {return semesterRepository.getById(id);}
+    public Semester getById(Long id) {
+        return semesterRepository.getById(id);
+    }
 
     @Override
-    public List<Semester> searchSemesters(String name, Date startDate, Date endDate) {return  semesterRepository.searchSemester(name, startDate, endDate);}
+    public List<Semester> searchSemesters(String name, Date startDate, Date endDate) {
+        if (name == null & startDate == null & endDate == null) {
+            return semesterRepository.findAll();
+        }
+        return  semesterRepository.searchSemester(name, startDate, endDate);
+    }
 
     @Override
     public Semester updateSemester(Long id, String name, Date startDate, Date endDate) {
         Semester semester = semesterRepository.getById(id);
-        semester.setName(name);
-        semester.setStartDate(startDate);
-        semester.setEndDate(endDate);
+        if (name != null) { semester.setName(name); }
+        if (startDate != null) { semester.setStartDate(startDate); }
+        if (endDate != null) { semester.setEndDate(endDate); }
         semesterRepository.save(semester);
         return semesterRepository.getById(id);
-
     }
 
     @Override
@@ -48,5 +54,6 @@ public class SemesterServiceImpl implements SemesterService{
         Semester semester = new Semester(name, startDate, endDate);
         semesterRepository.save(semester);
         return semesterRepository.getById(semester.getId());
+
     }
 }

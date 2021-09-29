@@ -2,7 +2,9 @@ package ojt.management.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
+import ojt.management.common.exceptions.AccountIdNotExistException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.data.repositories.AccountRepository;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +20,21 @@ public class UserController {
 
     private final AccountService accountService;
     private final UserMapper userMapper;
+    private final AccountRepository accountRepository;
 
-    public UserController(AccountService accountService, UserMapper userMapper) {
+    public UserController(AccountService accountService, UserMapper userMapper, AccountRepository accountRepository) {
         this.accountService = accountService;
         this.userMapper = userMapper;
+        this.accountRepository = accountRepository;
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
-        return  userMapper.userToUserDTO(accountService.getUserById(id));
+    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistException {
+        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
+            throw new AccountIdNotExistException();
+        } else {
+            return userMapper.userToUserDTO(accountService.getUserById(id));
+        }
     }
 
     @GetMapping()
