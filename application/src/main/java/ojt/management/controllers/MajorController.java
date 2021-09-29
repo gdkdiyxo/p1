@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.MajorService;
 import ojt.management.common.payload.dto.MajorDTO;
 import ojt.management.common.payload.request.MajorUpdateRequest;
+import ojt.management.data.entities.Major;
 import ojt.management.mappers.MajorMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,9 @@ public class MajorController {
     private final MajorService majorService;
     private final MajorMapper majorMapper;
 
-    public MajorController(MajorService majorSevice, MajorMapper majorMapper) {
+    public MajorController(MajorService majorService, MajorMapper majorMapper) {
         this.majorMapper = majorMapper;
-        this.majorService = majorSevice;
+        this.majorService = majorService;
     }
 
     @GetMapping("/{id}")
@@ -43,4 +44,7 @@ public class MajorController {
     public boolean deleteMajor(@RequestParam Long id) {
         return majorService.deleteMajor(id);
     }
+
+    @PostMapping()
+    public MajorDTO createMajor(@Valid @RequestBody String name) { return majorMapper.majorToMajorDTO(majorService.createMajor(name));}
 }

@@ -38,8 +38,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) {
-        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getPhone(),
-                accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
+        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
+                accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
     }
 
     @DeleteMapping("/{id}")

@@ -39,4 +39,9 @@ public class MajorServiceImpl implements MajorService{
         return response;
     }
 
+    @Override
+    public Major createMajor (String name) {
+        Major major = new Major(name);
+        return majorRepository.getById(major.getId());
+    }
 }

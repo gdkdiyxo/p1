@@ -26,10 +26,8 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> searchUser(String name, String email, String phone) { return accountRepository.searchUser(name, email, phone); }
 
     @Override
-    public Account updateUser(String phone, String address, String password) {
-            LoginRequest loginRequest = new LoginRequest();
-            String email = loginRequest.getEmail();
-            Account account = accountRepository.findByEmail(email);
+    public Account updateUser(Long id, String phone, String address, String password) {
+            Account account = accountRepository.getById(id);
             account.setPhone(phone);
             account.getStudent().setAddress(address);
             account.setPassword(password);

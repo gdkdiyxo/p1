@@ -2,7 +2,9 @@ package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.SemesterService;
 import ojt.management.common.payload.dto.SemesterDTO;
+import ojt.management.common.payload.request.SemesterCreateRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
+import ojt.management.data.entities.Semester;
 import ojt.management.mappers.SemesterMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +47,11 @@ public class SemesterController {
     @DeleteMapping("/{id}")
     public boolean deleteSemester(@PathVariable Long id) {
         return semesterService.deleteSemester(id);
+    }
+
+    @PostMapping()
+    public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest) {
+        return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(semesterCreateRequest.getName(),
+                semesterCreateRequest.getStartDate(), semesterCreateRequest.getEndDate()));
     }
 }

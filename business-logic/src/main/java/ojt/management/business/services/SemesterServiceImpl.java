@@ -42,4 +42,10 @@ public class SemesterServiceImpl implements SemesterService{
         }
         return response;
     }
+
+    @Override
+    public Semester createSemester(String name, Date startDate, Date endDate) {
+        Semester semester = new Semester(name, startDate, endDate);
+        return semesterRepository.getById(semester.getId());
+    }
 }

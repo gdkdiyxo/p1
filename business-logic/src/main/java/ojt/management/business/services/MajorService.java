@@ -12,4 +12,6 @@ public interface MajorService {
     Major updateMajor(Long id, String name);
 
     boolean deleteMajor(Long id);
+
+    Major createMajor(String name);
 }

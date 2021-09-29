@@ -73,4 +73,10 @@ public class Semester implements Serializable {
     private Set<Student> students;
     //----------[End]Mapping relationship----------
 
+    public Semester(String name, Date startDate, Date endDate) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
 }
