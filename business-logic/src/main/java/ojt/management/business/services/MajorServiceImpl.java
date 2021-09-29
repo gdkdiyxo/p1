@@ -42,6 +42,7 @@ public class MajorServiceImpl implements MajorService{
     @Override
     public Major createMajor (String name) {
         Major major = new Major(name);
+        majorRepository.save(major);
         return majorRepository.getById(major.getId());
     }
 }
