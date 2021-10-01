@@ -1,13 +1,9 @@
 package ojt.management.business.services;
 
-
-import ojt.management.common.exceptions.AccountIdNotExistException;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
-import ojt.management.common.payload.request.LoginRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service

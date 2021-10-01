@@ -8,6 +8,7 @@ import ojt.management.common.payload.request.SemesterCreateRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.data.repositories.SemesterRepository;
 import ojt.management.mappers.SemesterMapper;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@PostAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE')")
 @RequestMapping("/semesters")
 @SecurityRequirement(name = "bearerAuth")
 public class SemesterController {
@@ -46,6 +48,7 @@ public class SemesterController {
         return semesterService.searchSemesters(name, startDate, endDate).stream().map(semesterMapper::semesterToSemesterDTO).collect(Collectors.toList());
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
     public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest) throws SemesterNotExistedException, SemesterAlreadyExistedException {
         if (Boolean.FALSE.equals(semesterRepository.existsById(semesterUpdateRequest.getId()))) {
@@ -59,11 +62,13 @@ public class SemesterController {
         }
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
     public boolean deleteSemester(@PathVariable Long id) {
         return semesterService.deleteSemester(id);
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest) throws SemesterAlreadyExistedException {
         if (Boolean.TRUE.equals(semesterRepository.existsByNameAndAndStartDateAndEndDate(semesterCreateRequest.getName(), semesterCreateRequest.getStartDate(),

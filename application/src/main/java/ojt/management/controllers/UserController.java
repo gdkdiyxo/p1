@@ -7,6 +7,7 @@ import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
 @RequestMapping("/users")
 @SecurityRequirement(name = "bearerAuth")
 public class UserController {
