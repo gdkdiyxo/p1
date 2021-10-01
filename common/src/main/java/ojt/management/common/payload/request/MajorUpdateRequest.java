@@ -1,5 +1,4 @@
-package ojt.management.payload.request;
-
+package ojt.management.common.payload.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-    private String email;
-    private String password;
+public class MajorUpdateRequest {
+    private Long id;
+    private String name;
 }
