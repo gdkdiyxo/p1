@@ -1,6 +1,5 @@
 package ojt.management.business.services;
 
-import ojt.management.common.exceptions.AccountIdNotExistException;
 import ojt.management.data.entities.Account;
 
 import java.util.List;
