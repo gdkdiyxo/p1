@@ -11,9 +11,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    public AccountServiceImpl(AccountRepository accountRepository) {this.accountRepository = accountRepository;}
 
     @Override
     public Account getUserById(Long id) {
@@ -30,12 +28,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account updateUser(Long id, String phone, String address, String password) {
-            Account account = accountRepository.getById(id);
-            if (phone != null) { account.setPhone(phone); }
-            if (address != null) { account.getStudent().setAddress(address); }
-            if (password != null) { account.setPassword(password); }
-            accountRepository.save(account);
-            return accountRepository.getById(account.getId());
+        Account account = accountRepository.getById(id);
+        if (phone != null) { account.setPhone(phone); }
+        if (address != null) { account.getStudent().setAddress(address); }
+        if (password != null) { account.setPassword(password); }
+        accountRepository.save(account);
+        return accountRepository.getById(account.getId());
     }
 
     @Override

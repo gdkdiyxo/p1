@@ -59,7 +59,7 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
-    public boolean deleteMajor(@RequestParam Long id) {
+    public boolean deleteMajor(@PathVariable Long id) {
         return majorService.deleteMajor(id);
     }
 
