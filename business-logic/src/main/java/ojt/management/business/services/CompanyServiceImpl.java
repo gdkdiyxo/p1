@@ -36,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService{
         Company company = account.getRepresentative().getCompany();
         if (name != null)
             company.setName(name);
-        if (description != null)
+        if (description != null )
             company.setDescription(description);
         companyRepository.save(company);
         return company;

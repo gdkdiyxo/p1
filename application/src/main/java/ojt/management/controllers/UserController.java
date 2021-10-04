@@ -24,7 +24,9 @@ public class UserController {
     private final UserMapper userMapper;
     private final AccountRepository accountRepository;
 
-    public UserController(AccountService accountService, UserMapper userMapper, AccountRepository accountRepository) {
+    public UserController(AccountService accountService,
+                          UserMapper userMapper,
+                          AccountRepository accountRepository) {
         this.accountService = accountService;
         this.userMapper = userMapper;
         this.accountRepository = accountRepository;
@@ -48,8 +50,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) {
-        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
-                accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
+        return userMapper.userToUserDTO(accountService.updateUser(
+                accountUpdateRequest.getId(),
+                accountUpdateRequest.getPhone(),
+                accountUpdateRequest.getAddress(),
+                accountUpdateRequest.getPassword()));
     }
 
     @DeleteMapping("/{id}")

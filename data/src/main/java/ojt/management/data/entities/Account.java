@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -30,16 +31,16 @@ public class Account implements Serializable {
     private Long id;
 
     @Email
-    @Column(name = "email", length = 320, unique = true)
+    @Column(name = "email", length = 320, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", length = 1024)
+    @Column(name = "password", length = 1024, nullable = false)
     private String password;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "phone", length = 13)
+    @Column(name = "phone", length = 13, nullable = false)
     private String phone;
 
     @Column(name = "is_admin")

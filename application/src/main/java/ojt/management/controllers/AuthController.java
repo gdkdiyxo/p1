@@ -65,8 +65,14 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
 
-    public AuthController(AuthenticationManager authenticationManager, AccountRepository accountRepository,
-                          CompanyRepository companyRepository, MajorRepository majorRepository, StudentRepository studentRepository, RepresentativeRepository representativeRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          AccountRepository accountRepository,
+                          CompanyRepository companyRepository,
+                          MajorRepository majorRepository,
+                          StudentRepository studentRepository,
+                          RepresentativeRepository representativeRepository,
+                          PasswordEncoder encoder,
+                          JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.accountRepository = accountRepository;
         this.companyRepository = companyRepository;
@@ -100,8 +106,13 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<DataResponse<Account>> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
-            throws UsernameAlreadyExistedException, EmailAlreadyExistedException, EmptyRoleException, CompanyNotExistedException, MajorNotExistedException {
-        if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(accountRepository.existsByStudent_StudentCode(signUpRequest.getStudentCode()))) {
+            throws UsernameAlreadyExistedException,
+            EmailAlreadyExistedException,
+            EmptyRoleException,
+            CompanyNotExistedException,
+            MajorNotExistedException {
+        if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(
+                accountRepository.existsByStudent_StudentCode(signUpRequest.getStudentCode()))) {
             throw new UsernameAlreadyExistedException();
         }
 
@@ -116,6 +127,7 @@ public class AuthController {
                 signUpRequest.getPhone());
         account = accountRepository.save(account);
         String strRole = signUpRequest.getRole();
+
         if (strRole == null) {
             throw new EmptyRoleException();
         } else {

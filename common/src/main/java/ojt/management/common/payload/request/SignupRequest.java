@@ -4,15 +4,36 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.*;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignupRequest {
+    @Email
+    @Max(320)
+    @NotNull
     private String email;
+
+    @NotNull
+    @Max(1024)
+    @Min(8)
     private String password;
+
+    @NotNull
+    @Max(255)
+    @NotBlank
     private String name;
+
+    @NotNull
+    @NotBlank
     private String role;
+
+    @NotNull
+    @Max(13)
+    @Min(10)
     private String phone;
+
     /**
      * Start of company Section
      **/
@@ -24,8 +45,16 @@ public class SignupRequest {
     /**
      * Start of student Section
      **/
+    @NotBlank
+    @Max(500)
+    @NotNull
     private String address;
+
+    @Max(10)
+    @NotBlank
+    @NotNull
     private String studentCode;
+
     private Long majorId;
 
     /**

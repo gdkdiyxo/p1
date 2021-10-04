@@ -7,7 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -26,6 +26,7 @@ public class Attachment {
     private String key;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 
     @CreatedDate
