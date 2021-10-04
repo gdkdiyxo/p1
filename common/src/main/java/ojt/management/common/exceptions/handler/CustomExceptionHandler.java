@@ -13,7 +13,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ojt.management.common.exceptions.EmailAlreadyExistedException.class, UsernameAlreadyExistedException.class, EmptyRoleException.class,
             CompanyNotExistedException.class, MajorNotExistedException.class, AccountIdNotExistException.class, MajorNameAlreadyExistedException.class,
-            SemesterAlreadyExistedException.class})
+            SemesterAlreadyExistedException.class, JobNameAlreadyExistedException.class, JobNotExistedException.class})
     protected ResponseEntity<Response> handleAuthExceptions(CrudException exception) {
         return ResponseEntity
                 .status(exception.getStatus())
