@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.common.exceptions.AccountIdNotExistException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
-import ojt.management.data.repositories.AccountRepository;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -22,21 +21,15 @@ public class UserController {
 
     private final AccountService accountService;
     private final UserMapper userMapper;
-    private final AccountRepository accountRepository;
 
-    public UserController(AccountService accountService, UserMapper userMapper, AccountRepository accountRepository) {
+    public UserController(AccountService accountService, UserMapper userMapper) {
         this.accountService = accountService;
         this.userMapper = userMapper;
-        this.accountRepository = accountRepository;
     }
 
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistException();
-        } else {
-            return userMapper.userToUserDTO(accountService.getUserById(id));
-        }
+        return userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
     @GetMapping()
@@ -47,13 +40,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) {
+    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistException {
         return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
                 accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) {
+    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistException {
         return accountService.deleteUser(id);
     }
 }

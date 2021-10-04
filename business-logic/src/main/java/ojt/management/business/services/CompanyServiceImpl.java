@@ -1,5 +1,7 @@
 package ojt.management.business.services;
 
+import ojt.management.common.exceptions.CompanyNameAlreadyExistedException;
+import ojt.management.common.exceptions.CompanyNotExistedException;
 import ojt.management.common.payload.request.LoginRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
@@ -30,15 +32,22 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public Company updateCompany(String name, String description) {
+    public Company updateCompany(String name, String description) throws CompanyNotExistedException, CompanyNameAlreadyExistedException {
+        if (Boolean.TRUE.equals(companyRepository.existsByName(name))) {
+            throw new CompanyNameAlreadyExistedException();
+        }
         LoginRequest loginRequest = new LoginRequest();
         Account account = accountRepository.findByEmail(loginRequest.getEmail());
         Company company = account.getRepresentative().getCompany();
-        if (name != null)
-            company.setName(name);
-        if (description != null)
-            company.setDescription(description);
-        companyRepository.save(company);
-        return company;
+        if (company == null) {
+            throw new CompanyNotExistedException();
+        } else {
+            if (name != null)
+                company.setName(name);
+            if (description != null)
+                company.setDescription(description);
+            companyRepository.save(company);
+            return company;
+        }
     }
 }

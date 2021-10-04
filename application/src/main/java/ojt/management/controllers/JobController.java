@@ -1,6 +1,8 @@
 package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.JobService;
+import ojt.management.common.exceptions.JobNameAlreadyExistedException;
+import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.common.payload.dto.JobDTO;
 import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
@@ -40,26 +42,26 @@ public class JobController {
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @GetMapping("/{id}")
-    public JobDTO getById(@PathVariable Long id) {
+    public JobDTO getById(@PathVariable Long id) throws JobNotExistedException {
         return jobMapper.jobToJobDTO(jobService.getById(id));
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PutMapping("/{id}")
-    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest) {
+    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest) throws JobNotExistedException, JobNameAlreadyExistedException {
         return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest.getId(), jobUpdateRequest.getName(),
                 jobUpdateRequest.getDescription(), jobUpdateRequest.getTitle(), jobUpdateRequest.getSemesters(), jobUpdateRequest.getMajors()));
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @DeleteMapping("/{id}")
-    public boolean deleteJob(@PathVariable Long id) {
+    public boolean deleteJob(@PathVariable Long id) throws JobNotExistedException {
         return jobService.deleteJob(id);
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PostMapping
-    public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest) {
+    public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest) throws JobNameAlreadyExistedException {
         return jobMapper.jobToJobDTO(jobService.createJob(jobCreateRequest.getName(), jobCreateRequest.getDescription(),
                 jobCreateRequest.getTitle(), jobCreateRequest.getSemesters(), jobCreateRequest.getMajors()));
     }
