@@ -12,6 +12,9 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,15 +28,18 @@ public class MajorController {
     private final MajorMapper majorMapper;
     private final MajorRepository majorRepository;
 
-    public MajorController(MajorService majorService, MajorMapper majorMapper, MajorRepository majorRepository) {
+    public MajorController(MajorService majorService,
+                           MajorMapper majorMapper,
+                           MajorRepository majorRepository) {
         this.majorMapper = majorMapper;
         this.majorService = majorService;
         this.majorRepository = majorRepository;
     }
 
     @GetMapping("/{id}")
-    public MajorDTO getMajorById(@PathVariable Long id) throws MajorNotExistedException {
-        if (Boolean.FALSE.equals(majorRepository.existsById(id))){
+    public MajorDTO getMajorById(@PathVariable Long id)
+            throws MajorNotExistedException {
+        if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
             throw new MajorNotExistedException();
         } else {
             return majorMapper.majorToMajorDTO(majorService.getMajorById(id));
@@ -47,8 +53,10 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
-    public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException {
-        if (Boolean.FALSE.equals(majorRepository.existsById(majorUpdateRequest.getId()))){
+    public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest)
+            throws MajorNotExistedException,
+            MajorNameAlreadyExistedException {
+        if (Boolean.FALSE.equals(majorRepository.existsById(majorUpdateRequest.getId()))) {
             throw new MajorNotExistedException();
         } else if (Boolean.TRUE.equals(majorRepository.existsByName(majorUpdateRequest.getName()))) {
             throw new MajorNameAlreadyExistedException();
@@ -65,8 +73,9 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public MajorDTO createMajor(@Valid @RequestBody String name) throws MajorNameAlreadyExistedException {
-        if (Boolean.TRUE.equals(majorRepository.existsByName(name))){
+    public MajorDTO createMajor(@Valid @RequestBody @NotNull @NotBlank @Max(255) String name)
+            throws MajorNameAlreadyExistedException {
+        if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
             throw new MajorNameAlreadyExistedException();
         } else {
             return majorMapper.majorToMajorDTO(majorService.createMajor(name));
