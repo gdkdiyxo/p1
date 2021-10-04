@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ojt.management.common.exceptions.EmailAlreadyExistedException.class, UsernameAlreadyExistedException.class, EmptyRoleException.class,
-            CompanyNotExistedException.class, MajorNotExistedException.class, AccountIdNotExistException.class, MajorNameAlreadyExistedException.class,
+            CompanyNotExistedException.class, MajorNotExistedException.class, AccountIdNotExistedException.class, MajorNameAlreadyExistedException.class,
             SemesterAlreadyExistedException.class})
     protected ResponseEntity<Response> handleAuthExceptions(CrudException exception) {
         return ResponseEntity

@@ -2,7 +2,7 @@ package ojt.management.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
-import ojt.management.common.exceptions.AccountIdNotExistException;
+import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.mappers.UserMapper;
@@ -31,9 +31,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistException {
+    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistedException {
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistException();
+            throw new AccountIdNotExistedException();
         } else {
             return userMapper.userToUserDTO(accountService.getUserById(id));
         }
