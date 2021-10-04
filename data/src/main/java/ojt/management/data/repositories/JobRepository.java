@@ -19,4 +19,6 @@ public interface JobRepository extends JpaRepository<Job, Long>{
 
     boolean existsByCompany(Long id);
 
+    boolean existsByName(String name);
+
 }

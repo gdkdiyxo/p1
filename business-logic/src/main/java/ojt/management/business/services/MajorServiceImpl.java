@@ -17,8 +17,11 @@ public class MajorServiceImpl implements MajorService{
     public MajorServiceImpl(MajorRepository majorRepository) {this.majorRepository = majorRepository;}
 
     @Override
-    public Major getMajorById (Long id) {
-        return majorRepository.getById(id);
+    public Major getMajorById (Long id) throws MajorNotExistedException {
+        if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
+            throw new MajorNotExistedException();
+        } else
+            return majorRepository.getById(id);
     }
 
     @Override
@@ -30,31 +33,50 @@ public class MajorServiceImpl implements MajorService{
     }
 
     @Override
-    public Major updateMajor (Long id, String name) {
-        Major major = majorRepository.getById(id);
-        if (name != null) {
-            major.setName(name);
+    public Major updateMajor (Long id, String name) throws MajorNotExistedException, MajorNameAlreadyExistedException{
+        if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
+            throw new MajorNotExistedException();
+        } else if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
+            throw new MajorNameAlreadyExistedException();
+        } else {
+            Major major = majorRepository.getById(id);
+            if (major.isDisabled() == true) {
+                throw new MajorNotExistedException();
+            } else {
+                if (name != null) {
+                    major.setName(name);
+                }
+                majorRepository.save(major);
+                return majorRepository.getById(id);
+            }
         }
-        majorRepository.save(major);
-        return majorRepository.getById(id);
     }
 
     @Override
-    public boolean deleteMajor (Long id) {
-        Major major = majorRepository.getById(id);
-        boolean response = false;
-        if (major != null || major.isDisabled()==false) {
-            major.setDisabled(true);
-            response = true;
+    public boolean deleteMajor (Long id) throws MajorNotExistedException {
+        if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
+            throw new MajorNotExistedException();
+        } else {
+            Major major = majorRepository.getById(id);
+            boolean response = false;
+            if (major != null || major.isDisabled() == false) {
+                major.setDisabled(true);
+                response = true;
+                return response;
+            }
             return response;
+
         }
-        return response;
     }
 
     @Override
-    public Major createMajor (String name) {
-        Major major = new Major(name);
-        majorRepository.save(major);
-        return majorRepository.getById(major.getId());
+    public Major createMajor (String name) throws MajorNameAlreadyExistedException {
+        if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
+            throw new MajorNameAlreadyExistedException();
+        } else {
+            Major major = new Major(name);
+            majorRepository.save(major);
+            return majorRepository.getById(major.getId());
+        }
     }
 }

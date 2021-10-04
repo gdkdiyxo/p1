@@ -13,4 +13,6 @@ import java.util.List;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("SELECT a FROM Company a where a.name = :name or a.description = :description")
     List<Company> searchCompany(@Param("name") String name, @Param("description") String description);
+
+    boolean existsByName(String name);
 }

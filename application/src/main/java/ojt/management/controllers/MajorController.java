@@ -23,21 +23,15 @@ public class MajorController {
 
     private final MajorService majorService;
     private final MajorMapper majorMapper;
-    private final MajorRepository majorRepository;
 
-    public MajorController(MajorService majorService, MajorMapper majorMapper, MajorRepository majorRepository) {
+    public MajorController(MajorService majorService, MajorMapper majorMapper) {
         this.majorMapper = majorMapper;
         this.majorService = majorService;
-        this.majorRepository = majorRepository;
     }
 
     @GetMapping("/{id}")
     public MajorDTO getMajorById(@PathVariable Long id) throws MajorNotExistedException {
-        if (Boolean.FALSE.equals(majorRepository.existsById(id))){
-            throw new MajorNotExistedException();
-        } else {
-            return majorMapper.majorToMajorDTO(majorService.getMajorById(id));
-        }
+        return majorMapper.majorToMajorDTO(majorService.getMajorById(id));
     }
 
     @GetMapping()
@@ -48,28 +42,18 @@ public class MajorController {
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
     public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException {
-        if (Boolean.FALSE.equals(majorRepository.existsById(majorUpdateRequest.getId()))){
-            throw new MajorNotExistedException();
-        } else if (Boolean.TRUE.equals(majorRepository.existsByName(majorUpdateRequest.getName()))) {
-            throw new MajorNameAlreadyExistedException();
-        } else {
-            return majorMapper.majorToMajorDTO(majorService.updateMajor(majorUpdateRequest.getId(), majorUpdateRequest.getName()));
-        }
+        return majorMapper.majorToMajorDTO(majorService.updateMajor(majorUpdateRequest.getId(), majorUpdateRequest.getName()));
     }
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
-    public boolean deleteMajor(@PathVariable Long id) {
+    public boolean deleteMajor(@PathVariable Long id) throws MajorNotExistedException {
         return majorService.deleteMajor(id);
     }
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public MajorDTO createMajor(@Valid @RequestBody String name) throws MajorNameAlreadyExistedException {
-        if (Boolean.TRUE.equals(majorRepository.existsByName(name))){
-            throw new MajorNameAlreadyExistedException();
-        } else {
-            return majorMapper.majorToMajorDTO(majorService.createMajor(name));
-        }
+        return majorMapper.majorToMajorDTO(majorService.createMajor(name));
     }
 }

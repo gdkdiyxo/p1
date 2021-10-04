@@ -1,5 +1,7 @@
 package ojt.management.business.services;
 
+import ojt.management.common.exceptions.JobNameAlreadyExistedException;
+import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.data.entities.Job;
 import ojt.management.data.entities.Major;
 import ojt.management.data.entities.Semester;
@@ -11,11 +13,11 @@ public interface JobService {
 
     List<Job> searchJobs(String name, String description, String title, Set<Semester> semesters, Set<Major> major);
 
-    Job getById(Long id);
+    Job getById(Long id) throws JobNotExistedException;
 
-    Job updateJob(Long id, String name, String description, String title, Set<Semester> semesters, Set<Major> majors);
+    Job updateJob(Long id, String name, String description, String title, Set<Semester> semesters, Set<Major> majors) throws JobNotExistedException, JobNameAlreadyExistedException;
 
-    boolean deleteJob(Long id);
+    boolean deleteJob(Long id) throws JobNotExistedException;
 
-    Job createJob(String name, String description, String title, Set<Semester> semesters, Set<Major> majors);
+    Job createJob(String name, String description, String title, Set<Semester> semesters, Set<Major> majors) throws JobNameAlreadyExistedException;
 }
