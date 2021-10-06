@@ -63,6 +63,7 @@ public class AccountServiceImpl implements AccountService {
             boolean response = false;
             if (account != null || account.isDisabled() == false) {
                 account.setDisabled(true);
+                accountRepository.save(account);
                 response = true;
                 return response;
             }

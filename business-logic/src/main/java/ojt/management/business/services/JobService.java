@@ -11,13 +11,13 @@ import java.util.Set;
 
 public interface JobService {
 
-    List<Job> searchJobs(String name, String description, String title, Set<Semester> semesters, Set<Major> major);
+    List<Job> searchJobs(String name, String description, String title, String semesters, String major);
 
     Job getById(Long id) throws JobNotExistedException;
 
-    Job updateJob(Long id, String name, String description, String title, Set<Semester> semesters, Set<Major> majors) throws JobNotExistedException, JobNameAlreadyExistedException;
+    Job updateJob(Long id, String name, String description, String title, String semesters, String majors) throws JobNotExistedException, JobNameAlreadyExistedException;
 
     boolean deleteJob(Long id) throws JobNotExistedException;
 
-    Job createJob(String name, String description, String title, Set<Semester> semesters, Set<Major> majors) throws JobNameAlreadyExistedException;
+    Job createJob(String name, String description, String title, String semesters, String majors) throws JobNameAlreadyExistedException;
 }

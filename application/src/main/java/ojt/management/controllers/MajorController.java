@@ -53,7 +53,7 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public MajorDTO createMajor(@Valid @RequestBody String name) throws MajorNameAlreadyExistedException {
+    public MajorDTO createMajor(@RequestBody String name) throws MajorNameAlreadyExistedException {
         return majorMapper.majorToMajorDTO(majorService.createMajor(name));
     }
 }

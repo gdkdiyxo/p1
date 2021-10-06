@@ -65,8 +65,9 @@ public class SemesterServiceImpl implements SemesterService{
         } else {
             Semester semester = semesterRepository.getById(id);
             boolean response = false;
-            if (semester != null || semester.isDisabled() == false) {
+            if (semester != null & semester.isDisabled() == false) {
                 semester.setDisabled(true);
+                semesterRepository.save(semester);
                 response = true;
                 return response;
             }

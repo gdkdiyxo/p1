@@ -15,7 +15,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
 
     @Query("SELECT a FROM Job a where a.name = :name or a.description = :description or a.title = :title or a.semesters = :semesters or a.majors = :majors")
     List<Job> searchJob(@Param("name") String name, @Param("description") String description, @Param("title") String title,
-                        @Param("semesters") Set<Semester> semesters, @Param("majors") Set<Major> majors);
+                        @Param("semesters") String semesters, @Param("majors") String majors);
 
     boolean existsByCompany(Long id);
 

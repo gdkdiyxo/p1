@@ -35,8 +35,8 @@ public class JobController {
     public List<JobDTO> searchJobs(@RequestParam(value = "name", required = false) String name,
                                    @RequestParam(value = "description", required = false) String description,
                                    @RequestParam(value = "title", required = false) String title,
-                                   @RequestParam(value = "semesters", required = false) Set<Semester> semesters,
-                                   @RequestParam(value = "majors", required = false) Set<Major> major) {
+                                   @RequestParam(value = "semesters", required = false) String semesters,
+                                   @RequestParam(value = "majors", required = false) String major) {
         return jobService.searchJobs(name, description, title, semesters, major).stream().map(jobMapper::jobToJobDTO).collect(Collectors.toList());
     }
 
