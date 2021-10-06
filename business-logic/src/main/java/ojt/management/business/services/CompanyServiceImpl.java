@@ -39,6 +39,7 @@ public class CompanyServiceImpl implements CompanyService{
         LoginRequest loginRequest = new LoginRequest();
         Account account = accountRepository.findByEmail(loginRequest.getEmail());
         Company company = account.getRepresentative().getCompany();
+<<<<<<< HEAD
         if (company == null) {
             throw new CompanyNotExistedException();
         } else {
@@ -49,5 +50,13 @@ public class CompanyServiceImpl implements CompanyService{
             companyRepository.save(company);
             return company;
         }
+=======
+        if (name != null)
+            company.setName(name);
+        if (description != null )
+            company.setDescription(description);
+        companyRepository.save(company);
+        return company;
+>>>>>>> develop
     }
 }

@@ -2,7 +2,7 @@ package ojt.management.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
-import ojt.management.common.exceptions.AccountIdNotExistException;
+import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
@@ -22,14 +22,29 @@ public class UserController {
     private final AccountService accountService;
     private final UserMapper userMapper;
 
+<<<<<<< HEAD
     public UserController(AccountService accountService, UserMapper userMapper) {
+=======
+    public UserController(AccountService accountService,
+                          UserMapper userMapper,
+                          AccountRepository accountRepository) {
+>>>>>>> develop
         this.accountService = accountService;
         this.userMapper = userMapper;
     }
 
     @GetMapping("/{id}")
+<<<<<<< HEAD
     public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistException {
         return userMapper.userToUserDTO(accountService.getUserById(id));
+=======
+    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistedException {
+        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
+            throw new AccountIdNotExistedException();
+        } else {
+            return userMapper.userToUserDTO(accountService.getUserById(id));
+        }
+>>>>>>> develop
     }
 
     @GetMapping()
@@ -40,9 +55,18 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+<<<<<<< HEAD
     public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistException {
         return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
                 accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
+=======
+    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) {
+        return userMapper.userToUserDTO(accountService.updateUser(
+                accountUpdateRequest.getId(),
+                accountUpdateRequest.getPhone(),
+                accountUpdateRequest.getAddress(),
+                accountUpdateRequest.getPassword()));
+>>>>>>> develop
     }
 
     @DeleteMapping("/{id}")
