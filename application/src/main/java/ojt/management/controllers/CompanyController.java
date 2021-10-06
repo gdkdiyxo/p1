@@ -38,14 +38,7 @@ public class CompanyController {
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PutMapping("/{id}")
-<<<<<<< HEAD
     public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) throws CompanyNotExistedException, CompanyNameAlreadyExistedException {
         return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest.getName(), companyUpdateRequest.getDescription()));
-=======
-    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) {
-        return companyMapper.companyToCompanyDTO(companyService.updateCompany(
-                companyUpdateRequest.getName(),
-                companyUpdateRequest.getDescription()));
->>>>>>> develop
     }
 }

@@ -9,20 +9,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(value = {ojt.management.common.exceptions.EmailAlreadyExistedException.class, UsernameAlreadyExistedException.class, EmptyRoleException.class,
-<<<<<<< HEAD
-            CompanyNotExistedException.class, MajorNotExistedException.class, AccountIdNotExistException.class, MajorNameAlreadyExistedException.class,
-            SemesterAlreadyExistedException.class, JobNameAlreadyExistedException.class, JobNotExistedException.class, CompanyNameAlreadyExistedException.class})
-=======
+public class CustomExceptionHandler extends ResponseEntityExceptionHandler { @ExceptionHandler(value = {ojt.management.common.exceptions.EmailAlreadyExistedException.class, UsernameAlreadyExistedException.class, EmptyRoleException.class,
+            CompanyNotExistedException.class, MajorNotExistedException.class, MajorNameAlreadyExistedException.class,
+            SemesterAlreadyExistedException.class, JobNameAlreadyExistedException.class, JobNotExistedException.class, CompanyNameAlreadyExistedException.class,
             CompanyNotExistedException.class, MajorNotExistedException.class, AccountIdNotExistedException.class, MajorNameAlreadyExistedException.class,
             SemesterAlreadyExistedException.class})
->>>>>>> develop
     protected ResponseEntity<Response> handleAuthExceptions(CrudException exception) {
         return ResponseEntity
                 .status(exception.getStatus())
                 .body(new Response("Error", exception.getMessage()));
     }
-
 }

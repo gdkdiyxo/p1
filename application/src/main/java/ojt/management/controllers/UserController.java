@@ -22,29 +22,14 @@ public class UserController {
     private final AccountService accountService;
     private final UserMapper userMapper;
 
-<<<<<<< HEAD
     public UserController(AccountService accountService, UserMapper userMapper) {
-=======
-    public UserController(AccountService accountService,
-                          UserMapper userMapper,
-                          AccountRepository accountRepository) {
->>>>>>> develop
         this.accountService = accountService;
         this.userMapper = userMapper;
     }
 
     @GetMapping("/{id}")
-<<<<<<< HEAD
-    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistException {
-        return userMapper.userToUserDTO(accountService.getUserById(id));
-=======
     public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistedException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistedException();
-        } else {
-            return userMapper.userToUserDTO(accountService.getUserById(id));
-        }
->>>>>>> develop
+        return userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
     @GetMapping()
@@ -55,22 +40,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-<<<<<<< HEAD
-    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistException {
+    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
         return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
                 accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
-=======
-    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) {
-        return userMapper.userToUserDTO(accountService.updateUser(
-                accountUpdateRequest.getId(),
-                accountUpdateRequest.getPhone(),
-                accountUpdateRequest.getAddress(),
-                accountUpdateRequest.getPassword()));
->>>>>>> develop
+
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistException {
+    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistedException {
         return accountService.deleteUser(id);
     }
 }

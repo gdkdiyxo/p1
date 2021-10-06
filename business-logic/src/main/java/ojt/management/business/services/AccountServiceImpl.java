@@ -1,6 +1,7 @@
 package ojt.management.business.services;
 
-import ojt.management.common.exceptions.AccountIdNotExistException;
+
+import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,9 @@ public class AccountServiceImpl implements AccountService {
     public AccountServiceImpl(AccountRepository accountRepository) {this.accountRepository = accountRepository;}
 
     @Override
-    public Account getUserById(Long id) throws AccountIdNotExistException {
+    public Account getUserById(Long id) throws AccountIdNotExistedException {
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistException();
+            throw new AccountIdNotExistedException();
         } else
             return accountRepository.getById(id);
     }
@@ -31,13 +32,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateUser(Long id, String phone, String address, String password) throws AccountIdNotExistException{
+    public Account updateUser(Long id, String phone, String address, String password) throws AccountIdNotExistedException{
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistException();
+            throw new AccountIdNotExistedException();
         } else {
             Account account = accountRepository.getById(id);
             if (account.isDisabled() == true) {
-                throw new AccountIdNotExistException();
+                throw new AccountIdNotExistedException();
             } else {
                 if (phone != null) {
                     account.setPhone(phone);
@@ -55,9 +56,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean deleteUser(Long id) throws AccountIdNotExistException{
+    public boolean deleteUser(Long id) throws AccountIdNotExistedException{
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistException();
+            throw new AccountIdNotExistedException();
         } else {
             Account account = accountRepository.getById(id);
             boolean response = false;

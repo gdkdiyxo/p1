@@ -25,15 +25,10 @@ public class SemesterController {
     private final SemesterService semesterService;
     private final SemesterMapper semesterMapper;
 
-<<<<<<< HEAD
     public SemesterController(SemesterService semesterService, SemesterMapper semesterMapper) {
-=======
-    public SemesterController(SemesterService semesterService,
-                              SemesterMapper semesterMapper,
-                              SemesterRepository semesterRepository) {
->>>>>>> develop
         this.semesterService = semesterService;
-        this.semesterMapper = semesterMapper;}
+        this.semesterMapper = semesterMapper;
+    }
 
     @GetMapping("/{id}")
     public SemesterDTO getById(@PathVariable Long id) throws SemesterNotExistedException {
@@ -49,28 +44,9 @@ public class SemesterController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
-<<<<<<< HEAD
     public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest) throws SemesterAlreadyExistedException, SemesterNotExistedException {
         return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(semesterUpdateRequest.getId(),
                 semesterUpdateRequest.getName(), semesterUpdateRequest.getStartDate(), semesterUpdateRequest.getEndDate()));
-=======
-    public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest)
-            throws SemesterNotExistedException, SemesterAlreadyExistedException {
-        if (Boolean.FALSE.equals(semesterRepository.existsById(semesterUpdateRequest.getId()))) {
-            throw new SemesterNotExistedException();
-        } else if (Boolean.TRUE.equals(semesterRepository.existsByNameAndAndStartDateAndEndDate(
-                semesterUpdateRequest.getName(),
-                semesterUpdateRequest.getStartDate(),
-                semesterUpdateRequest.getEndDate()))) {
-            throw new SemesterAlreadyExistedException();
-        }else {
-            return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(
-                    semesterUpdateRequest.getId(),
-                    semesterUpdateRequest.getName(),
-                    semesterUpdateRequest.getStartDate(),
-                    semesterUpdateRequest.getEndDate()));
-        }
->>>>>>> develop
     }
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
@@ -81,24 +57,8 @@ public class SemesterController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-<<<<<<< HEAD
     public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest) throws SemesterAlreadyExistedException {
         return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(semesterCreateRequest.getName(),
                 semesterCreateRequest.getStartDate(), semesterCreateRequest.getEndDate()));
-=======
-    public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest)
-            throws SemesterAlreadyExistedException {
-        if (Boolean.TRUE.equals(semesterRepository.existsByNameAndAndStartDateAndEndDate(
-                semesterCreateRequest.getName(),
-                semesterCreateRequest.getStartDate(),
-                semesterCreateRequest.getEndDate()))) {
-            throw new SemesterAlreadyExistedException();
-        } else {
-            return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(
-                    semesterCreateRequest.getName(),
-                    semesterCreateRequest.getStartDate(),
-                    semesterCreateRequest.getEndDate()));
-        }
->>>>>>> develop
     }
 }
