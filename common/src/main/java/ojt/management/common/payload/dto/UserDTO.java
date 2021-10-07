@@ -1,5 +1,6 @@
 package ojt.management.common.payload.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,6 @@ public class UserDTO {
     private String name;
     private String email;
     private String role;
-
+    private String phone;
+    private StudentDTO student;
 }

@@ -10,6 +10,7 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @Mapping(source = "account", target = "role", qualifiedByName = "role")
+    @Mapping(source = "student", target = "student")
     UserDTO userToUserDTO(Account account);
 
     Account userDTOToUser(UserDTO userDTO);

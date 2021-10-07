@@ -1,6 +1,9 @@
 package ojt.management.controllers;
 
 
+import ojt.management.business.services.AccountService;
+import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.payload.dto.UserDTO;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
@@ -23,6 +26,7 @@ import ojt.management.data.repositories.CompanyRepository;
 import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.RepresentativeRepository;
 import ojt.management.data.repositories.StudentRepository;
+import ojt.management.mappers.UserMapper;
 import ojt.management.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +64,10 @@ public class AuthController {
 
     private final RepresentativeRepository representativeRepository;
 
+    private final AccountService accountService;
+
+    private final UserMapper userMapper;
+
     private final PasswordEncoder encoder;
 
     private final JwtUtils jwtUtils;
@@ -71,7 +79,8 @@ public class AuthController {
                           MajorRepository majorRepository,
                           StudentRepository studentRepository,
                           RepresentativeRepository representativeRepository,
-                          PasswordEncoder encoder,
+                          AccountService accountService,
+                          UserMapper userMapper, PasswordEncoder encoder,
                           JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.accountRepository = accountRepository;
@@ -79,12 +88,14 @@ public class AuthController {
         this.majorRepository = majorRepository;
         this.studentRepository = studentRepository;
         this.representativeRepository = representativeRepository;
+        this.accountService = accountService;
+        this.userMapper = userMapper;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws AccountIdNotExistedException {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -97,11 +108,14 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        Account account = accountService.getUserById(userDetails.getId());
+        UserDTO userInfo = userMapper.userToUserDTO(account);
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles));
+                roles, userInfo));
     }
 
     @PostMapping("/signup")
