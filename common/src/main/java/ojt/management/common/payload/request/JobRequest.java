@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobCreateRequest implements Serializable {
+public class JobRequest {
     @NotNull
     @NotBlank
     @Size(max = 255)
@@ -30,9 +30,14 @@ public class JobCreateRequest implements Serializable {
 
     @NotNull
     @NotBlank
-    private Long semesterId;
+    private List<Long> semesterIds;
 
     @NotNull
     @NotBlank
-    private Long majorId;
+    private List<Long> majorIds;
+
+    @NotNull
+    @NotBlank
+    private Long companyId;
+
 }
