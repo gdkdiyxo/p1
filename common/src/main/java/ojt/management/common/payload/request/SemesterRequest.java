@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SemesterCreateRequest implements Serializable {
+public class SemesterRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 255)

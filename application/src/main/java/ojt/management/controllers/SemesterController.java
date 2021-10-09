@@ -4,7 +4,7 @@ import ojt.management.business.services.SemesterService;
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.dto.SemesterDTO;
-import ojt.management.common.payload.request.SemesterCreateRequest;
+import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.mappers.SemesterMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -58,8 +58,8 @@ public class SemesterController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public SemesterDTO createSemester(@Valid @RequestBody SemesterCreateRequest semesterCreateRequest)
+    public SemesterDTO createSemester(@Valid @RequestBody SemesterRequest semesterRequest)
             throws SemesterAlreadyExistedException {
-        return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(semesterCreateRequest));
+        return semesterMapper.semesterToSemesterDTO(semesterService.createSemester(semesterRequest));
     }
 }

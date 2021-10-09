@@ -2,7 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
-import ojt.management.common.payload.request.SemesterCreateRequest;
+import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.data.entities.Semester;
 
@@ -18,5 +18,5 @@ public interface SemesterService {
 
     boolean deleteSemester(Long id) throws SemesterNotExistedException;
 
-    Semester createSemester(SemesterCreateRequest semesterCreateRequest) throws SemesterAlreadyExistedException;
+    Semester createSemester(SemesterRequest semesterRequest) throws SemesterAlreadyExistedException;
 }

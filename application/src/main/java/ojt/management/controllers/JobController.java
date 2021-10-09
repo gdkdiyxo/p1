@@ -30,7 +30,6 @@ public class JobController {
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @GetMapping()
     public List<JobDTO> searchJobs(@RequestParam(value = "name", required = false) String name,
-                                   @RequestParam(value = "description", required = false) String description,
                                    @RequestParam(value = "title", required = false) String title,
                                    @RequestParam(value = "semesterId", required = false) Long semesterId,
                                    @RequestParam(value = "majorId", required = false) Long majorId) {
