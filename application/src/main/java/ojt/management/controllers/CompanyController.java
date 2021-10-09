@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/companys")
+@RequestMapping("/companies")
 @SecurityRequirement(name = "bearerAuth")
 public class CompanyController {
 
