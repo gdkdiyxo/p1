@@ -18,14 +18,12 @@ import java.util.stream.Collectors;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
-    private final AccountRepository accountRepository;
     private final SemesterRepository semesterRepository;
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
 
-    public JobServiceImpl(JobRepository jobRepository, AccountRepository accountRepository, SemesterRepository semesterRepository, MajorRepository majorRepository, CompanyRepository companyRepository) {
+    public JobServiceImpl(JobRepository jobRepository, SemesterRepository semesterRepository, MajorRepository majorRepository, CompanyRepository companyRepository) {
         this.jobRepository = jobRepository;
-        this.accountRepository = accountRepository;
         this.semesterRepository = semesterRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
@@ -69,11 +67,11 @@ public class JobServiceImpl implements JobService {
         List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
                 .filter(id -> !job.getSemesters().stream()
                         .map(Semester::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
-        job.getSemesters().addAll(newSemesterIds.stream().map(id -> new Semester(id)).collect(Collectors.toList()));
+        job.getSemesters().addAll(newSemesterIds.stream().map(Semester::new).collect(Collectors.toList()));
         List<Long> newMajorIds = jobUpdateRequest.getMajorIds().stream()
                 .filter(id -> !job.getMajors().stream()
                         .map(Major::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
-        job.getMajors().addAll(newMajorIds.stream().map(id -> new Major(id)).collect(Collectors.toList()));
+        job.getMajors().addAll(newMajorIds.stream().map(Major::new).collect(Collectors.toList()));
         return jobRepository.save(job);
     }
 
@@ -102,9 +100,9 @@ public class JobServiceImpl implements JobService {
         job.setDescription(jobCreateRequest.getDescription());
         job.setTitle(jobCreateRequest.getTitle());
         job.setCompany(new Company(jobCreateRequest.getCompanyId()));
-        job.setSemesters(jobCreateRequest.getSemesterIds().stream().map(semesterId -> new Semester(semesterId))
+        job.setSemesters(jobCreateRequest.getSemesterIds().stream().map(Semester::new)
                 .collect(Collectors.toSet()));
-        job.setMajors(jobCreateRequest.getMajorIds().stream().map(majorId -> new Major(majorId))
+        job.setMajors(jobCreateRequest.getMajorIds().stream().map(Major::new)
                 .collect(Collectors.toSet()));
         return jobRepository.save(job);
     }

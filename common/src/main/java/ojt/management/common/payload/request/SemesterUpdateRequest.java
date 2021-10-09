@@ -13,19 +13,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SemesterUpdateRequest implements Serializable {
+public class SemesterUpdateRequest extends SemesterCreateRequest implements Serializable {
     @NotNull
     @NotBlank
     private Long id;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 255)
-    private String name;
-
-    @NotNull
-    private Date startDate;
-
-    @NotNull
-    private Date endDate;
 }
