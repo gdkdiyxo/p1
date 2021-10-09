@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SemesterUpdateRequest extends SemesterCreateRequest implements Serializable {
+public class SemesterUpdateRequest extends SemesterRequest implements Serializable {
     @NotNull
     @NotBlank
     private Long id;

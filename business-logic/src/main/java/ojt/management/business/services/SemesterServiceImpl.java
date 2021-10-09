@@ -2,7 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
-import ojt.management.common.payload.request.SemesterCreateRequest;
+import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.SemesterRepository;
@@ -73,16 +73,16 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public Semester createSemester(SemesterCreateRequest semesterCreateRequest) throws SemesterAlreadyExistedException {
-        if (Boolean.TRUE.equals(semesterRepository.existsByName(semesterCreateRequest.getName()))
+    public Semester createSemester(SemesterRequest semesterRequest) throws SemesterAlreadyExistedException {
+        if (Boolean.TRUE.equals(semesterRepository.existsByName(semesterRequest.getName()))
                 || Boolean.TRUE.equals(semesterRepository.existsByStartDateAndEndDate(
-                semesterCreateRequest.getStartDate(),
-                semesterCreateRequest.getEndDate()))) {
+                semesterRequest.getStartDate(),
+                semesterRequest.getEndDate()))) {
             throw new SemesterAlreadyExistedException();
         } else {
-            Semester semester = new Semester(semesterCreateRequest.getName(),
-                    semesterCreateRequest.getStartDate(),
-                    semesterCreateRequest.getEndDate());
+            Semester semester = new Semester(semesterRequest.getName(),
+                    semesterRequest.getStartDate(),
+                    semesterRequest.getEndDate());
             return semesterRepository.save(semester);
         }
     }
