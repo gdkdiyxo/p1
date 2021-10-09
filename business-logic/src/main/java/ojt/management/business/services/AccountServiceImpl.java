@@ -2,8 +2,10 @@ package ojt.management.business.services;
 
 
 import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.exceptions.CrudException;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> searchUser(String name, String email, String phone) {
-        if (name == null & email == null & phone == null) {
+        if (name == null && email == null && phone == null) {
             return accountRepository.findAll();
         }
         return accountRepository.searchUser(name, email, phone);
@@ -37,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIdNotExistedException();
         } else {
             Account account = accountRepository.getById(id);
-            if (account.isDisabled() == true) {
+            if (account.isDisabled()) {
                 throw new AccountIdNotExistedException();
             } else {
                 if (phone != null) {
@@ -61,14 +63,10 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIdNotExistedException();
         } else {
             Account account = accountRepository.getById(id);
-            boolean response = false;
-            if (account != null || account.isDisabled() == false) {
+            if (!account.isDisabled()) {
                 account.setDisabled(true);
-                accountRepository.save(account);
-                response = true;
-                return response;
             }
-            return response;
+            return true;
         }
     }
 

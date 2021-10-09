@@ -11,7 +11,9 @@ import java.util.List;
 @Repository
 public interface MajorRepository extends JpaRepository<Major, Long> {
 
-    @Query("SELECT a FROM Major a where a.name = :name")
+    @Query("SELECT m " +
+            "FROM Major m " +
+            "WHERE m.name = :name")
     List<Major> searchMajor(@Param("name") String name);
 
     boolean existsByName(String name);

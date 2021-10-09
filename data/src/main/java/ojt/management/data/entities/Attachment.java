@@ -26,8 +26,7 @@ public class Attachment implements Serializable {
     @Column(name = "key")
     private String key;
 
-    @Column(name = "name")
-    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @CreatedDate
