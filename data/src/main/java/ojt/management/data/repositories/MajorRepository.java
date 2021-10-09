@@ -13,7 +13,7 @@ public interface MajorRepository extends JpaRepository<Major, Long> {
 
     @Query("SELECT m " +
             "FROM Major m " +
-            "WHERE m.name = :name")
+            "WHERE m.name like :name")
     List<Major> searchMajor(@Param("name") String name);
 
     boolean existsByName(String name);
