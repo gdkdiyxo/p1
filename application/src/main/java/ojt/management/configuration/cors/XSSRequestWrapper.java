@@ -14,7 +14,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 	public String[] getParameterValues(String parameter) {
 		String[] values = super.getParameterValues(parameter);
 		if (values == null) {
-			return null;
+			return new String[0];
 		}
 
 		int count = values.length;
@@ -45,7 +45,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 			// avoid encoded attacks.
 			// value = ESAPI.encoder().canonicalize(value);
 			// Avoid null characters
-			value = value.replaceAll("", "");
+			value = value.replace("", "");
 
 			// Avoid anything between script tags
 			Pattern scriptPattern = Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE);
