@@ -1,20 +1,18 @@
 package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.JobService;
+import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.exceptions.JobNameAlreadyExistedException;
 import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.common.payload.dto.JobDTO;
-import ojt.management.common.payload.request.JobCreateRequest;
+import ojt.management.common.payload.request.JobRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
-import ojt.management.data.entities.Major;
-import ojt.management.data.entities.Semester;
 import ojt.management.mappers.JobMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
@@ -35,9 +33,9 @@ public class JobController {
     public List<JobDTO> searchJobs(@RequestParam(value = "name", required = false) String name,
                                    @RequestParam(value = "description", required = false) String description,
                                    @RequestParam(value = "title", required = false) String title,
-                                   @RequestParam(value = "semesters", required = false) String semesters,
-                                   @RequestParam(value = "majors", required = false) String major) {
-        return jobService.searchJobs(name, description, title, semesters, major).stream().map(jobMapper::jobToJobDTO).collect(Collectors.toList());
+                                   @RequestParam(value = "semesterId", required = false) Long semesterId,
+                                   @RequestParam(value = "majorId", required = false) Long majorId) {
+        return jobService.searchJobs(name, title, semesterId, majorId).stream().map(jobMapper::jobToJobDTO).collect(Collectors.toList());
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
@@ -48,9 +46,8 @@ public class JobController {
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PutMapping("/{id}")
-    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest) throws JobNotExistedException, JobNameAlreadyExistedException {
-        return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest.getId(), jobUpdateRequest.getName(),
-                jobUpdateRequest.getDescription(), jobUpdateRequest.getTitle(), jobUpdateRequest.getSemesters(), jobUpdateRequest.getMajors()));
+    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest) throws CrudException {
+        return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest));
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
@@ -61,8 +58,7 @@ public class JobController {
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PostMapping
-    public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest) throws JobNameAlreadyExistedException {
-        return jobMapper.jobToJobDTO(jobService.createJob(jobCreateRequest.getName(), jobCreateRequest.getDescription(),
-                jobCreateRequest.getTitle(), jobCreateRequest.getSemesters(), jobCreateRequest.getMajors()));
+    public JobDTO createJob(@Valid @RequestBody JobRequest jobCreateRequest) throws CrudException {
+        return jobMapper.jobToJobDTO(jobService.createJob(jobCreateRequest));
     }
 }

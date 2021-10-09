@@ -7,25 +7,37 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MajorUpdateRequest implements Serializable {
+public class JobRequest {
     @NotNull
     @NotBlank
-    private Long id;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 250)
+    @Size(max = 255)
     private String name;
 
     @NotNull
-    private Date startDate;
+    @NotBlank
+    @Size(max = 2000)
+    private String description;
 
     @NotNull
-    private Date endDate;
+    @NotBlank
+    @Size(max = 255)
+    private String title;
+
+    @NotNull
+    @NotBlank
+    private List<Long> semesterIds;
+
+    @NotNull
+    @NotBlank
+    private List<Long> majorIds;
+
+    @NotNull
+    @NotBlank
+    private Long companyId;
+
 }

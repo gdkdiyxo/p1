@@ -24,7 +24,7 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public List<Company> searchCompany(String name, String description) {
-        if (name == null & description == null) {
+        if (name == null && description == null) {
             return companyRepository.findAll();
         } else {
             return companyRepository.searchCompany(name, description);
