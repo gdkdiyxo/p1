@@ -7,18 +7,24 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyUpdateRequest {
+public class CompanyUpdateRequest implements Serializable {
     @NotNull
     @NotBlank
-    @Max(255)
+    private Long id;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String name;
 
     @NotNull
     @NotBlank
-    @Max(500)
+    @Size(max = 500)
     private String description;
 }
