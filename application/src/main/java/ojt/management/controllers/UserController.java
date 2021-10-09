@@ -2,7 +2,7 @@ package ojt.management.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
-import ojt.management.common.exceptions.AccountIdNotExistException;
+import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistException {
+    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistedException {
         return userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
@@ -40,13 +40,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistException {
+    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
         return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
                 accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
+
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistException {
+    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistedException {
         return accountService.deleteUser(id);
     }
 }

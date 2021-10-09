@@ -37,7 +37,7 @@ public class Semester implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", length = 250, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "start_date", nullable = false)

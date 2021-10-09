@@ -1,4 +1,5 @@
 package ojt.management.controllers;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.CompanyService;
 import ojt.management.common.exceptions.CompanyNameAlreadyExistedException;
@@ -21,7 +22,8 @@ public class CompanyController {
     private final CompanyMapper companyMapper;
     private final CompanyService companyService;
 
-    public CompanyController(CompanyMapper companyMapper, CompanyService companyService) {
+    public CompanyController(CompanyMapper companyMapper,
+                             CompanyService companyService) {
         this.companyMapper = companyMapper;
         this.companyService = companyService;
     }
@@ -29,8 +31,9 @@ public class CompanyController {
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
     public List<CompanyDTO> searchCompany(@RequestParam(value = "name", required = false) String name,
-                                    @RequestParam(value = "description", required = false) String description) {
-        return companyService.searchCompany(name, description).stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
+                                          @RequestParam(value = "description", required = false) String description) {
+        return companyService.searchCompany(name,
+                description).stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")

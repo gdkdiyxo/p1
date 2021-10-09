@@ -1,6 +1,9 @@
 package ojt.management.controllers;
 
 
+import ojt.management.business.services.AccountService;
+import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.payload.dto.UserDTO;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
@@ -23,6 +26,7 @@ import ojt.management.data.repositories.CompanyRepository;
 import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.RepresentativeRepository;
 import ojt.management.data.repositories.StudentRepository;
+import ojt.management.mappers.UserMapper;
 import ojt.management.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,25 +64,38 @@ public class AuthController {
 
     private final RepresentativeRepository representativeRepository;
 
+    private final AccountService accountService;
+
+    private final UserMapper userMapper;
+
     private final PasswordEncoder encoder;
 
     private final JwtUtils jwtUtils;
 
 
-    public AuthController(AuthenticationManager authenticationManager, AccountRepository accountRepository,
-                          CompanyRepository companyRepository, MajorRepository majorRepository, StudentRepository studentRepository, RepresentativeRepository representativeRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          AccountRepository accountRepository,
+                          CompanyRepository companyRepository,
+                          MajorRepository majorRepository,
+                          StudentRepository studentRepository,
+                          RepresentativeRepository representativeRepository,
+                          AccountService accountService,
+                          UserMapper userMapper, PasswordEncoder encoder,
+                          JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.accountRepository = accountRepository;
         this.companyRepository = companyRepository;
         this.majorRepository = majorRepository;
         this.studentRepository = studentRepository;
         this.representativeRepository = representativeRepository;
+        this.accountService = accountService;
+        this.userMapper = userMapper;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws AccountIdNotExistedException {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -91,17 +108,25 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        Account account = accountService.getUserById(userDetails.getId());
+        UserDTO userInfo = userMapper.userToUserDTO(account);
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles));
+                roles, userInfo));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<DataResponse<Account>> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
-            throws UsernameAlreadyExistedException, EmailAlreadyExistedException, EmptyRoleException, CompanyNotExistedException, MajorNotExistedException {
-        if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(accountRepository.existsByStudent_StudentCode(signUpRequest.getStudentCode()))) {
+            throws UsernameAlreadyExistedException,
+            EmailAlreadyExistedException,
+            EmptyRoleException,
+            CompanyNotExistedException,
+            MajorNotExistedException {
+        if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(
+                accountRepository.existsByStudent_StudentCode(signUpRequest.getStudentCode()))) {
             throw new UsernameAlreadyExistedException();
         }
 
@@ -116,6 +141,7 @@ public class AuthController {
                 signUpRequest.getPhone());
         account = accountRepository.save(account);
         String strRole = signUpRequest.getRole();
+
         if (strRole == null) {
             throw new EmptyRoleException();
         } else {

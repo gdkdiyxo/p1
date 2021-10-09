@@ -20,4 +20,6 @@ public interface SemesterRepository  extends JpaRepository<Semester, Long> {
     boolean existsByStartDateAndEndDate(Date startDate, Date endDate);
 
     boolean existsById(Long id);
+
+    Semester findByName(String name);
 }

@@ -15,6 +15,6 @@ public class JobUpdateRequest {
     private String name;
     private String description;
     private String title;
-    private Set<Semester> semesters;
-    private Set<Major> majors;
+    private String semesters;
+    private String majors;
 }

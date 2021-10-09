@@ -12,6 +12,9 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +56,7 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public MajorDTO createMajor(@Valid @RequestBody String name) throws MajorNameAlreadyExistedException {
+    public MajorDTO createMajor(@RequestBody String name) throws MajorNameAlreadyExistedException {
         return majorMapper.majorToMajorDTO(majorService.createMajor(name));
     }
 }

@@ -59,13 +59,13 @@ public class MajorServiceImpl implements MajorService{
         } else {
             Major major = majorRepository.getById(id);
             boolean response = false;
-            if (major != null || major.isDisabled() == false) {
+            if (major != null && major.isDisabled() == false) {
                 major.setDisabled(true);
+                majorRepository.save(major);
                 response = true;
                 return response;
-            }
-            return response;
-
+            } else
+                return response;
         }
     }
 

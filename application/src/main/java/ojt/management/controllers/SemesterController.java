@@ -27,7 +27,8 @@ public class SemesterController {
 
     public SemesterController(SemesterService semesterService, SemesterMapper semesterMapper) {
         this.semesterService = semesterService;
-        this.semesterMapper = semesterMapper;}
+        this.semesterMapper = semesterMapper;
+    }
 
     @GetMapping("/{id}")
     public SemesterDTO getById(@PathVariable Long id) throws SemesterNotExistedException {
