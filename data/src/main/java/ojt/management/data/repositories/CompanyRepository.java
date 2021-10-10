@@ -17,5 +17,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
             "OR c.description like :description")
     List<Company> searchCompany(@Param("name") String name, @Param("description") String description);
 
-    boolean existsByName(String name);
+    boolean existsById(Long id);
+
 }
