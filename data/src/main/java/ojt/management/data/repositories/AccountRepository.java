@@ -14,7 +14,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT a " +
             "FROM Account a " +
-            "WHERE a.name = :name " +
+            "WHERE a.name like :name " +
             "OR a.email = :email " +
             "OR a.phone = :phone ")
     List<Account> searchUser(@Param("name") String name, @Param("email") String email, @Param("phone") String phone);
