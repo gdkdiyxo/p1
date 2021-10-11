@@ -7,13 +7,11 @@ import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.common.payload.request.JobRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
-import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.*;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.JobRepository;
 import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.SemesterRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +20,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class JobServiceImpl implements JobService {
-
-    private static final String COMPANY_REPRESENTATIVE = "COMPANY_REPRESENTATIVE";
 
     private final JobRepository jobRepository;
     private final SemesterRepository semesterRepository;
@@ -41,11 +37,10 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId, Authentication authentication) {
-        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
+    public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId, Long accountId) {
         Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
-        if (accountRole.equals(COMPANY_REPRESENTATIVE)) { //The Rep only get their own job
+        Account account = accountRepository.getById(accountId);
+        if (account.getRepresentative() != null) { //The Rep only get their own job
             return jobRepository.searchJobByRep(Optional.ofNullable(name).orElse(""),
                     Optional.ofNullable(title).orElse(""),
                     semesterId,
@@ -61,10 +56,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job getById(Long id, Authentication authentication) throws JobNotExistedException {
-        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
-        if (accountRole.equals(COMPANY_REPRESENTATIVE)) { //The Rep only get their own job
+    public Job getById(Long id, Long accountId) throws JobNotExistedException {
+        Account account = accountRepository.getById(accountId);
+        if (account.getRepresentative() != null) { //The Rep only get their own job
             Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
             if (jobRepository.getJobByRep(repCompanyId, id) == null) {
                 throw new JobNotExistedException();
@@ -79,12 +73,11 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job updateJob(JobUpdateRequest jobUpdateRequest, Authentication authentication) throws CrudException {
+    public Job updateJob(JobUpdateRequest jobUpdateRequest, Long accountId) throws CrudException {
         if (!jobRepository.existsById(jobUpdateRequest.getId())) {
             throw new JobNotExistedException();
         }
         //Check authen: the Rep only can edit their own job
-        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         Account account = accountRepository.getById(accountId);
         Long oldJob = jobRepository.getById(jobUpdateRequest.getId()).getCompany().getId();
 
@@ -111,9 +104,8 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
-    public boolean deleteJob(Long id, Authentication authentication) throws JobNotExistedException {
+    public boolean deleteJob(Long id, Long accountId) throws JobNotExistedException {
         //Check authen: the Rep only can delete their own job
-        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         Long currentJob = jobRepository.getById(id).getId();
         Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
 
@@ -133,10 +125,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job createJob(JobCreateRequest jobCreateRequest, Authentication authentication) throws CrudException {
+    public Job createJob(JobCreateRequest jobCreateRequest, Long accountId) throws CrudException {
         validateSemesterIdsAndMajorIds(jobCreateRequest);
-        String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
-        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        Account account = accountRepository.getById(accountId);
         Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
         // create new job
         Job job = new Job();
@@ -144,7 +135,7 @@ public class JobServiceImpl implements JobService {
         job.setDescription(jobCreateRequest.getDescription());
         job.setTitle(jobCreateRequest.getTitle());
         //Get company id of Rep
-        if (accountRole.equals(COMPANY_REPRESENTATIVE)) {
+        if (account.getRepresentative() != null) {
             job.setCompany(new Company(companyId));
         } else {
             job.setCompany(new Company(jobCreateRequest.getCompanyId()));

@@ -28,7 +28,7 @@ public class MajorServiceImpl implements MajorService{
         if (name == null) {
             return majorRepository.findAll();
         }
-        return  majorRepository.searchMajor(name);
+        return  majorRepository.findByName(name);
     }
 
     @Override

@@ -22,10 +22,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> searchJob(@Param("name") String name, @Param("title") String title,
                         @Param("semesterId") Long semesterId, @Param("majorId") Long majorId);
 
-    //Get Company ID of Job
-    @Query("select c.id FROM Job j inner join j.company c where j.id = :id")
-    Long companyId(@Param("id") Long id);
-
     //Get job by ID for Rep
     @Query("select DISTINCT j FROM Job j inner JOIN j.company where c.id = :companyId and j.id = :id")
     Job getJobByRep(@Param("companyId") Long companyId, @Param("id") Long id);
