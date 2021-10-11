@@ -1,4 +1,5 @@
 package ojt.management.controllers;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.JobService;
 import ojt.management.common.exceptions.CrudException;
@@ -8,6 +9,7 @@ import ojt.management.common.payload.request.JobRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
 import ojt.management.mappers.JobMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,26 +34,26 @@ public class JobController {
     public List<JobDTO> searchJobs(@RequestParam(value = "name", required = false) String name,
                                    @RequestParam(value = "title", required = false) String title,
                                    @RequestParam(value = "semesterId", required = false) Long semesterId,
-                                   @RequestParam(value = "majorId", required = false) Long majorId) {
-        return jobService.searchJobs(name, title, semesterId, majorId).stream().map(jobMapper::jobToJobDTO).collect(Collectors.toList());
+                                   @RequestParam(value = "majorId", required = false) Long majorId, Authentication authentication) {
+        return jobService.searchJobs(name, title, semesterId, majorId, authentication).stream().map(jobMapper::jobToJobDTO).collect(Collectors.toList());
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @GetMapping("/{id}")
-    public JobDTO getById(@PathVariable Long id) throws JobNotExistedException {
-        return jobMapper.jobToJobDTO(jobService.getById(id));
+    public JobDTO getById(@PathVariable Long id, Authentication authentication) throws JobNotExistedException {
+        return jobMapper.jobToJobDTO(jobService.getById(id, authentication));
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
-    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest) throws CrudException {
-        return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest));
+    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest, Authentication authentication) throws CrudException {
+        return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest, authentication));
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @DeleteMapping("/{id}")
-    public boolean deleteJob(@PathVariable Long id) throws JobNotExistedException {
-        return jobService.deleteJob(id);
+    public boolean deleteJob(@PathVariable Long id, Authentication authentication) throws JobNotExistedException {
+        return jobService.deleteJob(id, authentication);
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE',SYS_ADMIN)")

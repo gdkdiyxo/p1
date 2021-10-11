@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface RepresentativeRepository extends JpaRepository<Representative, Long> {
+    //Get Company ID of Representative
     @Query("select distinct c.id " +
             "from Representative r " +
             "inner join r.account a " +
             "inner join r.company c " +
             "where a.id = :accountId")
-    int getCompanyId(@Param("accountId") String accountId);
-
+    Long companyId(@Param("accountId") Long accountId);
 }

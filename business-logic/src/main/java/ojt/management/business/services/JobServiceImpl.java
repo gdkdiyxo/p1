@@ -3,11 +3,13 @@ package ojt.management.business.services;
 import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.JobRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.Company;
 import ojt.management.data.entities.Job;
 import ojt.management.data.entities.Major;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,18 +23,31 @@ public class JobServiceImpl implements JobService {
     private final SemesterRepository semesterRepository;
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
+    private final RepresentativeRepository representativeRepository;
 
-    public JobServiceImpl(JobRepository jobRepository, SemesterRepository semesterRepository, MajorRepository majorRepository, CompanyRepository companyRepository) {
+    public JobServiceImpl(JobRepository jobRepository,
+                          SemesterRepository semesterRepository,
+                          MajorRepository majorRepository,
+                          CompanyRepository companyRepository,
+                          RepresentativeRepository representativeRepository) {
         this.jobRepository = jobRepository;
         this.semesterRepository = semesterRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
+        this.representativeRepository = representativeRepository;
     }
 
     @Override
-    public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId) {
-        if (name == null && title == null && semesterId == null && majorId == null) {
-            return jobRepository.findAll();
+    public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId, Authentication authentication) {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
+        Long repCompanyId = representativeRepository.companyId(accountId);
+        if (accountRole == "COMPANY_REPRESENTATIVE") { //The Rep only get their own job
+            return jobRepository.searchJobByRep(Optional.ofNullable(name).orElse(""),
+                    Optional.ofNullable(title).orElse(""),
+                    semesterId,
+                    majorId,
+                    repCompanyId);
         } else {
             return jobRepository.searchJob(
                     Optional.ofNullable(name).orElse(""),
@@ -43,51 +58,75 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job getById(Long id) throws JobNotExistedException {
-        if (Boolean.FALSE.equals(jobRepository.existsById(id))) {
-            throw new JobNotExistedException();
-        } else {
+    public Job getById(Long id, Authentication authentication) throws JobNotExistedException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
+        if (accountRole == "COMPANY_REPRESENTATIVE") { //The Rep only get their own job
+            Long repCompanyId = representativeRepository.companyId(accountId);
+            if (jobRepository.getJobByRep(repCompanyId, id) == null) {
+                throw new JobNotExistedException();
+            }
+            return jobRepository.getJobByRep(repCompanyId, id);
+        } else { //The other role can get all
+            if (Boolean.FALSE.equals(jobRepository.existsById(id))) {
+                throw new JobNotExistedException();
+            }
             return jobRepository.getById(id);
         }
     }
 
     @Override
-    public Job updateJob(JobUpdateRequest jobUpdateRequest) throws CrudException {
-        if (!jobRepository.existsById(jobUpdateRequest.getId())) {
-            throw new JobNotExistedException();
+    public Job updateJob(JobUpdateRequest jobUpdateRequest, Authentication authentication) throws CrudException {
+        //Check authen: the Rep only can edit their own job
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        Long jobCompanyId = jobRepository.companyId(jobUpdateRequest.getId());
+        Long repCompanyId = representativeRepository.companyId(accountId);
+
+        if (repCompanyId == jobCompanyId) {
+            if (!jobRepository.existsById(jobUpdateRequest.getId())) {
+                throw new JobNotExistedException();
+            }
+
+            validateCompanyIdAndSemesterIdsAndMajorIds(jobUpdateRequest);
+
+            Job job = jobRepository.getById(jobUpdateRequest.getId());
+            job.setName(jobUpdateRequest.getName());
+            job.setDescription(jobUpdateRequest.getDescription());
+            job.setTitle(jobUpdateRequest.getTitle());
+            job.setCompany(new Company(jobUpdateRequest.getCompanyId()));
+            List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
+                    .filter(id -> !job.getSemesters().stream()
+                            .map(Semester::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
+            job.getSemesters().addAll(newSemesterIds.stream().map(Semester::new).collect(Collectors.toList()));
+            List<Long> newMajorIds = jobUpdateRequest.getMajorIds().stream()
+                    .filter(id -> !job.getMajors().stream()
+                            .map(Major::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
+            job.getMajors().addAll(newMajorIds.stream().map(Major::new).collect(Collectors.toList()));
+            return jobRepository.save(job);
         }
-
-        validateCompanyIdAndSemesterIdsAndMajorIds(jobUpdateRequest);
-
-        Job job = jobRepository.getById(jobUpdateRequest.getId());
-        job.setName(jobUpdateRequest.getName());
-        job.setDescription(jobUpdateRequest.getDescription());
-        job.setTitle(jobUpdateRequest.getTitle());
-        job.setCompany(new Company(jobUpdateRequest.getCompanyId()));
-        List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
-                .filter(id -> !job.getSemesters().stream()
-                        .map(Semester::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
-        job.getSemesters().addAll(newSemesterIds.stream().map(Semester::new).collect(Collectors.toList()));
-        List<Long> newMajorIds = jobUpdateRequest.getMajorIds().stream()
-                .filter(id -> !job.getMajors().stream()
-                        .map(Major::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
-        job.getMajors().addAll(newMajorIds.stream().map(Major::new).collect(Collectors.toList()));
-        return jobRepository.save(job);
+        return null;
     }
 
 
     @Override
-    public boolean deleteJob(Long id) throws JobNotExistedException {
-        if (Boolean.FALSE.equals(jobRepository.existsById(id))) {
-            throw new JobNotExistedException();
-        } else {
-            Job job = jobRepository.getById(id);
-            if (!job.isDisabled()) {
-                job.setDisabled(true);
-                jobRepository.save(job);
+    public boolean deleteJob(Long id, Authentication authentication) throws JobNotExistedException {
+        //Check authen: the Rep only can delete their own job
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        Long jobCompanyId = jobRepository.companyId(id);
+        Long repCompanyId = representativeRepository.companyId(accountId);
+        if (repCompanyId == jobCompanyId) {
+            if (Boolean.FALSE.equals(jobRepository.existsById(id))) {
+                throw new JobNotExistedException();
+            } else {
+                Job job = jobRepository.getById(id);
+                if (!job.isDisabled()) {
+                    job.setDisabled(true);
+                    jobRepository.save(job);
+                }
+                return true;
             }
-            return true;
         }
+        return false;
     }
 
     @Override
