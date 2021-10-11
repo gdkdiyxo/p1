@@ -2,7 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.exceptions.JobNotExistedException;
-import ojt.management.common.payload.request.JobRequest;
+import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
 import ojt.management.data.entities.Job;
 import org.springframework.security.core.Authentication;
@@ -19,5 +19,5 @@ public interface JobService {
 
     boolean deleteJob(Long id, Authentication authentication) throws JobNotExistedException;
 
-    Job createJob(JobRequest jobCreateRequest) throws CrudException;
+    Job createJob(JobCreateRequest jobCreateRequest, Authentication authentication) throws CrudException;
 }

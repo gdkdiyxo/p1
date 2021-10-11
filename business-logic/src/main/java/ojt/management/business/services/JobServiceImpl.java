@@ -1,15 +1,18 @@
 package ojt.management.business.services;
 
-import ojt.management.common.exceptions.*;
+import ojt.management.common.exceptions.CrudException;
+import ojt.management.common.exceptions.JobNotExistedException;
+import ojt.management.common.exceptions.MajorNotExistedException;
+import ojt.management.common.exceptions.SemesterNotExistedException;
+import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.common.payload.request.JobRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
-import ojt.management.data.entities.Account;
-import ojt.management.data.entities.Company;
-import ojt.management.data.entities.Job;
-import ojt.management.data.entities.Major;
-import ojt.management.data.entities.Semester;
-import ojt.management.data.repositories.*;
+import ojt.management.data.entities.*;
+import ojt.management.data.repositories.AccountRepository;
+import ojt.management.data.repositories.JobRepository;
+import ojt.management.data.repositories.MajorRepository;
+import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -20,23 +23,20 @@ import java.util.stream.Collectors;
 @Service
 public class JobServiceImpl implements JobService {
 
+    private static final String COMPANY_REPRESENTATIVE = "COMPANY_REPRESENTATIVE";
+
     private final JobRepository jobRepository;
     private final SemesterRepository semesterRepository;
     private final MajorRepository majorRepository;
-    private final CompanyRepository companyRepository;
-    private final RepresentativeRepository representativeRepository;
     private final AccountRepository accountRepository;
 
     public JobServiceImpl(JobRepository jobRepository,
                           SemesterRepository semesterRepository,
                           MajorRepository majorRepository,
-                          CompanyRepository companyRepository,
-                          RepresentativeRepository representativeRepository, AccountRepository accountRepository) {
+                          AccountRepository accountRepository) {
         this.jobRepository = jobRepository;
         this.semesterRepository = semesterRepository;
         this.majorRepository = majorRepository;
-        this.companyRepository = companyRepository;
-        this.representativeRepository = representativeRepository;
         this.accountRepository = accountRepository;
     }
 
@@ -44,8 +44,8 @@ public class JobServiceImpl implements JobService {
     public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId, Authentication authentication) {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
-        Long repCompanyId = representativeRepository.companyId(accountId);
-        if (accountRole == "COMPANY_REPRESENTATIVE") { //The Rep only get their own job
+        Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
+        if (accountRole.equals(COMPANY_REPRESENTATIVE)) { //The Rep only get their own job
             return jobRepository.searchJobByRep(Optional.ofNullable(name).orElse(""),
                     Optional.ofNullable(title).orElse(""),
                     semesterId,
@@ -64,8 +64,8 @@ public class JobServiceImpl implements JobService {
     public Job getById(Long id, Authentication authentication) throws JobNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
-        if (accountRole == "COMPANY_REPRESENTATIVE") { //The Rep only get their own job
-            Long repCompanyId = representativeRepository.companyId(accountId);
+        if (accountRole.equals(COMPANY_REPRESENTATIVE)) { //The Rep only get their own job
+            Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
             if (jobRepository.getJobByRep(repCompanyId, id) == null) {
                 throw new JobNotExistedException();
             }
@@ -86,17 +86,16 @@ public class JobServiceImpl implements JobService {
         //Check authen: the Rep only can edit their own job
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         Account account = accountRepository.getById(accountId);
-        Job oldJob = jobRepository.getById(jobUpdateRequest.getId());
+        Long oldJob = jobRepository.getById(jobUpdateRequest.getId()).getCompany().getId();
 
-        if(account.isAdmin() || (account.getRepresentative().getCompany().getId() == oldJob.getCompany().getId())) {
+        if (account.isAdmin() || (account.getRepresentative().getCompany().getId() == oldJob)) {
 
-            validateCompanyIdAndSemesterIdsAndMajorIds(jobUpdateRequest);
+            validateSemesterIdsAndMajorIds(jobUpdateRequest);
 
             Job job = jobRepository.getById(jobUpdateRequest.getId());
             job.setName(jobUpdateRequest.getName());
             job.setDescription(jobUpdateRequest.getDescription());
             job.setTitle(jobUpdateRequest.getTitle());
-            job.setCompany(new Company(jobUpdateRequest.getCompanyId()));
             List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
                     .filter(id -> !job.getSemesters().stream()
                             .map(Semester::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
@@ -115,9 +114,10 @@ public class JobServiceImpl implements JobService {
     public boolean deleteJob(Long id, Authentication authentication) throws JobNotExistedException {
         //Check authen: the Rep only can delete their own job
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        Long jobCompanyId = jobRepository.companyId(id);
-        Long repCompanyId = representativeRepository.companyId(accountId);
-        if (repCompanyId == jobCompanyId) {
+        Long currentJob = jobRepository.getById(id).getId();
+        Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
+
+        if (currentJob.equals(repCompanyId)) {
             if (Boolean.FALSE.equals(jobRepository.existsById(id))) {
                 throw new JobNotExistedException();
             } else {
@@ -133,15 +133,22 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job createJob(JobRequest jobCreateRequest) throws CrudException {
-        validateCompanyIdAndSemesterIdsAndMajorIds(jobCreateRequest);
-
+    public Job createJob(JobCreateRequest jobCreateRequest, Authentication authentication) throws CrudException {
+        validateSemesterIdsAndMajorIds(jobCreateRequest);
+        String accountRole = ((UserDetailsImpl) authentication.getPrincipal()).getAuthorities().toString();
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
         // create new job
         Job job = new Job();
         job.setName(jobCreateRequest.getName());
         job.setDescription(jobCreateRequest.getDescription());
         job.setTitle(jobCreateRequest.getTitle());
-        job.setCompany(new Company(jobCreateRequest.getCompanyId()));
+        //Get company id of Rep
+        if (accountRole.equals(COMPANY_REPRESENTATIVE)) {
+            job.setCompany(new Company(companyId));
+        } else {
+            job.setCompany(new Company(jobCreateRequest.getCompanyId()));
+        }
         job.setSemesters(jobCreateRequest.getSemesterIds().stream().map(Semester::new)
                 .collect(Collectors.toSet()));
         job.setMajors(jobCreateRequest.getMajorIds().stream().map(Major::new)
@@ -149,19 +156,13 @@ public class JobServiceImpl implements JobService {
         return jobRepository.save(job);
     }
 
-    private void validateCompanyIdAndSemesterIdsAndMajorIds(JobRequest jobRequest) throws CrudException {
-        // check if company id exist.
-        if (!companyRepository.existsById(jobRequest.getCompanyId())) {
-            throw new CompanyNotExistedException();
-        }
-
+    private void validateSemesterIdsAndMajorIds(JobRequest jobRequest) throws CrudException {
         // check if semester ids exist.
         List<Long> semesterIds = semesterRepository.findAll()
                 .stream().map(Semester::getId).collect(Collectors.toList());
         if (jobRequest.getSemesterIds().stream().anyMatch(id -> !semesterIds.contains(id))) {
             throw new SemesterNotExistedException();
         }
-
         // check if major ids exist.
         List<Long> majorIds = majorRepository.findAll()
                 .stream().map(Major::getId).collect(Collectors.toList());

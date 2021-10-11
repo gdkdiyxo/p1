@@ -5,7 +5,7 @@ import ojt.management.business.services.JobService;
 import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.common.payload.dto.JobDTO;
-import ojt.management.common.payload.request.JobRequest;
+import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
 import ojt.management.mappers.JobMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -58,7 +58,7 @@ public class JobController {
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE',SYS_ADMIN)")
     @PostMapping
-    public JobDTO createJob(@Valid @RequestBody JobRequest jobCreateRequest) throws CrudException {
-        return jobMapper.jobToJobDTO(jobService.createJob(jobCreateRequest));
+    public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest, Authentication authentication) throws CrudException {
+        return jobMapper.jobToJobDTO(jobService.createJob(jobCreateRequest, authentication));
     }
 }
