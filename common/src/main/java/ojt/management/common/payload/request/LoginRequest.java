@@ -20,7 +20,7 @@ public class LoginRequest implements Serializable {
     private String email;
 
     @NotBlank
-    @Size(min = 8, max = 1024)
+    @Size(min = 6, max = 1024)
     @NotNull
     private String password;
 }
