@@ -4,6 +4,7 @@ import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.JobRequest;
 import ojt.management.common.payload.request.JobUpdateRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
+import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
 import ojt.management.data.entities.Job;
 import ojt.management.data.entities.Major;
@@ -24,17 +25,19 @@ public class JobServiceImpl implements JobService {
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
     private final RepresentativeRepository representativeRepository;
+    private final AccountRepository accountRepository;
 
     public JobServiceImpl(JobRepository jobRepository,
                           SemesterRepository semesterRepository,
                           MajorRepository majorRepository,
                           CompanyRepository companyRepository,
-                          RepresentativeRepository representativeRepository) {
+                          RepresentativeRepository representativeRepository, AccountRepository accountRepository) {
         this.jobRepository = jobRepository;
         this.semesterRepository = semesterRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
         this.representativeRepository = representativeRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -77,15 +80,15 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Job updateJob(JobUpdateRequest jobUpdateRequest, Authentication authentication) throws CrudException {
+        if (!jobRepository.existsById(jobUpdateRequest.getId())) {
+            throw new JobNotExistedException();
+        }
         //Check authen: the Rep only can edit their own job
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        Long jobCompanyId = jobRepository.companyId(jobUpdateRequest.getId());
-        Long repCompanyId = representativeRepository.companyId(accountId);
+        Account account = accountRepository.getById(accountId);
+        Job oldJob = jobRepository.getById(jobUpdateRequest.getId());
 
-        if (repCompanyId == jobCompanyId) {
-            if (!jobRepository.existsById(jobUpdateRequest.getId())) {
-                throw new JobNotExistedException();
-            }
+        if(account.isAdmin() || (account.getRepresentative().getCompany().getId() == oldJob.getCompany().getId())) {
 
             validateCompanyIdAndSemesterIdsAndMajorIds(jobUpdateRequest);
 
