@@ -4,6 +4,7 @@ package ojt.management.business.services;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> searchUser(String name, String email, String phone) {
-        if (name == null && email == null && phone == null) {
+        if (Strings.isEmpty(name) && Strings.isEmpty(email) && Strings.isEmpty(phone)) {
             return accountRepository.findAll();
         }
         return accountRepository.searchUser(name, email, phone);
