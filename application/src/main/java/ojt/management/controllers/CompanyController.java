@@ -5,11 +5,14 @@ import ojt.management.business.services.CompanyService;
 import ojt.management.common.exceptions.CompanyNotExistedException;
 import ojt.management.common.payload.dto.CompanyDTO;
 import ojt.management.common.payload.request.CompanyUpdateRequest;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.CompanyMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.Authenticator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,9 +38,19 @@ public class CompanyController {
                 description).stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
     }
 
+    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
+    @GetMapping()
+    public CompanyDTO getCompanyId(@RequestParam(value = "id", required = false) Long id,
+                                   Authentication authentication) throws CompanyNotExistedException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return companyMapper.companyToCompanyDTO(companyService.getCompanyById(id,accountId));
+    }
+
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PutMapping("/{id}")
-    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) throws CompanyNotExistedException {
+    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest,
+                                    Authentication authentication) throws CompanyNotExistedException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest));
     }
 }

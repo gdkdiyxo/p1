@@ -18,6 +18,17 @@ public class AccountUpdateRequest implements Serializable {
     @NotBlank
     private Long id;
 
+    @Email
+    @NotNull
+    @NotBlank
+    @Size(max = 320)
+    private String email;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 255)
+    private String name;
+
     @NotNull
     @Size(min = 10, max = 13)
     private String phone;
@@ -26,44 +37,4 @@ public class AccountUpdateRequest implements Serializable {
     @NotBlank
     @Size(min = 8, max = 1024)
     private String password;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 255)
-    private String name;
-
-    @Email
-    @NotNull
-    @NotBlank
-    @Size(max = 320)
-    private String email;
-
-    //    ===== [Start] Update for Student only =====
-    @Size(max = 500)
-    private String address;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 10)
-    private String studentCode;
-
-    @NotNull
-    private Long majorId;
-
-    @NotNull
-    private Long semesterId;
-    //    ===== [End] Update for Student only =====
-
-    //    ===== [Start] Update for Company only =====
-    @NotNull
-    @NotBlank
-    @Size(max = 255)
-    private String companyName;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 500)
-    private String companyDescription;
-    //    ===== [End] Update for Company only =====
-
 }

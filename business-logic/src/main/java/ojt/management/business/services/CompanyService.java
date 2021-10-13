@@ -1,6 +1,7 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.CompanyNotExistedException;
+import ojt.management.common.payload.request.CompanyCreateRequest;
 import ojt.management.common.payload.request.CompanyUpdateRequest;
 import ojt.management.data.entities.Company;
 

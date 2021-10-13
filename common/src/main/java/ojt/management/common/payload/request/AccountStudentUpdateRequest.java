@@ -3,6 +3,7 @@ package ojt.management.common.payload.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,8 +12,18 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyUpdateRequest extends CompanyRequest implements Serializable {
+public class AccountStudentUpdateRequest extends AccountUpdateRequest implements Serializable {
+    @Size(max = 500)
+    private String address;
+
     @NotNull
     @NotBlank
-    private Long id;
+    @Size(max = 10)
+    private String studentCode;
+
+    @NotNull
+    private Long majorId;
+
+    @NotNull
+    private Long semesterId;
 }
