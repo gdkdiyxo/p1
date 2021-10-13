@@ -38,20 +38,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company updateCompany(CompanyUpdateRequest companyUpdateRequest, Long accountId) throws CrudException {
-        Account account = accountRepository.getById(accountId);
+    public Company updateCompany(CompanyUpdateRequest companyUpdateRequest) throws CrudException {
         if (!companyRepository.existsById(companyUpdateRequest.getId())) {
             throw new CompanyNotExistedException();
         }
-        if (account.getRepresentative() != null || account.isAdmin()) {
-            Company company = companyRepository.getById(companyUpdateRequest.getId());
-            company.setName(companyUpdateRequest.getName());
-            company.setDescription(companyUpdateRequest.getDescription());
+        Company company = companyRepository.getById(companyUpdateRequest.getId());
+        company.setName(companyUpdateRequest.getName());
+        company.setDescription(companyUpdateRequest.getDescription());
 
-            return companyRepository.save(company);
-        }
-//        return new CrudException("You can't allow access to the resource", HttpStatus.FORBIDDEN);
-        return null;
+        return companyRepository.save(company);
     }
 
     @Override
@@ -71,14 +66,10 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company createCompany(CompanyCreateRequest companyCreateRequest, Long accountId) throws CrudException {
-        Account account = accountRepository.getById(accountId);
-        if(account.isAdmin()){
-            Company company = new Company();
-            company.setName(companyCreateRequest.getName());
-            company.setDescription(companyCreateRequest.getDescription());
-           return companyRepository.save(company);
-        }
-        return null;
+    public Company createCompany(CompanyCreateRequest companyCreateRequest) {
+        Company company = new Company();
+        company.setName(companyCreateRequest.getName());
+        company.setDescription(companyCreateRequest.getDescription());
+        return companyRepository.save(company);
     }
 }
