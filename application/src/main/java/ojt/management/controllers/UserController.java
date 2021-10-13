@@ -59,7 +59,7 @@ public class UserController {
     public PagedDataResponse<UserDTO> searchUser(@RequestParam(value = "search", required = false) String search,
                                                  @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                 @RequestParam(value = "sortBy", required = false, defaultValue = "id>") String sortBy) {
+                                                 @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
         Specification<Account> spec = Specification.where(null);
         if (Strings.isNotBlank(search)) {
             Node rootNode = new RSQLParser().parse(search);
