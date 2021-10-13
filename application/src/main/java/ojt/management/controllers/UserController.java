@@ -1,11 +1,16 @@
 package ojt.management.controllers;
 
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.data.entities.Account;
+import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +38,10 @@ public class UserController {
     }
 
     @GetMapping()
-    public List<UserDTO> searchUser(@RequestParam(value = "name", required = false) String name,
-                                    @RequestParam(value = "email", required = false) String email,
-                                    @RequestParam(value = "phone", required = false) String phone) {
-        return accountService.searchUser(name, email, phone).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
+    public List<UserDTO> searchUser(@RequestParam(value = "search") String search) {
+        Node rootNode = new RSQLParser().parse(search);
+        Specification<Account> spec = rootNode.accept(new CustomRsqlVisitor<>());
+        return accountService.searchUser(spec).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")

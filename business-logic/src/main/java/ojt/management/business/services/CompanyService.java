@@ -10,4 +10,7 @@ public interface CompanyService {
     List<Company> searchCompany(String name, String description);
 
     Company updateCompany(CompanyUpdateRequest companyUpdateRequest) throws CompanyNotExistedException;
+
+    Company getCompanyById(Long id, Long accountId) throws CompanyNotExistedException;
+
 }
