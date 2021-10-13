@@ -1,6 +1,8 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.CompanyNotExistedException;
+import ojt.management.common.exceptions.CrudException;
+import ojt.management.common.payload.request.CompanyCreateRequest;
 import ojt.management.common.payload.request.CompanyUpdateRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
@@ -36,19 +38,24 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company updateCompany(CompanyUpdateRequest companyUpdateRequest) throws CompanyNotExistedException {
+    public Company updateCompany(CompanyUpdateRequest companyUpdateRequest, Long accountId) throws CrudException {
+        Account account = accountRepository.getById(accountId);
         if (!companyRepository.existsById(companyUpdateRequest.getId())) {
             throw new CompanyNotExistedException();
         }
-        Company company = companyRepository.getById(companyUpdateRequest.getId());
-        company.setName(companyUpdateRequest.getName());
-        company.setDescription(companyUpdateRequest.getDescription());
+        if (account.getRepresentative() != null || account.isAdmin()) {
+            Company company = companyRepository.getById(companyUpdateRequest.getId());
+            company.setName(companyUpdateRequest.getName());
+            company.setDescription(companyUpdateRequest.getDescription());
 
-        return companyRepository.save(company);
+            return companyRepository.save(company);
+        }
+//        return new CrudException("You can't allow access to the resource", HttpStatus.FORBIDDEN);
+        return null;
     }
 
     @Override
-    public Company getCompanyById(Long id, Long accountId) throws CompanyNotExistedException {
+    public Company getCompanyById(Long id, Long accountId) throws CrudException {
         Account account = accountRepository.getById(accountId);
         if (account.getRepresentative() != null) { //The Rep only get their company
             Long repCompanyId = representativeRepository.getById(accountId).getCompany().getId();
@@ -61,5 +68,17 @@ public class CompanyServiceImpl implements CompanyService {
             }
         }
         return companyRepository.getById(id);
+    }
+
+    @Override
+    public Company createCompany(CompanyCreateRequest companyCreateRequest, Long accountId) throws CrudException {
+        Account account = accountRepository.getById(accountId);
+        if(account.isAdmin()){
+            Company company = new Company();
+            company.setName(companyCreateRequest.getName());
+            company.setDescription(companyCreateRequest.getDescription());
+           return companyRepository.save(company);
+        }
+        return null;
     }
 }

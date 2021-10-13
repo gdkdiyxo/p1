@@ -3,10 +3,14 @@ package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.CompanyService;
 import ojt.management.common.exceptions.CompanyNotExistedException;
+import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.payload.dto.CompanyDTO;
+import ojt.management.common.payload.request.CompanyCreateRequest;
 import ojt.management.common.payload.request.CompanyUpdateRequest;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.CompanyMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,9 +39,27 @@ public class CompanyController {
                 description).stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
     }
 
-    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
+    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
+    @GetMapping()
+    public CompanyDTO getCompanyId(@RequestParam(value = "id", required = false) Long id,
+                                   Authentication authentication) throws CrudException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return companyMapper.companyToCompanyDTO(companyService.getCompanyById(id,accountId));
+    }
+
+    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
-    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) throws CompanyNotExistedException {
-        return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest));
+    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest,
+                                    Authentication authentication) throws CrudException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest, accountId));
+    }
+
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PostMapping()
+    public CompanyDTO createCompany(@RequestBody @Valid CompanyCreateRequest companyCreateRequest,
+                                    Authentication authentication) throws CrudException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return companyMapper.companyToCompanyDTO(companyService.createCompany(companyCreateRequest, accountId));
     }
 }
