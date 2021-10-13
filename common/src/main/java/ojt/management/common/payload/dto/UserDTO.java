@@ -3,7 +3,6 @@ package ojt.management.common.payload.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ojt.management.common.payload.request.CompanyRequest;
 
 import java.io.Serializable;
 
