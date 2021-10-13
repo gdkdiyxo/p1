@@ -77,7 +77,7 @@ public class JobServiceImpl implements JobService {
         //Check authen: the Rep only can edit their own job
         Account account = accountRepository.getById(accountId);
         Long oldJob = jobRepository.getById(jobUpdateRequest.getId()).getCompany().getId();
-        if (!account.isAdmin() || (account.getRepresentative().getCompany().getId() != oldJob)) {
+        if (!account.isAdmin() || (!oldJob.equals(account.getRepresentative().getCompany().getId()))) {
             throw new JobNotAllowedUpdateException();
         }
 

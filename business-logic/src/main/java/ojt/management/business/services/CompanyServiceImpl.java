@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
         Account account = accountRepository.getById(accountId);
         if (account.getRepresentative() != null) { //The Rep only get their company
             Long repCompanyId = representativeRepository.getById(accountId).getCompany().getId();
-            if (id != repCompanyId) {
+            if (!id.equals(repCompanyId)) {
                 throw new CompanyNotExistedException();
             }
         } else { //The other role can get all
