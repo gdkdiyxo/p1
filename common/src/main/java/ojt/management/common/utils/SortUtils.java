@@ -23,6 +23,8 @@ public class SortUtils {
                     case "ASC":
                         sort = Sort.by(matcher.group(1)).ascending();
                         break;
+                    default:
+                        break;
                 }
             } else {
                 switch (matcher.group(3)) {
@@ -35,6 +37,8 @@ public class SortUtils {
                     case "asc":
                     case "ASC":
                         sort = sort.and(Sort.by(matcher.group(1)).ascending());
+                        break;
+                    default:
                         break;
                 }
             }
