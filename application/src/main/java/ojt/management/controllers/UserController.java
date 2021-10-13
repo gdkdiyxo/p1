@@ -1,6 +1,5 @@
 package ojt.management.controllers;
 
-import com.querydsl.core.types.Predicate;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -12,7 +11,6 @@ import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 

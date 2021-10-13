@@ -1,14 +1,9 @@
 package ojt.management.data.repositories;
 
-import com.querydsl.core.types.dsl.StringPath;
 import ojt.management.data.entities.Account;
-import ojt.management.data.entities.QAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
-import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 

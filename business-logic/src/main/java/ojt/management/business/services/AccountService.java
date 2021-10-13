@@ -1,7 +1,6 @@
 package ojt.management.business.services;
 
 
-import com.querydsl.core.types.Predicate;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.data.entities.Account;
 import org.springframework.data.jpa.domain.Specification;
