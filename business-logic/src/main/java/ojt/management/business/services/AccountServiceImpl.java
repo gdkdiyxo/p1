@@ -1,11 +1,11 @@
 package ojt.management.business.services;
 
 
-import com.querydsl.core.types.Predicate;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
 import org.apache.commons.collections4.IterableUtils;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> searchUser(Predicate predicate) {
-        return IterableUtils.toList(accountRepository.findAll(predicate));
+    public List<Account> searchUser(Specification<Account> specification) {
+        return accountRepository.findAll(specification);
     }
 
     @Override

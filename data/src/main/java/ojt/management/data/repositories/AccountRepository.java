@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.StringPath;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.QAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -14,12 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long>, QuerydslPredicateExecutor<Account>, QuerydslBinderCustomizer<QAccount> {
-    @Override
-    default void customize(QuerydslBindings bindings, QAccount root) {
-        bindings.bind(String.class).first(
-                (StringPath path, String value) -> path.containsIgnoreCase(value));
-    }
+public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
 
     Account findByEmail(String email);
 

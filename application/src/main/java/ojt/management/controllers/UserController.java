@@ -1,13 +1,17 @@
 package ojt.management.controllers;
 
 import com.querydsl.core.types.Predicate;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.data.entities.Account;
+import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +40,10 @@ public class UserController {
     }
 
     @GetMapping()
-    public List<UserDTO> searchUser(@QuerydslPredicate(root = Account.class) Predicate predicate) {
-        return accountService.searchUser(predicate).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
+    public List<UserDTO> searchUser(@RequestParam(value = "search") String search) {
+        Node rootNode = new RSQLParser().parse(search);
+        Specification<Account> spec = rootNode.accept(new CustomRsqlVisitor<>());
+        return accountService.searchUser(spec).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
