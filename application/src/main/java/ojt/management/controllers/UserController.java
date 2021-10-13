@@ -1,11 +1,14 @@
 package ojt.management.controllers;
 
+import com.querydsl.core.types.Predicate;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.data.entities.Account;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +36,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public List<UserDTO> searchUser(@RequestParam(value = "name", required = false) String name,
-                                    @RequestParam(value = "email", required = false) String email,
-                                    @RequestParam(value = "phone", required = false) String phone) {
-        return accountService.searchUser(name, email, phone).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
+    public List<UserDTO> searchUser(@QuerydslPredicate(root = Account.class) Predicate predicate) {
+        return accountService.searchUser(predicate).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
