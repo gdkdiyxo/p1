@@ -3,6 +3,7 @@ package ojt.management.common.payload.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ojt.management.common.payload.request.CompanyRequest;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +15,5 @@ public class UserDTO {
     private String role;
     private String phone;
     private StudentDTO student;
+    private CompanyDTO company;
 }

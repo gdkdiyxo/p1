@@ -6,12 +6,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.Account;
 import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.UserMapper;
 import ojt.management.common.payload.dto.UserDTO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
 @RequestMapping("/users")
 @SecurityRequirement(name = "bearerAuth")
 public class UserController {
@@ -32,11 +33,14 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistedException {
+    public UserDTO getUserById(@PathVariable Long id)
+            throws AccountIdNotExistedException {
         return userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
     public List<UserDTO> searchUser(@RequestParam(value = "search") String search) {
         Node rootNode = new RSQLParser().parse(search);
@@ -44,15 +48,18 @@ public class UserController {
         return accountService.searchUser(spec).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
     }
 
+    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @PutMapping("/{id}")
-    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
-        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest.getId(),
-                accountUpdateRequest.getPhone(), accountUpdateRequest.getAddress(), accountUpdateRequest.getPassword()));
-
+    public UserDTO updateUser(@Valid @RequestBody AccountUpdateRequest accountUpdateRequest, Authentication authentication)
+            throws AccountIdNotExistedException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest,accountId));
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistedException {
+    public boolean deleteUser(@PathVariable Long id)
+            throws AccountIdNotExistedException {
         return accountService.deleteUser(id);
     }
 }

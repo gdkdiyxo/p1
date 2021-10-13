@@ -2,9 +2,9 @@ package ojt.management.business.services;
 
 
 import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -33,27 +33,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateUser(Long id, String phone, String address, String password) throws AccountIdNotExistedException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
+    public Account updateUser(AccountUpdateRequest accountUpdateRequest, Long accountId) throws AccountIdNotExistedException {
+        Account account = accountRepository.getById(accountId);
+
+        if (Boolean.FALSE.equals(accountRepository.existsById(accountUpdateRequest.getId()))) {
             throw new AccountIdNotExistedException();
-        } else {
-            Account account = accountRepository.getById(id);
-            if (account.isDisabled()) {
-                throw new AccountIdNotExistedException();
-            } else {
-                if (phone != null) {
-                    account.setPhone(phone);
-                }
-                if (address != null) {
-                    account.getStudent().setAddress(address);
-                }
-                if (password != null) {
-                    account.setPassword(password);
-                }
-                accountRepository.save(account);
-                return accountRepository.getById(account.getId());
-            }
         }
+
+        if (account.getStudent() != null) {
+            account.setPhone(accountUpdateRequest.getPhone());
+            account.getStudent().setAddress(accountUpdateRequest.getAddress());
+            account.setPassword(accountUpdateRequest.getPassword());
+        } else if (account.isAdmin()) {
+            account.setPhone(accountUpdateRequest.getPhone());
+            account.getStudent().setAddress(accountUpdateRequest.getAddress());
+            account.setPassword(accountUpdateRequest.getPassword());
+            account.setName(accountUpdateRequest.getName());
+            account.setEmail(accountUpdateRequest.getEmail());
+
+        } else if (account.getRepresentative() != null) {
+
+        }
+        return accountRepository.save(account);
     }
 
     @Override

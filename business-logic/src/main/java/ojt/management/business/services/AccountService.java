@@ -2,6 +2,7 @@ package ojt.management.business.services;
 
 
 import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.data.entities.Account;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,7 +13,7 @@ public interface AccountService {
 
     List<Account> searchUser(Specification<Account> specification);
 
-    Account updateUser(Long id, String phone, String address, String password) throws AccountIdNotExistedException;
+    Account updateUser(AccountUpdateRequest accountUpdateRequest, Long accountId) throws AccountIdNotExistedException;
 
     boolean deleteUser(Long id) throws AccountIdNotExistedException;
 }
