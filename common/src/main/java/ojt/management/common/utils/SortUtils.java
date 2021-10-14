@@ -11,7 +11,7 @@ public class SortUtils {
         if(Strings.isBlank(query)){
             return Sort.by("id").ascending();
         }
-        Pattern pattern = Pattern.compile("(\\w+?)( )(ASC|DESC|>|<|asc|desc),");
+        Pattern pattern = Pattern.compile("(\\w.+?)( )(ASC|DESC|>|<|asc|desc),");
         Matcher matcher = pattern.matcher(query + ",");
         Sort sort = null;
         while (matcher.find()) {
