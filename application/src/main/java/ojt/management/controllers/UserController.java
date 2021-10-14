@@ -4,11 +4,11 @@ import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
-import ojt.management.common.utils.SortUtils;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.UserDTO;
 import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.common.utils.SortUtils;
 import ojt.management.data.entities.Account;
 import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.UserMapper;
@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -62,11 +63,14 @@ public class UserController {
             spec = rootNode.accept(new CustomRsqlVisitor<>());
         }
         Sort sort = SortUtils.parseSortQuery(sortBy);
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Pageable pageable = PageRequest.of(
+                Optional.ofNullable(pageNo).orElse(0),
+                Optional.ofNullable(pageSize).orElse(20),
+                sort);
         Page<Account> pagedResult = accountService.searchUser(spec, pageable);
         List<UserDTO> data = pagedResult.getContent().stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
 
-        return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages());
+        return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages(), pagedResult.getNumber());
     }
 
     @PutMapping("/{id}")
