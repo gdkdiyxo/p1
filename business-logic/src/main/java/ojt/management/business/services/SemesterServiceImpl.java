@@ -30,7 +30,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public List<Semester> searchSemesters(String name, Date startDate, Date endDate) {
-        if (name == null && startDate == null && endDate == null) {
+        if (name == "" && startDate == null && endDate == null) {
             return semesterRepository.findAll();
         }
         return semesterRepository.searchSemester(name, startDate, endDate);
@@ -50,10 +50,19 @@ public class SemesterServiceImpl implements SemesterService {
             if (semester.isDisabled()) {
                 throw new SemesterNotExistedException();
             } else {
-                semester.setName(semesterUpdateRequest.getName());
-                semester.setStartDate(semesterUpdateRequest.getStartDate());
-                semester.setEndDate(semesterUpdateRequest.getEndDate());
-                return semesterRepository.save(semester);
+                if (semesterUpdateRequest.getName() != "") {
+                    semester.setName(semesterUpdateRequest.getName());
+                    semesterRepository.save(semester);
+                }
+                if (semesterUpdateRequest.getStartDate() != null) {
+                    semester.setStartDate(semesterUpdateRequest.getStartDate());
+                    semesterRepository.save(semester);
+                }
+                if (semesterUpdateRequest.getEndDate() != null) {
+                    semester.setEndDate(semesterUpdateRequest.getEndDate());
+                    semesterRepository.save(semester);
+                }
+                return semesterRepository.getById(semesterUpdateRequest.getId());
             }
         }
     }
@@ -67,8 +76,10 @@ public class SemesterServiceImpl implements SemesterService {
             if (!semester.isDisabled()) {
                 semester.setDisabled(true);
                 semesterRepository.save(semester);
+                return true;
+            } else {
+                throw new SemesterNotExistedException();
             }
-            return true;
         }
     }
 

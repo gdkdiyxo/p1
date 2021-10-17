@@ -12,6 +12,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CompanyUpdateRequest extends CompanyCreateRequest implements Serializable {
     @NotNull
-    @NotBlank
     private Long id;
 }

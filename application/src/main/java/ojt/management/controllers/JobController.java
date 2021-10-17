@@ -61,7 +61,7 @@ public class JobController {
         return jobService.deleteJob(id, accountId);
     }
 
-    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE',SYS_ADMIN)")
+    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PostMapping
     public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest, Authentication authentication) throws CrudException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();

@@ -15,7 +15,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class MajorUpdateRequest implements Serializable {
     @NotNull
-    @NotBlank
     private Long id;
 
     @NotNull
@@ -23,9 +22,4 @@ public class MajorUpdateRequest implements Serializable {
     @Size(max = 250)
     private String name;
 
-    @NotNull
-    private Date startDate;
-
-    @NotNull
-    private Date endDate;
 }

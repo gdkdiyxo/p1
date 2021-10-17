@@ -13,6 +13,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class SemesterUpdateRequest extends SemesterRequest implements Serializable {
     @NotNull
-    @NotBlank
     private Long id;
 }
