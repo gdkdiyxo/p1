@@ -30,7 +30,8 @@ public class MajorController {
     }
 
     @GetMapping("/{id}")
-    public MajorDTO getMajorById(@PathVariable Long id) throws MajorNotExistedException {
+    public MajorDTO getMajorById(@PathVariable Long id)
+            throws MajorNotExistedException {
         return majorMapper.majorToMajorDTO(majorService.getMajorById(id));
     }
 
@@ -41,8 +42,11 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
-    public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException {
-        return majorMapper.majorToMajorDTO(majorService.updateMajor(majorUpdateRequest.getId(), majorUpdateRequest.getName()));
+    public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest)
+            throws MajorNotExistedException, MajorNameAlreadyExistedException {
+        return majorMapper.majorToMajorDTO(majorService.updateMajor(
+                majorUpdateRequest.getId(),
+                majorUpdateRequest.getName()));
     }
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
@@ -53,7 +57,8 @@ public class MajorController {
 
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public MajorDTO createMajor(@RequestBody MajorCreateRequest majorCreateRequest) throws MajorNameAlreadyExistedException {
+    public MajorDTO createMajor(@RequestBody MajorCreateRequest majorCreateRequest)
+            throws MajorNameAlreadyExistedException {
         return majorMapper.majorToMajorDTO(majorService.createMajor(majorCreateRequest.getName()));
     }
 }

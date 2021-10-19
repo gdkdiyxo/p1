@@ -26,4 +26,6 @@ public interface SemesterRepository extends JpaRepository<Semester, Long> {
     boolean existsById(Long id);
 
     Semester findByName(String name);
+
+    List<Semester> findAllByIdIn(List<Long> ids);
 }

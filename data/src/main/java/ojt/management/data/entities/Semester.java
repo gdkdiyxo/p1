@@ -1,8 +1,6 @@
 package ojt.management.data.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -26,7 +24,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "semester")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -79,5 +78,10 @@ public class Semester implements Serializable {
 
     public Semester(Long id) {
         this.id = id;
+    }
+
+    public Semester(Long id, Set<Job> jobs) {
+        this.id = id;
+        this.jobs = jobs;
     }
 }

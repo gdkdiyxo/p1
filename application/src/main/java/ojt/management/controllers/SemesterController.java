@@ -10,6 +10,7 @@ import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.mappers.SemesterMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -58,7 +59,7 @@ public class SemesterController {
         return semesterService.deleteSemester(id);
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public SemesterDTO createSemester(@Valid @RequestBody SemesterRequest semesterRequest)
             throws SemesterAlreadyExistedException {
