@@ -13,6 +13,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class JobCreateRequest extends JobRequest implements Serializable {
     @NotNull
-    @NotBlank
     private Long companyId;
 }

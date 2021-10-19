@@ -1,6 +1,7 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
@@ -30,7 +31,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public List<Semester> searchSemesters(String name, Date startDate, Date endDate) {
-        if (name == null && startDate == null && endDate == null) {
+        if (name == "" && startDate == null && endDate == null) {
             return semesterRepository.findAll();
         }
         return semesterRepository.searchSemester(name, startDate, endDate);
@@ -59,7 +60,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public boolean deleteSemester(Long id) throws SemesterNotExistedException {
+    public boolean deleteSemester(Long id) throws SemesterNotExistedException, SemesterDisabledException {
         if (Boolean.FALSE.equals(semesterRepository.existsById(id))) {
             throw new SemesterNotExistedException();
         } else {
@@ -67,8 +68,10 @@ public class SemesterServiceImpl implements SemesterService {
             if (!semester.isDisabled()) {
                 semester.setDisabled(true);
                 semesterRepository.save(semester);
+                return true;
+            } else {
+                throw new SemesterDisabledException();
             }
-            return true;
         }
     }
 

@@ -1,6 +1,5 @@
 package ojt.management.business.services;
 
-
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.request.AccountCompanyUpdateRequest;
 import ojt.management.common.payload.request.AccountStudentUpdateRequest;
@@ -27,8 +26,9 @@ public class AccountServiceImpl implements AccountService {
     public Account getUserById(Long id) throws AccountIdNotExistedException {
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
             throw new AccountIdNotExistedException();
-        } else
+        } else {
             return accountRepository.getById(id);
+        }
     }
 
     @Override
@@ -97,9 +97,10 @@ public class AccountServiceImpl implements AccountService {
             Account account = accountRepository.getById(id);
             if (!account.isDisabled()) {
                 account.setDisabled(true);
+                return true;
+            } else {
+                throw new AccountIdNotExistedException();
             }
-            return true;
         }
     }
-
 }

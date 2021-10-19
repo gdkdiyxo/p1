@@ -15,7 +15,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AccountUpdateRequest implements Serializable {
     @NotNull
-    @NotBlank
     private Long id;
 
     @Email

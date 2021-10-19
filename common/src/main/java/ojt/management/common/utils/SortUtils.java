@@ -1,5 +1,6 @@
 package ojt.management.common.utils;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Sort;
 
 import java.util.regex.Matcher;
@@ -7,7 +8,10 @@ import java.util.regex.Pattern;
 
 public class SortUtils {
     public static Sort parseSortQuery(String query) {
-        Pattern pattern = Pattern.compile("(\\w+?)( )(ASC|DESC|>|<|asc|desc),");
+        if(Strings.isBlank(query)){
+            return Sort.by("id").ascending();
+        }
+        Pattern pattern = Pattern.compile("(\\w.+?)( )(ASC|DESC|>|<|asc|desc),");
         Matcher matcher = pattern.matcher(query + ",");
         Sort sort = null;
         while (matcher.find()) {

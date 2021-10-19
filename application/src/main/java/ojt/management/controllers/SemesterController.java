@@ -2,6 +2,7 @@ package ojt.management.controllers;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.SemesterService;
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.dto.SemesterDTO;
 import ojt.management.common.payload.request.SemesterRequest;
@@ -52,7 +53,7 @@ public class SemesterController {
     @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
     public boolean deleteSemester(@PathVariable Long id)
-            throws SemesterNotExistedException {
+            throws SemesterNotExistedException, SemesterDisabledException {
         return semesterService.deleteSemester(id);
     }
 
