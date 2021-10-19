@@ -1,4 +1,5 @@
 package ojt.management.controllers;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.SemesterService;
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
@@ -36,9 +37,9 @@ public class SemesterController {
     }
 
     @GetMapping()
-    public List<SemesterDTO> searchSemesters(@RequestParam (value = "name", required = false) String name,
-                                             @RequestParam (value = "startDate", required = false) Date startDate,
-                                             @RequestParam (value = "endDate", required = false) Date endDate) {
+    public List<SemesterDTO> searchSemesters(@RequestParam(value = "name", required = false) String name,
+                                             @RequestParam(value = "startDate", required = false) Date startDate,
+                                             @RequestParam(value = "endDate", required = false) Date endDate) {
         return semesterService.searchSemesters(name, startDate, endDate)
                 .stream().map(semesterMapper::semesterToSemesterDTO).collect(Collectors.toList());
     }

@@ -38,8 +38,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "AND (m.id = :majorId or :majorId is null) " +
             "AND c.id = :companyId")
     List<Job> searchJobByRep(@Param("name") String name,
-                        @Param("title") String title,
-                        @Param("semesterId") Long semesterId,
-                        @Param("majorId") Long majorId,
-                        @Param("companyId") Long companyId);
+                             @Param("title") String title,
+                             @Param("semesterId") Long semesterId,
+                             @Param("majorId") Long majorId,
+                             @Param("companyId") Long companyId);
 }

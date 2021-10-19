@@ -1,4 +1,5 @@
 package ojt.management.mappers;
+
 import ojt.management.common.payload.dto.SemesterDTO;
 import ojt.management.data.entities.Semester;
 import org.mapstruct.Mapper;

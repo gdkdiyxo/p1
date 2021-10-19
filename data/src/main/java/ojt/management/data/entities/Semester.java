@@ -56,11 +56,6 @@ public class Semester implements Serializable {
 
     @Column(name = "is_disabled")
     private boolean disabled;
-
-    public Semester(String name) {
-        this.name = name;
-    }
-
     //----------[Start]Mapping relationship----------
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -68,7 +63,6 @@ public class Semester implements Serializable {
             joinColumns = @JoinColumn(name = "semester_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))
     private Set<Job> jobs;
-
     @OneToMany(mappedBy = "semester")
     private Set<Student> students;
     //----------[End]Mapping relationship----------
@@ -77,6 +71,10 @@ public class Semester implements Serializable {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Semester(String name) {
+        this.name = name;
     }
 
     public Semester(Long id) {

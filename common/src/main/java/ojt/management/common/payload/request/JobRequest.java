@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobRequest  implements Serializable {
+public class JobRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 255)

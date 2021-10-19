@@ -1,6 +1,5 @@
 package ojt.management.data.repositories;
 
-import ojt.management.data.entities.Account;
 import ojt.management.data.entities.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 

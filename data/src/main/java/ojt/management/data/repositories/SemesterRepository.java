@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface SemesterRepository  extends JpaRepository<Semester, Long> {
+public interface SemesterRepository extends JpaRepository<Semester, Long> {
 
     @Query("SELECT s " +
             "FROM Semester s " +
