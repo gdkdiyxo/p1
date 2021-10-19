@@ -30,7 +30,7 @@ public class SemesterServiceImpl implements SemesterService {
 
     @Override
     public List<Semester> searchSemesters(String name, Date startDate, Date endDate) {
-        if (name == null && startDate == null && endDate == null) {
+        if (name == "" && startDate == null && endDate == null) {
             return semesterRepository.findAll();
         }
         return semesterRepository.searchSemester(name, startDate, endDate);
@@ -67,15 +67,10 @@ public class SemesterServiceImpl implements SemesterService {
             if (!semester.isDisabled()) {
                 semester.setDisabled(true);
                 semesterRepository.save(semester);
-<<<<<<< Updated upstream
-            }
-            return true;
-=======
                 return true;
             } else {
                 throw new SemesterNotExistedException();
             }
->>>>>>> Stashed changes
         }
     }
 

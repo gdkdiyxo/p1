@@ -25,7 +25,7 @@ public class MajorServiceImpl implements MajorService{
 
     @Override
     public List<Major> searchMajor (String name) {
-        if (name == null) {
+        if (name == "") {
             return majorRepository.findAll();
         }
         return  majorRepository.findByName(name);
@@ -42,7 +42,7 @@ public class MajorServiceImpl implements MajorService{
             if (major.isDisabled()) {
                 throw new MajorNotExistedException();
             } else {
-                if (name != null) {
+                if (name != "") {
                     major.setName(name);
                 }
                 majorRepository.save(major);

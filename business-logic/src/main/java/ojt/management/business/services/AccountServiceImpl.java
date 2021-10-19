@@ -40,13 +40,13 @@ public class AccountServiceImpl implements AccountService {
             if (account.isDisabled()) {
                 throw new AccountIdNotExistedException();
             } else {
-                if (phone != null) {
+                if (phone != "") {
                     account.setPhone(phone);
                 }
-                if (address != null) {
+                if (address != "") {
                     account.getStudent().setAddress(address);
                 }
-                if (password != null) {
+                if (password != "") {
                     account.setPassword(password);
                 }
                 accountRepository.save(account);
