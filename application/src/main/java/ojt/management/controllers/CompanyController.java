@@ -8,7 +8,7 @@ import ojt.management.common.payload.request.CompanyCreateRequest;
 import ojt.management.common.payload.request.CompanyUpdateRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.CompanyMapper;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +30,7 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
     public List<CompanyDTO> searchCompany(@RequestParam(value = "name", required = false) String name,
                                           @RequestParam(value = "description", required = false) String description) {
@@ -38,7 +38,7 @@ public class CompanyController {
                 description).stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
     }
 
-    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
+    @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @GetMapping("/{id}")
     public CompanyDTO getCompanyId(@PathVariable Long id,
                                    Authentication authentication) throws CrudException {
@@ -46,13 +46,13 @@ public class CompanyController {
         return companyMapper.companyToCompanyDTO(companyService.getCompanyById(id, accountId));
     }
 
-    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
     public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) throws CrudException {
         return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest));
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public CompanyDTO createCompany(@RequestBody @Valid CompanyCreateRequest companyCreateRequest) {
         return companyMapper.companyToCompanyDTO(companyService.createCompany(companyCreateRequest));

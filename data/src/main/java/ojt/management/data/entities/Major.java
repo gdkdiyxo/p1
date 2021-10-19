@@ -66,4 +66,9 @@ public class Major implements Serializable {
     public Major(Long id) {
         this.id = id;
     }
+
+    public Major(Long id, Set<Job> jobs) {
+        this.id = id;
+        this.jobs = jobs;
+    }
 }

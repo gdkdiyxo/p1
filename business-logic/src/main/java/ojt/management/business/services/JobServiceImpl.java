@@ -11,8 +11,10 @@ import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -136,10 +138,14 @@ public class JobServiceImpl implements JobService {
         } else {
             job.setCompany(new Company(jobCreateRequest.getCompanyId()));
         }
-        job.setSemesters(jobCreateRequest.getSemesterIds().stream().map(Semester::new)
-                .collect(Collectors.toSet()));
-        job.setMajors(jobCreateRequest.getMajorIds().stream().map(Major::new)
-                .collect(Collectors.toSet()));
+        job = jobRepository.save(job);
+        List<Semester> semesters = semesterRepository.findAllByIdIn(jobCreateRequest.getSemesterIds());
+        List<Major> majors = majorRepository.findAllByIdIn(jobCreateRequest.getMajorIds());
+        AtomicReference<Job> jobAtomicReference = new AtomicReference<>(job);
+        semesters.forEach(semester -> semester.getJobs().add(jobAtomicReference.get()));
+        majors.forEach(major -> major.getJobs().add(jobAtomicReference.get()));
+        job.setSemesters(semesters.stream().collect(Collectors.toSet()));
+        job.setMajors(majors.stream().collect(Collectors.toSet()));
         return jobRepository.save(job);
     }
 

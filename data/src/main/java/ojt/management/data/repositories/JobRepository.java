@@ -42,4 +42,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
                              @Param("semesterId") Long semesterId,
                              @Param("majorId") Long majorId,
                              @Param("companyId") Long companyId);
+
+    List<Job> findAllByIdIn(List<Long> ids);
 }
