@@ -67,8 +67,15 @@ public class SemesterServiceImpl implements SemesterService {
             if (!semester.isDisabled()) {
                 semester.setDisabled(true);
                 semesterRepository.save(semester);
+<<<<<<< Updated upstream
             }
             return true;
+=======
+                return true;
+            } else {
+                throw new SemesterNotExistedException();
+            }
+>>>>>>> Stashed changes
         }
     }
 

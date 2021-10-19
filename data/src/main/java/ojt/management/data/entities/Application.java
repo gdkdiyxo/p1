@@ -44,8 +44,8 @@ public class Application implements Serializable {
     @Column(name = "accepted_at")
     private Timestamp acceptedAt;
 
-    @Column(name = "is_student_comfirmed")
-    private boolean isStudentComfirmed;
+    @Column(name = "is_student_confirmed")
+    private boolean isStudentConfirmed;
 
     @Column(name = "confirmed_at")
     private Timestamp confirmedAt;
