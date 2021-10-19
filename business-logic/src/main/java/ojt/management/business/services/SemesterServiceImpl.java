@@ -1,6 +1,7 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
@@ -50,25 +51,16 @@ public class SemesterServiceImpl implements SemesterService {
             if (semester.isDisabled()) {
                 throw new SemesterNotExistedException();
             } else {
-                if (semesterUpdateRequest.getName() != "") {
-                    semester.setName(semesterUpdateRequest.getName());
-                    semesterRepository.save(semester);
-                }
-                if (semesterUpdateRequest.getStartDate() != null) {
-                    semester.setStartDate(semesterUpdateRequest.getStartDate());
-                    semesterRepository.save(semester);
-                }
-                if (semesterUpdateRequest.getEndDate() != null) {
-                    semester.setEndDate(semesterUpdateRequest.getEndDate());
-                    semesterRepository.save(semester);
-                }
-                return semesterRepository.getById(semesterUpdateRequest.getId());
+                semester.setName(semesterUpdateRequest.getName());
+                semester.setStartDate(semesterUpdateRequest.getStartDate());
+                semester.setEndDate(semesterUpdateRequest.getEndDate());
+                return semesterRepository.save(semester);
             }
         }
     }
 
     @Override
-    public boolean deleteSemester(Long id) throws SemesterNotExistedException {
+    public boolean deleteSemester(Long id) throws SemesterNotExistedException, SemesterDisabledException {
         if (Boolean.FALSE.equals(semesterRepository.existsById(id))) {
             throw new SemesterNotExistedException();
         } else {
@@ -77,14 +69,9 @@ public class SemesterServiceImpl implements SemesterService {
                 semester.setDisabled(true);
                 semesterRepository.save(semester);
                 return true;
-<<<<<<< Updated upstream
             } else {
-                throw new SemesterNotExistedException();
+                throw new SemesterDisabledException();
             }
-=======
-            }
-            return false;
->>>>>>> Stashed changes
         }
     }
 

@@ -13,13 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MajorUpdateRequest implements Serializable {
+public class MajorUpdateRequest extends MajorCreateRequest implements Serializable {
     @NotNull
     private Long id;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 250)
-    private String name;
-
 }

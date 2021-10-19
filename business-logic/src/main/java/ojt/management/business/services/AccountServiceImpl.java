@@ -1,5 +1,7 @@
 package ojt.management.business.services;
+
 import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.payload.request.AccountUpdateRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
 import org.springframework.data.domain.Page;
@@ -8,20 +10,20 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
 
-    public AccountServiceImpl (AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
     @Override
     public Account getUserById(Long id) throws AccountIdNotExistedException {
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw  new AccountIdNotExistedException();
+            throw new AccountIdNotExistedException();
         } else {
-            return  accountRepository.getById(id);
+            return accountRepository.getById(id);
         }
     }
 
@@ -31,22 +33,18 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public Account updateUser(Long id, String phone, String address, String password) throws AccountIdNotExistedException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
+    public Account updateUser(AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
+        if (Boolean.FALSE.equals(accountRepository.existsById(accountUpdateRequest.getId()))) {
             throw new AccountIdNotExistedException();
         } else {
-            Account account = accountRepository.getById(id);
-            if (account.isDisabled()){
+            Account account = accountRepository.getById(accountUpdateRequest.getId());
+            if (account.isDisabled()) {
                 throw new AccountIdNotExistedException();
             }
-            if (phone != "")
-                account.setPhone(phone);
-            if (address != "")
-                account.getStudent().setAddress(address);
-            if (password != "")
-                account.setPassword(password);
-            accountRepository.save(account);
-            return account;
+            account.setPhone(accountUpdateRequest.getPhone());
+            account.getStudent().setAddress(accountUpdateRequest.getAddress());
+            account.setPassword(accountUpdateRequest.getPassword());
+            return accountRepository.save(account);
         }
     }
 
@@ -56,11 +54,12 @@ public class AccountServiceImpl implements AccountService{
             throw new AccountIdNotExistedException();
         } else {
             Account account = accountRepository.getById(id);
-            if (!account.isDisabled()){
+            if (!account.isDisabled()) {
                 account.setDisabled(true);
                 return true;
+            } else {
+                throw new AccountIdNotExistedException();
             }
-            return false;
         }
     }
 }
