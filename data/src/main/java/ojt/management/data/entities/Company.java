@@ -58,7 +58,7 @@ public class Company implements Serializable {
         this.description = description;
     }
 
-    public Company(Long id){
+    public Company(Long id) {
         this.id = id;
     }
 }

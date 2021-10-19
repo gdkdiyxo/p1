@@ -43,7 +43,7 @@ public class CompanyController {
     public CompanyDTO getCompanyId(@PathVariable Long id,
                                    Authentication authentication) throws CrudException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return companyMapper.companyToCompanyDTO(companyService.getCompanyById(id,accountId));
+        return companyMapper.companyToCompanyDTO(companyService.getCompanyById(id, accountId));
     }
 
     @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
