@@ -8,7 +8,7 @@ import ojt.management.common.payload.dto.MajorDTO;
 import ojt.management.common.payload.request.MajorCreateRequest;
 import ojt.management.common.payload.request.MajorUpdateRequest;
 import ojt.management.mappers.MajorMapper;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@PostAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT')")
+@PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT')")
 @RequestMapping("/majors")
 @SecurityRequirement(name = "bearerAuth")
 public class MajorController {
@@ -40,7 +40,7 @@ public class MajorController {
         return majorService.searchMajor(name).stream().map(majorMapper::majorToMajorDTO).collect(Collectors.toList());
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
     public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest)
             throws MajorNotExistedException, MajorNameAlreadyExistedException {
@@ -49,13 +49,13 @@ public class MajorController {
                 majorUpdateRequest.getName()));
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
     public boolean deleteMajor(@PathVariable Long id) throws MajorNotExistedException {
         return majorService.deleteMajor(id);
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public MajorDTO createMajor(@RequestBody MajorCreateRequest majorCreateRequest)
             throws MajorNameAlreadyExistedException {
