@@ -28,7 +28,7 @@ public class MajorServiceImpl implements MajorService {
 
     @Override
     public List<Major> searchMajor(String name) {
-        if (name == "") {
+        if (name.isEmpty()) {
             return majorRepository.findAll();
         }
         return majorRepository.findByName(name);

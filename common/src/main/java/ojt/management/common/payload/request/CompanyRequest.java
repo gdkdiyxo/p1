@@ -13,7 +13,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompanyRequest implements Serializable {
-
     @NotNull
     @NotBlank
     @Size(max = 255)
