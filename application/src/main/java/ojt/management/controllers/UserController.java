@@ -77,7 +77,7 @@ public class UserController {
     public UserDTO updateUser(@PathVariable Long id,
                               @Valid @RequestBody AccountUpdateRequest accountUpdateRequest)
             throws AccountIdNotExistedException {
-        return userMapper.userToUserDTO(accountService.updateUser(accountUpdateRequest));
+        return userMapper.userToUserDTO(accountService.updateUser(id, accountUpdateRequest));
     }
 
     @DeleteMapping("/{id}")
