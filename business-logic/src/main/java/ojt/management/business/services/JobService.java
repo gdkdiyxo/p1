@@ -3,7 +3,7 @@ package ojt.management.business.services;
 import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.common.payload.request.JobCreateRequest;
-import ojt.management.common.payload.request.JobUpdateRequest;
+import ojt.management.common.payload.request.JobRequest;
 import ojt.management.data.entities.Job;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public interface JobService {
 
     Job getById(Long id, Long accountId) throws JobNotExistedException;
 
-    Job updateJob(JobUpdateRequest jobUpdateRequest, Long accountId) throws CrudException;
+    Job updateJob(Long id, JobRequest jobUpdateRequest, Long accountId) throws CrudException;
 
     boolean deleteJob(Long id, Long accountId) throws JobNotExistedException;
 

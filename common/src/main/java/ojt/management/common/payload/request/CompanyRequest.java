@@ -12,16 +12,15 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountUpdateRequest implements Serializable {
-    @NotNull
-    @Size(min = 10, max = 13)
-    private String phone;
-
-    @Size(max = 500)
-    private String address;
+public class CompanyRequest implements Serializable {
 
     @NotNull
     @NotBlank
-    @Size(min = 8, max = 1024)
-    private String password;
+    @Size(max = 255)
+    private String name;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 500)
+    private String description;
 }

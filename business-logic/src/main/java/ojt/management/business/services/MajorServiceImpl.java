@@ -2,6 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
+import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.data.entities.Major;
 import ojt.management.data.repositories.MajorRepository;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
-    public Major updateMajor(Long id, String name) throws MajorNotExistedException, MajorNameAlreadyExistedException {
+    public Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException {
         if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
             throw new MajorNotExistedException();
         } else if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {

@@ -4,8 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.CompanyService;
 import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.payload.dto.CompanyDTO;
-import ojt.management.common.payload.request.CompanyCreateRequest;
-import ojt.management.common.payload.request.CompanyUpdateRequest;
+import ojt.management.common.payload.request.CompanyRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.CompanyMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,13 +47,15 @@ public class CompanyController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
-    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) throws CrudException {
-        return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest));
+    public CompanyDTO updateCompany(@PathVariable Long id,
+                                    @RequestBody @Valid CompanyRequest companyUpdateRequest)
+            throws CrudException {
+        return companyMapper.companyToCompanyDTO(companyService.updateCompany(id, companyUpdateRequest));
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public CompanyDTO createCompany(@RequestBody @Valid CompanyCreateRequest companyCreateRequest) {
-        return companyMapper.companyToCompanyDTO(companyService.createCompany(companyCreateRequest));
+    public CompanyDTO createCompany(@RequestBody @Valid CompanyRequest companyRequest) {
+        return companyMapper.companyToCompanyDTO(companyService.createCompany(companyRequest));
     }
 }

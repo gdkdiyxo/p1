@@ -13,7 +13,7 @@ public interface AccountService {
 
     Page<Account> searchUser(Specification<Account> specification, Pageable pageable);
 
-    Account updateUser(AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException;
+    Account updateUser(Long id, AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException;
 
     boolean deleteUser(Long id) throws AccountIdNotExistedException;
 }

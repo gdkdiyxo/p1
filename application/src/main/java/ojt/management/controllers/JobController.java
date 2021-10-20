@@ -6,7 +6,7 @@ import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.common.payload.dto.JobDTO;
 import ojt.management.common.payload.request.JobCreateRequest;
-import ojt.management.common.payload.request.JobUpdateRequest;
+import ojt.management.common.payload.request.JobRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.JobMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,21 +49,28 @@ public class JobController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
-    public JobDTO updateJob(@Valid @RequestBody JobUpdateRequest jobUpdateRequest, Authentication authentication) throws CrudException {
+    public JobDTO updateJob(@PathVariable Long id,
+                            @Valid @RequestBody JobRequest jobUpdateRequest,
+                            Authentication authentication)
+            throws CrudException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest, accountId));
+        return jobMapper.jobToJobDTO(jobService.updateJob(id, jobUpdateRequest, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @DeleteMapping("/{id}")
-    public boolean deleteJob(@PathVariable Long id, Authentication authentication) throws JobNotExistedException {
+    public boolean deleteJob(@PathVariable Long id,
+                             Authentication authentication)
+            throws JobNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return jobService.deleteJob(id, accountId);
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PostMapping
-    public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest, Authentication authentication) throws CrudException {
+    public JobDTO createJob(@Valid @RequestBody JobCreateRequest jobCreateRequest,
+                            Authentication authentication)
+            throws CrudException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return jobMapper.jobToJobDTO(jobService.createJob(jobCreateRequest, accountId));
     }
