@@ -14,9 +14,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AccountUpdateRequest implements Serializable {
     @NotNull
-    private Long id;
-
-    @NotNull
     @Size(min = 10, max = 13)
     private String phone;
 

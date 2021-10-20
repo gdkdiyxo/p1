@@ -42,7 +42,8 @@ public class MajorController {
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
-    public MajorDTO updateMajor(@Valid @RequestBody MajorUpdateRequest majorUpdateRequest)
+    public MajorDTO updateMajor(@PathVariable Long id,
+                                @Valid @RequestBody MajorUpdateRequest majorUpdateRequest)
             throws MajorNotExistedException, MajorNameAlreadyExistedException {
         return majorMapper.majorToMajorDTO(majorService.updateMajor(
                 majorUpdateRequest.getId(),

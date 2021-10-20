@@ -46,7 +46,8 @@ public class SemesterController {
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
-    public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest)
+    public SemesterDTO updateSemester(@PathVariable Long id,
+                                      @Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest)
             throws SemesterAlreadyExistedException, SemesterNotExistedException {
         return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(semesterUpdateRequest));
     }

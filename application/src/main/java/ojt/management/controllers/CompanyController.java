@@ -48,7 +48,9 @@ public class CompanyController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
-    public CompanyDTO updateCompany(@RequestBody @Valid CompanyUpdateRequest companyUpdateRequest) throws CrudException {
+    public CompanyDTO updateCompany(@PathVariable Long id,
+                                    @RequestBody @Valid CompanyUpdateRequest companyUpdateRequest)
+            throws CrudException {
         return companyMapper.companyToCompanyDTO(companyService.updateCompany(companyUpdateRequest));
     }
 

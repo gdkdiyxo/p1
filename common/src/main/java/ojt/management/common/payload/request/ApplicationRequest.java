@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationCreateRequest implements  Serializable{
+public class ApplicationRequest implements  Serializable{
     @NotNull
     @NotBlank
     @Size(max = 1000)
@@ -23,4 +23,10 @@ public class ApplicationCreateRequest implements  Serializable{
 
     @NotNull
     private Long accountId;
+
+    @NotNull
+    private boolean isCompanyAccepted;
+
+    @NotNull
+    private boolean isStudentConfirmed;
 }
