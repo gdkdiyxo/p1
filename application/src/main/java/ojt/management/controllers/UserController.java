@@ -8,6 +8,7 @@ import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.UserDTO;
 import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.common.utils.SortUtils;
 import ojt.management.data.entities.Account;
 import ojt.management.data.rsql.CustomRsqlVisitor;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -47,11 +49,14 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) throws AccountIdNotExistedException {
+    public UserDTO getUserById(@PathVariable Long id)
+            throws AccountIdNotExistedException {
         return userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
     public PagedDataResponse<UserDTO> searchUser(@RequestParam(value = "search", required = false) String search,
                                                  @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
@@ -73,6 +78,7 @@ public class UserController {
         return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages(), pagedResult.getNumber());
     }
 
+    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id,
                               @Valid @RequestBody AccountUpdateRequest accountUpdateRequest)
@@ -80,8 +86,10 @@ public class UserController {
         return userMapper.userToUserDTO(accountService.updateUser(id, accountUpdateRequest));
     }
 
+    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) throws AccountIdNotExistedException {
+    public boolean deleteUser(@PathVariable Long id)
+            throws AccountIdNotExistedException {
         return accountService.deleteUser(id);
     }
 }

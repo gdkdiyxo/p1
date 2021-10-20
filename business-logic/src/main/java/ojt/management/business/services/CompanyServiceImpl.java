@@ -29,7 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<Company> searchCompany(String name, String description) {
-        if (name == "" && description == "") {
+        if (name.isEmpty() && description.isEmpty()) {
             return companyRepository.findAll();
         } else {
             return companyRepository.searchCompany(name, description);

@@ -9,13 +9,12 @@ import ojt.management.data.entities.Job;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.ApplicationRepository;
 import ojt.management.data.repositories.JobRepository;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ApplicationServiceImpl implements  ApplicationService{
+public class ApplicationServiceImpl implements ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
@@ -43,8 +42,8 @@ public class ApplicationServiceImpl implements  ApplicationService{
     }
 
     @Override
-    public Application getAppById(Long id, Long accountId) throws ApplicationNotExistedException, AccountIdNotExistedException{
-        if (Boolean.FALSE.equals(applicationRepository.existsById(id))){
+    public Application getAppById(Long id, Long accountId) throws ApplicationNotExistedException, AccountIdNotExistedException {
+        if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
@@ -53,14 +52,14 @@ public class ApplicationServiceImpl implements  ApplicationService{
         Account account = accountRepository.getById(accountId);
         if (account.getRepresentative() != null) {
             return applicationRepository.getAppRep(id, account.getRepresentative().getCompany().getId());
-        } else  {
+        } else {
             return applicationRepository.getAppStudent(id, account.getStudent().getId());
         }
     }
 
     @Override
     public boolean deleteApplication(Long id) throws ApplicationNotExistedException {
-        if (Boolean.FALSE.equals(applicationRepository.existsById(id))){
+        if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
         Application application = applicationRepository.getById(id);
@@ -73,15 +72,15 @@ public class ApplicationServiceImpl implements  ApplicationService{
     }
 
     @Override
-    public Application updateApplication(Long id, ApplicationRequest applicationRequest) throws ApplicationNotExistedException{
-        if (Boolean.FALSE.equals(applicationRepository.existsById(id))){
+    public Application updateApplication(Long id, ApplicationRequest applicationRequest) throws ApplicationNotExistedException {
+        if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
         Application application = applicationRepository.getById(id);
-        if (application.isDisabled()){
+        if (application.isDisabled()) {
             throw new ApplicationNotExistedException();
         } else {
-            if (applicationRequest.getExperience() != "")
+            if (!applicationRequest.getExperience().isEmpty()) 
                 application.setExperience(applicationRequest.getExperience());
             application.setCompanyAccepted(applicationRequest.isCompanyAccepted());
             application.setStudentConfirmed(applicationRequest.isStudentConfirmed());

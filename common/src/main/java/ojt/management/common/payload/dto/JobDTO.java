@@ -6,16 +6,18 @@ import lombok.NoArgsConstructor;
 import ojt.management.data.entities.Major;
 import ojt.management.data.entities.Semester;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobDTO {
+public class JobDTO implements Serializable {
     private Long id;
     private String name;
     private String description;
     private String title;
     private Set<SemesterDTO> semesters;
     private Set<MajorDTO> majors;
+    private CompanyDTO company;
 }

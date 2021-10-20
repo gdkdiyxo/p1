@@ -160,10 +160,9 @@ public class AuthController {
                     account.setAdmin(true);
                     break;
                 case "COMPANY_REPRESENTATIVE":
-                    if (!companyRepository.existsById(signUpRequest.getCompanyId())) {
-                        throw new CompanyNotExistedException();
-                    }
-                    Company company = companyRepository.getById(signUpRequest.getCompanyId());
+                    Company company = new Company();
+                    company.setName(signUpRequest.getCompanyName());
+                    company.setDescription(signUpRequest.getDescription());
                     Representative representative = new Representative();
                     representative.setCompany(company);
                     representative.setAccount(account);

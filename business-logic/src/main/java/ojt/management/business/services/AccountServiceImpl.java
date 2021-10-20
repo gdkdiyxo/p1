@@ -34,18 +34,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account updateUser(Long id, AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
-            throw new AccountIdNotExistedException();
-        } else {
-            Account account = accountRepository.getById(id);
-            if (account.isDisabled()) {
-                throw new AccountIdNotExistedException();
-            }
-            account.setPhone(accountUpdateRequest.getPhone());
-            account.getStudent().setAddress(accountUpdateRequest.getAddress());
-            account.setPassword(accountUpdateRequest.getPassword());
-            return accountRepository.save(account);
-        }
+        Account account = accountRepository.getById(id);
+
+        return accountRepository.save(account);
     }
 
     @Override
