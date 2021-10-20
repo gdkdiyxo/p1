@@ -1,6 +1,7 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.common.payload.request.SemesterUpdateRequest;
@@ -59,7 +60,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public boolean deleteSemester(Long id) throws SemesterNotExistedException {
+    public boolean deleteSemester(Long id) throws SemesterNotExistedException, SemesterDisabledException {
         if (Boolean.FALSE.equals(semesterRepository.existsById(id))) {
             throw new SemesterNotExistedException();
         } else {
@@ -69,7 +70,7 @@ public class SemesterServiceImpl implements SemesterService {
                 semesterRepository.save(semester);
                 return true;
             } else {
-                throw new SemesterNotExistedException();
+                throw new SemesterDisabledException();
             }
         }
     }
