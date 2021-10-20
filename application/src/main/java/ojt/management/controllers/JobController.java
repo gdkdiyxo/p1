@@ -6,7 +6,7 @@ import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.exceptions.JobNotExistedException;
 import ojt.management.common.payload.dto.JobDTO;
 import ojt.management.common.payload.request.JobCreateRequest;
-import ojt.management.common.payload.request.JobUpdateRequest;
+import ojt.management.common.payload.request.JobRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.JobMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,11 +50,11 @@ public class JobController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
     public JobDTO updateJob(@PathVariable Long id,
-                            @Valid @RequestBody JobUpdateRequest jobUpdateRequest,
+                            @Valid @RequestBody JobRequest jobUpdateRequest,
                             Authentication authentication)
             throws CrudException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return jobMapper.jobToJobDTO(jobService.updateJob(jobUpdateRequest, accountId));
+        return jobMapper.jobToJobDTO(jobService.updateJob(id, jobUpdateRequest, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")

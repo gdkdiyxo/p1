@@ -5,8 +5,7 @@ import ojt.management.business.services.MajorService;
 import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
 import ojt.management.common.payload.dto.MajorDTO;
-import ojt.management.common.payload.request.MajorCreateRequest;
-import ojt.management.common.payload.request.MajorUpdateRequest;
+import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.mappers.MajorMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,11 +42,9 @@ public class MajorController {
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
     public MajorDTO updateMajor(@PathVariable Long id,
-                                @Valid @RequestBody MajorUpdateRequest majorUpdateRequest)
+                                @Valid @RequestBody MajorRequest majorUpdateRequest)
             throws MajorNotExistedException, MajorNameAlreadyExistedException {
-        return majorMapper.majorToMajorDTO(majorService.updateMajor(
-                majorUpdateRequest.getId(),
-                majorUpdateRequest.getName()));
+        return majorMapper.majorToMajorDTO(majorService.updateMajor(id, majorUpdateRequest));
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
@@ -58,8 +55,8 @@ public class MajorController {
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
-    public MajorDTO createMajor(@RequestBody MajorCreateRequest majorCreateRequest)
+    public MajorDTO createMajor(@RequestBody MajorRequest majorRequest)
             throws MajorNameAlreadyExistedException {
-        return majorMapper.majorToMajorDTO(majorService.createMajor(majorCreateRequest.getName()));
+        return majorMapper.majorToMajorDTO(majorService.createMajor(majorRequest.getName()));
     }
 }

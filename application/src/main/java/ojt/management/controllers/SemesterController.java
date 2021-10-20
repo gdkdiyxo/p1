@@ -7,7 +7,6 @@ import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.dto.SemesterDTO;
 import ojt.management.common.payload.request.SemesterRequest;
-import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.mappers.SemesterMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -47,9 +46,9 @@ public class SemesterController {
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
     public SemesterDTO updateSemester(@PathVariable Long id,
-                                      @Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest)
+                                      @Valid @RequestBody SemesterRequest semesterUpdateRequest)
             throws SemesterAlreadyExistedException, SemesterNotExistedException {
-        return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(semesterUpdateRequest));
+        return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(id, semesterUpdateRequest));
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")

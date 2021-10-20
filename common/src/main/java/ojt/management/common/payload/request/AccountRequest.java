@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupRequest implements Serializable {
+public class AccountRequest implements Serializable {
     @Email(message = "Email is not valid")
     @NotNull
     @Size(max = 320)
@@ -63,7 +63,7 @@ public class SignupRequest implements Serializable {
 
 
     // Constructor or admin creation
-    public SignupRequest(String email, String password, String name, String role, String phone) {
+    public AccountRequest(String email, String password, String name, String role, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -72,7 +72,7 @@ public class SignupRequest implements Serializable {
     }
 
     // constructor for representative
-    public SignupRequest(String email, String password, String name, String role, String phone, Long companyId) {
+    public AccountRequest(String email, String password, String name, String role, String phone, Long companyId) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -82,7 +82,7 @@ public class SignupRequest implements Serializable {
     }
 
     // constructor for student
-    public SignupRequest(String email, String password, String name, String role, String phone, String address, String studentCode, Long majorId) {
+    public AccountRequest(String email, String password, String name, String role, String phone, String address, String studentCode, Long majorId) {
         this.email = email;
         this.password = password;
         this.name = name;

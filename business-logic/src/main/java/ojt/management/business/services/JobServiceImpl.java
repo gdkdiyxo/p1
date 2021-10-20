@@ -3,7 +3,6 @@ package ojt.management.business.services;
 import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.common.payload.request.JobRequest;
-import ojt.management.common.payload.request.JobUpdateRequest;
 import ojt.management.data.entities.*;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.JobRepository;
@@ -11,7 +10,6 @@ import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -72,20 +70,20 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job updateJob(JobUpdateRequest jobUpdateRequest, Long accountId) throws CrudException {
-        if (!jobRepository.existsById(jobUpdateRequest.getId())) {
+    public Job updateJob(Long idJob, JobRequest jobUpdateRequest, Long accountId) throws CrudException {
+        if (!jobRepository.existsById(idJob)) {
             throw new JobNotExistedException();
         }
         //Check authen: the Rep only can edit their own job
         Account account = accountRepository.getById(accountId);
-        Long oldJob = jobRepository.getById(jobUpdateRequest.getId()).getCompany().getId();
+        Long oldJob = jobRepository.getById(idJob).getCompany().getId();
         if (!account.isAdmin() || (!oldJob.equals(account.getRepresentative().getCompany().getId()))) {
             throw new JobNotAllowedUpdateException();
         }
 
         validateSemesterIdsAndMajorIds(jobUpdateRequest);
 
-        Job job = jobRepository.getById(jobUpdateRequest.getId());
+        Job job = jobRepository.getById(idJob);
         job.setName(jobUpdateRequest.getName());
         job.setDescription(jobUpdateRequest.getDescription());
         job.setTitle(jobUpdateRequest.getTitle());

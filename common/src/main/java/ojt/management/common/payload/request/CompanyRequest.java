@@ -12,20 +12,15 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationUpdateRequest implements  Serializable{
-    @NotNull
-    @NotBlank
-    @Size(max = 1000)
-    private String experience;
-
-    @NotNull
-    private Long id;
+public class CompanyRequest implements Serializable {
 
     @NotNull
     @NotBlank
-    private boolean isCompanyAccepted;
+    @Size(max = 255)
+    private String name;
 
     @NotNull
     @NotBlank
-    private boolean isStudentConfirmed;
+    @Size(max = 500)
+    private String description;
 }
