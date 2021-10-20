@@ -14,19 +14,9 @@ import java.util.Date;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(value = {ojt.management.common.exceptions.
-            EmailAlreadyExistedException.class,
-            UsernameAlreadyExistedException.class,
-            EmptyRoleException.class,
-            MajorNotExistedException.class,
-            MajorNameAlreadyExistedException.class,
-            JobNotExistedException.class,
-            CompanyNotExistedException.class,
-            AccountIdNotExistedException.class,
-            SemesterAlreadyExistedException.class,
-            SemesterNotExistedException.class,
-            AccountDisabledException.class,
-            SemesterDisabledException.class})
+    @ExceptionHandler(value = {
+            CrudException.class
+    })
     protected ResponseEntity<Response> handleAuthExceptions(CrudException exception) {
         return ResponseEntity
                 .status(exception.getStatus())

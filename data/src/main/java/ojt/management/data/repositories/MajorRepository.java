@@ -14,4 +14,6 @@ public interface MajorRepository extends JpaRepository<Major, Long> {
     boolean existsById(Long id);
 
     List<Major> findByName(String name);
+
+    List<Major> findAllByIdIn(List<Long> ids);
 }

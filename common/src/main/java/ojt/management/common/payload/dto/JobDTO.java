@@ -17,7 +17,7 @@ public class JobDTO implements Serializable {
     private String name;
     private String description;
     private String title;
-    private Set<Semester> semesters;
-    private Set<Major> major;
+    private Set<SemesterDTO> semesters;
+    private Set<MajorDTO> majors;
     private CompanyDTO company;
 }

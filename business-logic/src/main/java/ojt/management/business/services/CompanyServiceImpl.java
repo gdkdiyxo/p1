@@ -2,8 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.CompanyNotExistedException;
 import ojt.management.common.exceptions.CrudException;
-import ojt.management.common.payload.request.CompanyCreateRequest;
-import ojt.management.common.payload.request.CompanyUpdateRequest;
+import ojt.management.common.payload.request.CompanyRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
 import ojt.management.data.repositories.AccountRepository;
@@ -38,13 +37,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company updateCompany(CompanyUpdateRequest companyUpdateRequest) throws CrudException {
-        if (!companyRepository.existsById(companyUpdateRequest.getId())) {
+    public Company updateCompany(Long id, CompanyRequest companyRequest) throws CrudException {
+        if (!companyRepository.existsById(id)) {
             throw new CompanyNotExistedException();
         }
-        Company company = companyRepository.getById(companyUpdateRequest.getId());
-        company.setName(companyUpdateRequest.getName());
-        company.setDescription(companyUpdateRequest.getDescription());
+        Company company = companyRepository.getById(id);
+        company.setName(companyRequest.getName());
+        company.setDescription(companyRequest.getDescription());
 
         return companyRepository.save(company);
     }
@@ -66,10 +65,10 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company createCompany(CompanyCreateRequest companyCreateRequest) {
+    public Company createCompany(CompanyRequest companyRequest) {
         Company company = new Company();
-        company.setName(companyCreateRequest.getName());
-        company.setDescription(companyCreateRequest.getDescription());
+        company.setName(companyRequest.getName());
+        company.setDescription(companyRequest.getDescription());
         return companyRepository.save(company);
     }
 }

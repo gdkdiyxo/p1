@@ -16,7 +16,7 @@ import ojt.management.common.payload.Response;
 import ojt.management.common.payload.TokenRefreshResponse;
 import ojt.management.common.payload.dto.UserDTO;
 import ojt.management.common.payload.request.LoginRequest;
-import ojt.management.common.payload.request.SignupRequest;
+import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.common.payload.request.TokenRefreshRequest;
 import ojt.management.configuration.security.services.RefreshTokenService;
 import ojt.management.configuration.security.services.UserDetailsImpl;
@@ -129,7 +129,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<DataResponse<Account>> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
+    public ResponseEntity<DataResponse<Account>> registerUser(@Valid @RequestBody AccountRequest signUpRequest)
             throws UsernameAlreadyExistedException,
             EmailAlreadyExistedException,
             EmptyRoleException,

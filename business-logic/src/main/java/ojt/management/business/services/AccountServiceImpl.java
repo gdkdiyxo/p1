@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateUser(AccountUpdateRequest accountUpdateRequest, Long accountId) throws AccountIdNotExistedException {
+    public Account updateUser(Long id, AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
         AccountStudentUpdateRequest accountStudentUpdateRequest = new AccountStudentUpdateRequest();
         AccountCompanyUpdateRequest accountCompanyUpdateRequest = new AccountCompanyUpdateRequest();
 

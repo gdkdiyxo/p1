@@ -2,6 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
+import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.data.entities.Major;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface MajorService {
 
     List<Major> searchMajor(String name);
 
-    Major updateMajor(Long id, String name) throws MajorNotExistedException, MajorNameAlreadyExistedException;
+    Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException;
 
     boolean deleteMajor(Long id) throws MajorNotExistedException;
 

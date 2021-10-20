@@ -12,15 +12,9 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyCreateRequest implements Serializable {
-
+public class MajorRequest implements Serializable {
     @NotNull
     @NotBlank
-    @Size(max = 255)
+    @Size(max = 250)
     private String name;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 500)
-    private String description;
 }
