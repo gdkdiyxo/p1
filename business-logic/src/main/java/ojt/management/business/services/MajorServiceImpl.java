@@ -38,14 +38,14 @@ public class MajorServiceImpl implements MajorService {
     public Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException {
         if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
             throw new MajorNotExistedException();
-        } else if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
+        } else if (Boolean.TRUE.equals(majorRepository.existsByName(majorRequest.getName()))) {
             throw new MajorNameAlreadyExistedException();
         } else {
             Major major = majorRepository.getById(id);
             if (major.isDisabled()) {
                 throw new MajorNotExistedException();
             } else {
-                major.setName(name);
+                major.setName(majorRequest.getName());
                 return majorRepository.save(major);
             }
         }
