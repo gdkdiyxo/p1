@@ -1,9 +1,9 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.request.SemesterRequest;
-import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.data.domain.Page;
@@ -37,8 +37,8 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public Semester updateSemester(SemesterUpdateRequest semesterUpdateRequest) throws SemesterAlreadyExistedException, SemesterNotExistedException {
-        if (Boolean.FALSE.equals(semesterRepository.existsById(semesterUpdateRequest.getId()))) {
+    public Semester updateSemester(Long id, SemesterRequest semesterUpdateRequest) throws SemesterAlreadyExistedException, SemesterNotExistedException {
+        if (Boolean.FALSE.equals(semesterRepository.existsById(id))) {
             throw new SemesterNotExistedException();
         } else if (Boolean.TRUE.equals(semesterRepository.existsByName(semesterUpdateRequest.getName()))
                 || Boolean.TRUE.equals(semesterRepository.existsByStartDateAndEndDate(
@@ -46,7 +46,7 @@ public class SemesterServiceImpl implements SemesterService {
                 semesterUpdateRequest.getEndDate()))) {
             throw new SemesterAlreadyExistedException();
         } else {
-            Semester semester = semesterRepository.getById(semesterUpdateRequest.getId());
+            Semester semester = semesterRepository.getById(id);
             if (semester.isDisabled()) {
                 throw new SemesterNotExistedException();
             } else {
@@ -59,7 +59,7 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public boolean deleteSemester(Long id) throws SemesterNotExistedException {
+    public boolean deleteSemester(Long id) throws SemesterNotExistedException, SemesterDisabledException {
         if (Boolean.FALSE.equals(semesterRepository.existsById(id))) {
             throw new SemesterNotExistedException();
         } else {
@@ -69,7 +69,7 @@ public class SemesterServiceImpl implements SemesterService {
                 semesterRepository.save(semester);
                 return true;
             } else {
-                throw new SemesterNotExistedException();
+                throw new SemesterDisabledException();
             }
         }
     }

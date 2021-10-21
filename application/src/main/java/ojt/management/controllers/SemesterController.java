@@ -4,11 +4,11 @@ import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.SemesterService;
 import ojt.management.common.exceptions.SemesterAlreadyExistedException;
+import ojt.management.common.exceptions.SemesterDisabledException;
 import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.SemesterDTO;
 import ojt.management.common.payload.request.SemesterRequest;
-import ojt.management.common.payload.request.SemesterUpdateRequest;
 import ojt.management.common.utils.SortUtils;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.rsql.CustomRsqlVisitor;
@@ -20,15 +20,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PostAuthorize;
+import ojt.management.mappers.SemesterMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@PostAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE')")
+@PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE')")
 @RequestMapping("/semesters")
 @SecurityRequirement(name = "bearerAuth")
 public class SemesterController {
@@ -61,24 +61,25 @@ public class SemesterController {
         Page<Semester> pagedResult = semesterService.searchSemester(spec, pageable);
         List<SemesterDTO> data = pagedResult.getContent().stream().map(semesterMapper::semesterToSemesterDTO).collect(Collectors.toList());
 
-        return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages());
+        return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages(), pagedResult.getNumber());
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PutMapping("/{id}")
-    public SemesterDTO updateSemester(@Valid @RequestBody SemesterUpdateRequest semesterUpdateRequest)
+    public SemesterDTO updateSemester(@PathVariable Long id,
+                                      @Valid @RequestBody SemesterRequest semesterUpdateRequest)
             throws SemesterAlreadyExistedException, SemesterNotExistedException {
-        return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(semesterUpdateRequest));
+        return semesterMapper.semesterToSemesterDTO(semesterService.updateSemester(id, semesterUpdateRequest));
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
     public boolean deleteSemester(@PathVariable Long id)
-            throws SemesterNotExistedException {
+            throws SemesterNotExistedException, SemesterDisabledException {
         return semesterService.deleteSemester(id);
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public SemesterDTO createSemester(@Valid @RequestBody SemesterRequest semesterRequest)
             throws SemesterAlreadyExistedException {

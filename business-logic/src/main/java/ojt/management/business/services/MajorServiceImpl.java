@@ -2,6 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
+import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.data.entities.Major;
 import ojt.management.data.repositories.MajorRepository;
 import org.springframework.data.domain.Page;
@@ -12,14 +13,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MajorServiceImpl implements MajorService{
+public class MajorServiceImpl implements MajorService {
 
     private final MajorRepository majorRepository;
 
-    public MajorServiceImpl(MajorRepository majorRepository) {this.majorRepository = majorRepository;}
+    public MajorServiceImpl(MajorRepository majorRepository) {
+        this.majorRepository = majorRepository;
+    }
 
     @Override
-    public Major getMajorById (Long id) throws MajorNotExistedException {
+    public Major getMajorById(Long id) throws MajorNotExistedException {
         if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
             throw new MajorNotExistedException();
         } else
@@ -32,27 +35,24 @@ public class MajorServiceImpl implements MajorService{
     }
 
     @Override
-    public Major updateMajor (Long id, String name) throws MajorNotExistedException, MajorNameAlreadyExistedException{
+    public Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException {
         if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
             throw new MajorNotExistedException();
-        } else if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
+        } else if (Boolean.TRUE.equals(majorRepository.existsByName(majorRequest.getName()))) {
             throw new MajorNameAlreadyExistedException();
         } else {
             Major major = majorRepository.getById(id);
             if (major.isDisabled()) {
                 throw new MajorNotExistedException();
             } else {
-                if (name != "") {
-                    major.setName(name);
-                }
-                majorRepository.save(major);
-                return majorRepository.getById(id);
+                major.setName(majorRequest.getName());
+                return majorRepository.save(major);
             }
         }
     }
 
     @Override
-    public boolean deleteMajor (Long id) throws MajorNotExistedException {
+    public boolean deleteMajor(Long id) throws MajorNotExistedException {
         if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
             throw new MajorNotExistedException();
         } else {
@@ -66,7 +66,7 @@ public class MajorServiceImpl implements MajorService{
     }
 
     @Override
-    public Major createMajor (String name) throws MajorNameAlreadyExistedException {
+    public Major createMajor(String name) throws MajorNameAlreadyExistedException {
         if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
             throw new MajorNameAlreadyExistedException();
         } else {

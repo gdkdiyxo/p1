@@ -2,10 +2,10 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.exceptions.ApplicationNotExistedException;
+import ojt.management.common.payload.request.ApplicationRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Application;
 import ojt.management.data.entities.Job;
-import ojt.management.data.entities.Student;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.ApplicationRepository;
 import ojt.management.data.repositories.JobRepository;
@@ -73,7 +73,7 @@ public class ApplicationServiceImpl implements  ApplicationService{
     }
 
     @Override
-    public Application updateApplication(Long id, String experience, boolean isCompanyAccepted, boolean isStudentConfirmed) throws ApplicationNotExistedException{
+    public Application updateApplication(Long id, ApplicationRequest applicationRequest) throws ApplicationNotExistedException{
         if (Boolean.FALSE.equals(applicationRepository.existsById(id))){
             throw new ApplicationNotExistedException();
         }
@@ -81,21 +81,21 @@ public class ApplicationServiceImpl implements  ApplicationService{
         if (application.isDisabled()){
             throw new ApplicationNotExistedException();
         } else {
-            if (experience != "")
-                application.setExperience(experience);
-            application.setCompanyAccepted(isCompanyAccepted);
-            application.setStudentConfirmed(isStudentConfirmed);
+            if (applicationRequest.getExperience() != "")
+                application.setExperience(applicationRequest.getExperience());
+            application.setCompanyAccepted(applicationRequest.isCompanyAccepted());
+            application.setStudentConfirmed(applicationRequest.isStudentConfirmed());
             applicationRepository.save(application);
             return application;
         }
     }
 
     @Override
-    public Application createApplication(String experience, Long jobId, Long accountId) {
-        Account account = accountRepository.getById(accountId);
-        Job job = jobRepository.getById(jobId);
+    public Application createApplication(ApplicationRequest applicationRequest) {
+        Account account = accountRepository.getById(applicationRequest.getAccountId());
+        Job job = jobRepository.getById(applicationRequest.getJobId());
         Application application = new Application();
-        application.setExperience(experience);
+        application.setExperience(applicationRequest.getExperience());
         application.setJob(job);
         application.setStudent(account.getStudent());
         application.setStudentConfirmed(false);
