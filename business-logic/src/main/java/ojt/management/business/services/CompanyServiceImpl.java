@@ -45,6 +45,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.getById(companyUpdateRequest.getId());
         company.setName(companyUpdateRequest.getName());
         company.setDescription(companyUpdateRequest.getDescription());
+        company.setAddress(companyUpdateRequest.getAddress());
 
         return companyRepository.save(company);
     }
@@ -70,6 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = new Company();
         company.setName(companyCreateRequest.getName());
         company.setDescription(companyCreateRequest.getDescription());
+        company.setAddress(companyCreateRequest.getAddress());
         return companyRepository.save(company);
     }
 }

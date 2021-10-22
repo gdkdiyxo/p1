@@ -37,6 +37,9 @@ public class Company implements Serializable {
     @Column(name = "description", length = 500, nullable = false)
     private String description;
 
+    @Column(name = "address", length = 500)
+    private  String address;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;

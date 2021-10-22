@@ -23,4 +23,9 @@ public class CompanyCreateRequest implements Serializable {
     @NotBlank
     @Size(max = 500)
     private String description;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 500)
+    private String address;
 }
