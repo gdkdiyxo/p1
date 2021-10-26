@@ -1,6 +1,5 @@
 package ojt.management.data.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

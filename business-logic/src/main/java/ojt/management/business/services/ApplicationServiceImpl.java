@@ -29,7 +29,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<Application> searchApplication(Long accountId) throws AccountIdNotExistedException {
+    public List<Application> searchApplication(Long accountId)
+            throws AccountIdNotExistedException {
         if (Boolean.FALSE.equals(accountRepository.existsById(accountId))) {
             throw new AccountIdNotExistedException();
         }
@@ -42,7 +43,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Application getAppById(Long id, Long accountId) throws ApplicationNotExistedException, AccountIdNotExistedException {
+    public Application getAppById(Long id, Long accountId)
+            throws ApplicationNotExistedException, AccountIdNotExistedException {
         if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
@@ -58,7 +60,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public boolean deleteApplication(Long id) throws ApplicationNotExistedException {
+    public boolean deleteApplication(Long id)
+            throws ApplicationNotExistedException {
         if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
@@ -72,7 +75,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Application updateApplication(Long id, ApplicationRequest applicationRequest) throws ApplicationNotExistedException {
+    public Application updateApplication(Long id, ApplicationRequest applicationRequest)
+            throws ApplicationNotExistedException {
         if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
@@ -102,5 +106,4 @@ public class ApplicationServiceImpl implements ApplicationService {
         applicationRepository.save(application);
         return application;
     }
-
 }

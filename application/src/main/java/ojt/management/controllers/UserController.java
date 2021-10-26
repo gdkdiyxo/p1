@@ -49,14 +49,14 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id)
             throws AccountIdNotExistedException {
         return userMapper.userToUserDTO(accountService.getUserById(id));
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
     public PagedDataResponse<UserDTO> searchUser(@RequestParam(value = "search", required = false) String search,
                                                  @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
@@ -78,7 +78,7 @@ public class UserController {
         return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages(), pagedResult.getNumber());
     }
 
-    @PostAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
+    @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id,
                               @Valid @RequestBody AccountUpdateRequest accountUpdateRequest)
@@ -86,7 +86,7 @@ public class UserController {
         return userMapper.userToUserDTO(accountService.updateUser(id, accountUpdateRequest));
     }
 
-    @PostAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @DeleteMapping("/{id}")
     public boolean deleteUser(@PathVariable Long id)
             throws AccountIdNotExistedException {
