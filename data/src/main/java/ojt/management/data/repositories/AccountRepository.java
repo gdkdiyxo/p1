@@ -21,7 +21,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
             "OR a.phone = :phone ")
     List<Account> searchUser(@Param("name") String name, @Param("email") String email, @Param("phone") String phone);
 
-    Boolean existsByStudent_StudentCode(String studentCode);
+    Boolean existsByStudentCode(String studentCode);
 
     Boolean existsByEmail(String email);
 

@@ -3,8 +3,6 @@ package ojt.management.common.payload.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ojt.management.data.entities.Major;
-import ojt.management.data.entities.Semester;
 
 import java.io.Serializable;
 import java.util.Set;

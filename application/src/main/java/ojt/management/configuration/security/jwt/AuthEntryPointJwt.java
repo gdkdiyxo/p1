@@ -41,7 +41,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     @Getter
     @Setter
-    public class AuthorizedErrorResponse implements Serializable {
+    public static class AuthorizedErrorResponse implements Serializable {
         private String timestamp;
         private int status;
         private String error;

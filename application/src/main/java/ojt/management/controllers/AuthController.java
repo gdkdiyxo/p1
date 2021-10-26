@@ -136,7 +136,7 @@ public class AuthController {
             CompanyNotExistedException,
             MajorNotExistedException {
         if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(
-                accountRepository.existsByStudent_StudentCode(signUpRequest.getStudentCode()))) {
+                accountRepository.existsByStudentCode(signUpRequest.getStudentCode()))) {
             throw new UsernameAlreadyExistedException();
         }
 
@@ -164,6 +164,7 @@ public class AuthController {
                     company.setName(signUpRequest.getCompanyName());
                     company.setDescription(signUpRequest.getDescription());
                     company.setAddress(signUpRequest.getCompanyAddress());
+                    companyRepository.save(company);
                     Representative representative = new Representative();
                     representative.setCompany(company);
                     representative.setAccount(account);
