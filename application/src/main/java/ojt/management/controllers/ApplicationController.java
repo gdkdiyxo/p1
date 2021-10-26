@@ -4,10 +4,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.ApplicationService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.exceptions.ApplicationNotExistedException;
+import ojt.management.common.exceptions.NotPermissionException;
 import ojt.management.common.payload.dto.ApplicationDTO;
 import ojt.management.common.payload.request.ApplicationRequest;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.mappers.ApplicationMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,38 +33,48 @@ public class ApplicationController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping()
-    public List<ApplicationDTO> searchApplication(@RequestParam(value = "accountId", required = true) Long accountId)
+    public List<ApplicationDTO> searchApplication(Authentication authentication)
             throws AccountIdNotExistedException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return applicationService.searchApplication(accountId).stream().map(applicationMapper::applicationToApplicationDTO)
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping("/{id}")
     public ApplicationDTO getAppById(@PathVariable Long id,
-                                     @RequestParam(value = "accountId", required = true) Long accountId)
+                                     Authentication authentication)
             throws ApplicationNotExistedException, AccountIdNotExistedException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return applicationMapper.applicationToApplicationDTO(applicationService.getAppById(id, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @PutMapping("/{id}")
     public ApplicationDTO updateApplication(@Valid @RequestBody ApplicationRequest applicationRequest,
-                                            @PathVariable Long id)
-            throws ApplicationNotExistedException {
-        return applicationMapper.applicationToApplicationDTO(applicationService.updateApplication(id, applicationRequest));
+                                            @PathVariable Long id,
+                                            Authentication authentication)
+            throws ApplicationNotExistedException, NotPermissionException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return applicationMapper.applicationToApplicationDTO(
+                applicationService.updateApplication(id, applicationRequest, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     @DeleteMapping("/{id}")
-    public boolean deleteApplication(@PathVariable Long id)
-            throws ApplicationNotExistedException {
-        return applicationService.deleteApplication(id);
+    public boolean deleteApplication(@PathVariable Long id,
+                                     Authentication authentication)
+            throws ApplicationNotExistedException, NotPermissionException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return applicationService.deleteApplication(id, accountId);
     }
 
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     @PostMapping()
-    public ApplicationDTO createApplication(@Valid @RequestBody ApplicationRequest applicationRequest) {
-        return applicationMapper.applicationToApplicationDTO(applicationService.createApplication(applicationRequest));
+    public ApplicationDTO createApplication(@Valid @RequestBody ApplicationRequest applicationRequest,
+                                            Authentication authentication) {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return applicationMapper.applicationToApplicationDTO(
+                applicationService.createApplication(applicationRequest, accountId));
     }
 }

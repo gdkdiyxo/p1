@@ -2,6 +2,7 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.exceptions.ApplicationNotExistedException;
+import ojt.management.common.exceptions.NotPermissionException;
 import ojt.management.common.payload.request.ApplicationRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Application;
@@ -11,6 +12,7 @@ import ojt.management.data.repositories.ApplicationRepository;
 import ojt.management.data.repositories.JobRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -54,48 +56,70 @@ public class ApplicationServiceImpl implements ApplicationService {
         Account account = accountRepository.getById(accountId);
         if (account.getRepresentative() != null) {
             return applicationRepository.getAppRep(id, account.getRepresentative().getCompany().getId());
-        } else {
+        } else if (account.getStudent() != null) {
             return applicationRepository.getAppStudent(id, account.getStudent().getId());
+        } else {
+            return applicationRepository.getById(id);
         }
     }
 
     @Override
-    public boolean deleteApplication(Long id)
-            throws ApplicationNotExistedException {
+    public boolean deleteApplication(Long id, Long accountId)
+            throws ApplicationNotExistedException, NotPermissionException {
         if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
         Application application = applicationRepository.getById(id);
         if (!application.isDisabled()) {
-            application.setDisabled(true);
-            applicationRepository.save(application);
-            return true;
+            if (application.getStudent().getAccount().getId().equals(accountId)) {
+                application.setDisabled(true);
+                applicationRepository.save(application);
+                return true;
+            } else {
+                throw new NotPermissionException();
+            }
         }
         return false;
     }
 
     @Override
-    public Application updateApplication(Long id, ApplicationRequest applicationRequest)
-            throws ApplicationNotExistedException {
+    public Application updateApplication(Long id, ApplicationRequest applicationRequest, Long accountId)
+            throws ApplicationNotExistedException, NotPermissionException {
         if (Boolean.FALSE.equals(applicationRepository.existsById(id))) {
             throw new ApplicationNotExistedException();
         }
         Application application = applicationRepository.getById(id);
         if (application.isDisabled()) {
             throw new ApplicationNotExistedException();
-        } else {
-            if (!applicationRequest.getExperience().isEmpty()) 
-                application.setExperience(applicationRequest.getExperience());
-            application.setCompanyAccepted(applicationRequest.isCompanyAccepted());
-            application.setStudentConfirmed(applicationRequest.isStudentConfirmed());
-            applicationRepository.save(application);
-            return application;
         }
+
+        Account account = accountRepository.getById(accountId);
+        //Company accept application
+        //Company id of application == company id of account
+        if (application.getJob().getCompany().getId() == account.getRepresentative().getCompany().getId()) {
+            if (!application.isStudentConfirmed()) {
+                application.setCompanyAccepted(applicationRequest.isCompanyAccepted());
+                application.setAcceptedAt(new Timestamp(System.currentTimeMillis()));
+            } else {
+                throw new NotPermissionException();
+            }
+        }
+        //student account id of application == student account id of account
+        if (application.getStudent().getAccount().getId() == account.getStudent().getAccount().getId()) {
+            //Student confirm application
+            if (application.isCompanyAccepted()) {
+                application.setStudentConfirmed(applicationRequest.isStudentConfirmed());
+                application.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
+            }
+            //Student update exp
+            application.setExperience(applicationRequest.getExperience());
+        }
+        return applicationRepository.save(application);
     }
 
     @Override
-    public Application createApplication(ApplicationRequest applicationRequest) {
-        Account account = accountRepository.getById(applicationRequest.getAccountId());
+    public Application createApplication(ApplicationRequest applicationRequest, Long accountId) {
+        Account account = accountRepository.getById(accountId);
         Job job = jobRepository.getById(applicationRequest.getJobId());
         Application application = new Application();
         application.setExperience(applicationRequest.getExperience());
