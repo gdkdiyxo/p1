@@ -2,16 +2,18 @@ package ojt.management.business.services;
 
 import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
+import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.data.entities.Major;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 public interface MajorService {
     Major getMajorById(Long id) throws MajorNotExistedException;
 
-    List<Major> searchMajor(String name);
+    Page<Major> searchMajor(Specification<Major> specification, Pageable pageable) ;
 
-    Major updateMajor(Long id, String name) throws MajorNotExistedException, MajorNameAlreadyExistedException;
+    Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException;
 
     boolean deleteMajor(Long id) throws MajorNotExistedException;
 

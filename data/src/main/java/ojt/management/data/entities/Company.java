@@ -1,8 +1,6 @@
 package ojt.management.data.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,7 +19,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "company")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -36,6 +35,9 @@ public class Company implements Serializable {
 
     @Column(name = "description", length = 500, nullable = false)
     private String description;
+
+    @Column(name = "address", length = 500)
+    private  String address;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -58,7 +60,7 @@ public class Company implements Serializable {
         this.description = description;
     }
 
-    public Company(Long id){
+    public Company(Long id) {
         this.id = id;
     }
 }
