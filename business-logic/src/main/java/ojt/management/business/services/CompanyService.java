@@ -10,10 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 public interface CompanyService {
     Page<Company> searchCompany(Specification<Company> specification, Pageable pageable);
 
-    Company updateCompany(Long id, CompanyRequest companyRequest) throws CrudException;
+    Company updateCompany(Long id, CompanyRequest companyRequest, Long accountId) throws CrudException;
 
     Company getCompanyById(Long id, Long accountId) throws CrudException;
-
-    Company createCompany(CompanyRequest companyRequest);
-
 }
