@@ -6,6 +6,9 @@ import ojt.management.common.exceptions.SemesterNotExistedException;
 import ojt.management.common.payload.request.SemesterRequest;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.SemesterRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -29,11 +32,8 @@ public class SemesterServiceImpl implements SemesterService {
     }
 
     @Override
-    public List<Semester> searchSemesters(String name, Date startDate, Date endDate) {
-        if (name.isEmpty() && startDate == null && endDate == null) {
-            return semesterRepository.findAll();
-        }
-        return semesterRepository.searchSemester(name, startDate, endDate);
+    public Page<Semester> searchSemester(Specification<Semester> specification, Pageable pageable) {
+        return semesterRepository.findAll(specification, pageable);
     }
 
     @Override

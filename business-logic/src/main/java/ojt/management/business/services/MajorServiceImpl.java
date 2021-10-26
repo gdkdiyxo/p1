@@ -5,6 +5,9 @@ import ojt.management.common.exceptions.MajorNotExistedException;
 import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.data.entities.Major;
 import ojt.management.data.repositories.MajorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +30,8 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
-    public List<Major> searchMajor(String name) {
-        if (name.isEmpty()) {
-            return majorRepository.findAll();
-        }
-        return majorRepository.findByName(name);
+    public Page<Major> searchMajor(Specification<Major> specification, Pageable pageable) {
+        return majorRepository.findAll(specification, pageable);
     }
 
     @Override

@@ -8,6 +8,9 @@ import ojt.management.data.entities.Company;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.CompanyRepository;
 import ojt.management.data.repositories.RepresentativeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +31,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> searchCompany(String name, String description) {
-        if (name.isEmpty() && description.isEmpty()) {
-            return companyRepository.findAll();
-        } else {
-            return companyRepository.searchCompany(name, description);
-        }
+    public Page<Company> searchCompany(Specification<Company> specification, Pageable pageable) {
+        return companyRepository.findAll(specification, pageable);
     }
 
     @Override

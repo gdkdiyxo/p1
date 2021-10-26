@@ -1,12 +1,26 @@
 package ojt.management.controllers;
 
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.CompanyService;
 import ojt.management.common.exceptions.CrudException;
+import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.CompanyDTO;
+import ojt.management.common.utils.SortUtils;
 import ojt.management.common.payload.request.CompanyRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
+import ojt.management.data.entities.Account;
+import ojt.management.data.entities.Company;
+import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.CompanyMapper;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +46,21 @@ public class CompanyController {
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
-    public List<CompanyDTO> searchCompany(@RequestParam(value = "name", required = false) String name,
-                                          @RequestParam(value = "description", required = false) String description) {
-        return companyService.searchCompany(name,
-                description).stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
+    public PagedDataResponse<CompanyDTO> searchUser(@RequestParam(value = "search", required = false) String search,
+                                                 @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
+                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+                                                 @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
+        Specification<Company> spec = Specification.where(null);
+        if (Strings.isNotBlank(search)) {
+            Node rootNode = new RSQLParser().parse(search);
+            spec = rootNode.accept(new CustomRsqlVisitor<>());
+        }
+        Sort sort = SortUtils.parseSortQuery(sortBy);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Company> pagedResult = companyService.searchCompany(spec, pageable);
+        List<CompanyDTO> data = pagedResult.getContent().stream().map(companyMapper::companyToCompanyDTO).collect(Collectors.toList());
+
+        return new PagedDataResponse<>("OK", "Retrieved account successfully.", data, pagedResult.getTotalElements(), pagedResult.getTotalPages(), pagedResult.getNumber());
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")

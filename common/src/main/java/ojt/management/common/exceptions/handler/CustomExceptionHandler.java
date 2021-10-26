@@ -14,10 +14,20 @@ import java.util.Date;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(value = {
-            CrudException.class
-    })
-    protected ResponseEntity<Response> handleAuthExceptions(CrudException exception) {
+    @ExceptionHandler(value = {ojt.management.common.exceptions.
+            EmailAlreadyExistedException.class,
+            UsernameAlreadyExistedException.class,
+            EmptyRoleException.class,
+            MajorNotExistedException.class,
+            MajorNameAlreadyExistedException.class,
+            JobNotExistedException.class,
+            JobNotAllowedUpdateException.class,
+            CompanyNotExistedException.class,
+            AccountIdNotExistedException.class,
+            SemesterAlreadyExistedException.class,
+            SemesterNotExistedException.class,
+            ApplicationNotExistedException.class})
+     protected ResponseEntity<Response> handleAuthExceptions(CrudException exception) {
         return ResponseEntity
                 .status(exception.getStatus())
                 .body(new Response("Error", exception.getMessage()));
