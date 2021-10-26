@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -36,7 +34,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company updateCompany(Long id, CompanyRequest companyRequest) throws CrudException {
+    public Company updateCompany(Long id, CompanyRequest companyRequest, Long accountId) throws CrudException {
         if (!companyRepository.existsById(id)) {
             throw new CompanyNotExistedException();
         }
@@ -62,13 +60,5 @@ public class CompanyServiceImpl implements CompanyService {
             }
         }
         return companyRepository.getById(id);
-    }
-
-    @Override
-    public Company createCompany(CompanyRequest companyRequest) {
-        Company company = new Company();
-        company.setName(companyCreateRequest.getName());
-        company.setDescription(companyCreateRequest.getDescription());
-        return companyRepository.save(company);
     }
 }

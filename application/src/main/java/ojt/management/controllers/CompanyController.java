@@ -10,7 +10,6 @@ import ojt.management.common.payload.dto.CompanyDTO;
 import ojt.management.common.utils.SortUtils;
 import ojt.management.common.payload.request.CompanyRequest;
 import ojt.management.configuration.security.services.UserDetailsImpl;
-import ojt.management.data.entities.Account;
 import ojt.management.data.entities.Company;
 import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.CompanyMapper;
@@ -20,13 +19,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.Authenticator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,14 +71,10 @@ public class CompanyController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN')")
     @PutMapping("/{id}")
     public CompanyDTO updateCompany(@PathVariable Long id,
-                                    @RequestBody @Valid CompanyRequest companyUpdateRequest)
+                                    @RequestBody @Valid CompanyRequest companyUpdateRequest,
+                                    Authentication authentication)
             throws CrudException {
-        return companyMapper.companyToCompanyDTO(companyService.updateCompany(id, companyUpdateRequest));
-    }
-
-    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
-    @PostMapping()
-    public CompanyDTO createCompany(@RequestBody @Valid CompanyRequest companyRequest) {
-        return companyMapper.companyToCompanyDTO(companyService.createCompany(companyRequest));
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return companyMapper.companyToCompanyDTO(companyService.updateCompany(id, companyUpdateRequest,accountId ));
     }
 }
