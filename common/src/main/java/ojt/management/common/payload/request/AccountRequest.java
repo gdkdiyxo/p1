@@ -84,7 +84,7 @@ public class AccountRequest implements Serializable {
     }
 
     // constructor for representative
-    public AccountRequest(String email, String password, String name, String role, String companyName, String description, String companyAddress) {
+    public AccountRequest(String email, String password, String name, String role, String companyName, String description, String companyAddress, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -92,6 +92,7 @@ public class AccountRequest implements Serializable {
         this.companyName = companyName;
         this.description = description;
         this.companyAddress = companyAddress;
+        this.phone = phone;
     }
 
     // constructor for student

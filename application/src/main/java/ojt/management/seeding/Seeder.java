@@ -66,7 +66,7 @@ public class Seeder {
         Faker faker = new Faker();
         String initialPassword = "123456";
         List<AccountRequest> accountRequests = Arrays.asList(
-                new AccountRequest("thanhthu0321@gmail.com", initialPassword, "Thu", RoleEnum.SYS_ADMIN.name(), faker.phoneNumber().cellPhone()),
+                new AccountRequest("thanhthu0321@gmail.com", initialPassword, "Thu", RoleEnum.SYS_ADMIN.name(), faker.phoneNumber().subscriberNumber(12)),
                 new AccountRequest("student1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150099", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150098", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student3@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "BA150097", Long.valueOf(2), Long.valueOf(1)),
@@ -118,8 +118,8 @@ public class Seeder {
                 new AccountRequest("student49@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150139", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student50@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150140", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student51@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150141", Long.valueOf(1), Long.valueOf(1)),
-                new AccountRequest("representative1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress()),
-                new AccountRequest("representative2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress()));
+                new AccountRequest("representative1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12)),
+                new AccountRequest("representative2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12)));
 
         accountRequests.stream().forEach(accountRequest -> {
             try {
