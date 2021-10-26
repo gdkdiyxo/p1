@@ -1,7 +1,7 @@
 package ojt.management.business.services;
 
 import ojt.management.common.exceptions.AccountIdNotExistedException;
-import ojt.management.common.payload.request.AccountUpdateRequest;
+import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.data.entities.Account;
 import ojt.management.data.repositories.AccountRepository;
 import org.springframework.data.domain.Page;
@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateUser(Long id, AccountUpdateRequest accountUpdateRequest) throws AccountIdNotExistedException {
+    public Account updateUser(Long id, AccountRequest accountUpdateRequest) throws AccountIdNotExistedException {
         Account account = accountRepository.getById(id);
 
         return accountRepository.save(account);
