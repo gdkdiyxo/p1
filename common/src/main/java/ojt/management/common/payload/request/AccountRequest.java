@@ -39,7 +39,18 @@ public class AccountRequest implements Serializable {
     /**
      * Start of company Section
      **/
-    private Long companyId;
+    @NotNull
+    @NotBlank
+    @Size(max = 255)
+    private String companyName;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 500)
+    private String description;
+
+    @Size(max = 500)
+    private String companyAddress;
     /**
      * End of company Section
      **/
@@ -57,6 +68,7 @@ public class AccountRequest implements Serializable {
 
     private Long majorId;
 
+    private Long semesterId;
     /**
      * End of student Section
      **/
@@ -72,17 +84,18 @@ public class AccountRequest implements Serializable {
     }
 
     // constructor for representative
-    public AccountRequest(String email, String password, String name, String role, String phone, Long companyId) {
+    public AccountRequest(String email, String password, String name, String role, String companyName, String description, String companyAddress) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
-        this.phone = phone;
-        this.companyId = companyId;
+        this.companyName = companyName;
+        this.description = description;
+        this.companyAddress = companyAddress;
     }
 
     // constructor for student
-    public AccountRequest(String email, String password, String name, String role, String phone, String address, String studentCode, Long majorId) {
+    public AccountRequest(String email, String password, String name, String role, String phone, String address, String studentCode, Long majorId, Long semesterId) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -91,5 +104,39 @@ public class AccountRequest implements Serializable {
         this.address = address;
         this.studentCode = studentCode;
         this.majorId = majorId;
+        this.semesterId = semesterId;
     }
+
+    /**
+     * Start of Update Section
+     **/
+    //constructor for admin update student
+    public AccountRequest(String email, String password, String name, String phone, String address, String studentCode, Long majorId, Long semesterId) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.studentCode = studentCode;
+        this.majorId = majorId;
+        this.semesterId = semesterId;
+    }
+
+    //constructor for admin update rep
+    public AccountRequest(String email, String password, String name, String phone) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+    }
+
+    //constructor for student update
+    public AccountRequest(String password, String phone, String address) {
+        this.password = password;
+        this.phone = phone;
+        this.address = address;
+    }
+    /**
+     * End of Update Section
+     **/
 }

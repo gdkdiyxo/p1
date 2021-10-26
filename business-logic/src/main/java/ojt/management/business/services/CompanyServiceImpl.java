@@ -43,6 +43,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.getById(id);
         company.setName(companyRequest.getName());
         company.setDescription(companyRequest.getDescription());
+        company.setAddress(companyRequest.getAddress());
 
         return companyRepository.save(company);
     }
@@ -66,8 +67,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company createCompany(CompanyRequest companyRequest) {
         Company company = new Company();
-        company.setName(companyRequest.getName());
-        company.setDescription(companyRequest.getDescription());
+        company.setName(companyCreateRequest.getName());
+        company.setDescription(companyCreateRequest.getDescription());
         return companyRepository.save(company);
     }
 }
