@@ -40,10 +40,7 @@ public class SemesterServiceImpl implements SemesterService {
     public Semester updateSemester(SemesterUpdateRequest semesterUpdateRequest) throws SemesterAlreadyExistedException, SemesterNotExistedException {
         if (Boolean.FALSE.equals(semesterRepository.existsById(semesterUpdateRequest.getId()))) {
             throw new SemesterNotExistedException();
-        } else if (Boolean.TRUE.equals(semesterRepository.existsByName(semesterUpdateRequest.getName()))
-                || Boolean.TRUE.equals(semesterRepository.existsByStartDateAndEndDate(
-                semesterUpdateRequest.getStartDate(),
-                semesterUpdateRequest.getEndDate()))) {
+        } else if (Boolean.TRUE.equals(semesterRepository.existsByName(semesterUpdateRequest.getName()))) {
             throw new SemesterAlreadyExistedException();
         } else {
             Semester semester = semesterRepository.getById(semesterUpdateRequest.getId());
