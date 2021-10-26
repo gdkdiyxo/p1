@@ -22,7 +22,7 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    private static final int JWT_EXPIRATION_MS = SecurityConstants.JWT_EXPIRATION_MS;
+    private static final int jwtExpirationMs = SecurityConstants.JWT_EXPIRATION_MS;
 
     public String generateJwtToken(Authentication authentication) {
 
@@ -31,14 +31,14 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key)
                 .compact();
     }
 
     public String generateTokenFromUsername(String username) {
         return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS)).signWith(SignatureAlgorithm.HS512, key)
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
 
