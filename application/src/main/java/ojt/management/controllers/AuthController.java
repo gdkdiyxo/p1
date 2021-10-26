@@ -163,6 +163,7 @@ public class AuthController {
                     Company company = new Company();
                     company.setName(signUpRequest.getCompanyName());
                     company.setDescription(signUpRequest.getDescription());
+                    company.setAddress(signUpRequest.getCompanyAddress());
                     Representative representative = new Representative();
                     representative.setCompany(company);
                     representative.setAccount(account);

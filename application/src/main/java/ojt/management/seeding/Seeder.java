@@ -118,8 +118,8 @@ public class Seeder {
                 new AccountRequest("student49@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150139", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student50@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150140", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student51@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150141", Long.valueOf(1), Long.valueOf(1)),
-                new AccountRequest("representative1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university()),
-                new AccountRequest("representative2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university()));
+                new AccountRequest("representative1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress()),
+                new AccountRequest("representative2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress()));
 
         accountRequests.stream().forEach(accountRequest -> {
             try {

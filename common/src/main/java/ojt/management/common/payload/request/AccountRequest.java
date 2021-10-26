@@ -48,6 +48,9 @@ public class AccountRequest implements Serializable {
     @NotBlank
     @Size(max = 500)
     private String description;
+
+    @Size(max = 500)
+    private String companyAddress;
     /**
      * End of company Section
      **/
@@ -81,13 +84,14 @@ public class AccountRequest implements Serializable {
     }
 
     // constructor for representative
-    public AccountRequest(String email, String password, String name, String role, String companyName, String description) {
+    public AccountRequest(String email, String password, String name, String role, String companyName, String description, String companyAddress) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
         this.companyName = companyName;
         this.description = description;
+        this.companyAddress = companyAddress;
     }
 
     // constructor for student
