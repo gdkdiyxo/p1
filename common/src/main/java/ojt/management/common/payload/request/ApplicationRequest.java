@@ -12,20 +12,21 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountUpdateRequest implements Serializable {
+public class ApplicationRequest implements  Serializable{
     @NotNull
     @NotBlank
-    private Long id;
+    @Size(max = 1000)
+    private String experience;
 
     @NotNull
-    @Size(min = 10, max = 13)
-    private String phone;
-
-    @Size(max = 500)
-    private String address;
+    private Long jobId;
 
     @NotNull
-    @NotBlank
-    @Size(min = 8, max = 1024)
-    private String password;
+    private Long accountId;
+
+    @NotNull
+    private boolean isCompanyAccepted;
+
+    @NotNull
+    private boolean isStudentConfirmed;
 }

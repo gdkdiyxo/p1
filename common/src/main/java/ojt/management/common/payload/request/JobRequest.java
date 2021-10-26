@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobRequest  implements Serializable {
+public class JobRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 255)
@@ -30,10 +30,8 @@ public class JobRequest  implements Serializable {
     private String title;
 
     @NotNull
-    @NotBlank
     private List<Long> semesterIds;
 
     @NotNull
-    @NotBlank
     private List<Long> majorIds;
 }

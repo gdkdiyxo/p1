@@ -22,7 +22,7 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    private static final int jwtExpirationMs = SecurityConstants.JWT_EXPIRATION_MS;
+    private static final int JWT_EXPIRATION_MS = SecurityConstants.JWT_EXPIRATION_MS;
 
     public String generateJwtToken(Authentication authentication) {
 
@@ -31,8 +31,14 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS))
                 .signWith(key)
+                .compact();
+    }
+
+    public String generateTokenFromUsername(String username) {
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS)).signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
 
@@ -40,22 +46,54 @@ public class JwtUtils {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public ValidationStatus validateJwtToken(String authToken) {
+        String message = "";
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
-            return true;
+            return new ValidationStatus(true, "");
         } catch (SignatureException e) {
-            logger.error("Invalid JWT signature: {}", e.getMessage());
+            message = String.format("Invalid JWT signature: %s", e.getMessage());
+            logger.error(message);
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            message = String.format("Invalid JWT token: %s", e.getMessage());
+            logger.error(message);
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            message = String.format("JWT token is expired: %s", e.getMessage());
+            logger.error(message);
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            message = String.format("JWT token is unsupported: %s", e.getMessage());
+            logger.error(message);
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            message = String.format("JWT claims string is empty: %s", e.getMessage());
+            logger.error(message);
         }
 
-        return false;
+        return new ValidationStatus(false, message);
+    }
+
+    public class ValidationStatus {
+        private boolean valid;
+        private String message;
+
+        public ValidationStatus(boolean valid, String message) {
+            this.valid = valid;
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public boolean isValid() {
+            return valid;
+        }
+
+        public void setValid(boolean valid) {
+            this.valid = valid;
+        }
     }
 }

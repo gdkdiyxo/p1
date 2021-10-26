@@ -5,21 +5,8 @@ import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.From;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.CollectionAttribute;
-import javax.persistence.metamodel.ListAttribute;
-import javax.persistence.metamodel.MapAttribute;
-import javax.persistence.metamodel.PluralAttribute;
-import javax.persistence.metamodel.SetAttribute;
-import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.criteria.*;
+import javax.persistence.metamodel.*;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -98,21 +85,21 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
             From lastFrom = root;
 
             for (int i = 1; i <= pathSteps.length - 1; i++) {
-                if(path instanceof PluralAttributePath) {
+                if (path instanceof PluralAttributePath) {
                     PluralAttribute attr = ((PluralAttributePath) path).getAttribute();
                     Join join = getJoin(attr, lastFrom);
                     path = join.get(pathSteps[i]);
                     lastFrom = join;
-                } else if(path instanceof SingularAttributePath) {
+                } else if (path instanceof SingularAttributePath) {
                     SingularAttribute attr = ((SingularAttributePath) path).getAttribute();
-                    if(attr.getPersistentAttributeType() != Attribute.PersistentAttributeType.BASIC) {
+                    if (attr.getPersistentAttributeType() != Attribute.PersistentAttributeType.BASIC) {
                         Join join = lastFrom.join(attr, JoinType.LEFT);
                         path = join.get(pathSteps[i]);
                         lastFrom = join;
                     } else {
                         path = path.get(pathSteps[i]);
                     }
-                }  else {
+                } else {
                     path = path.get(pathSteps[i]);
                 }
             }
@@ -134,7 +121,7 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
     }
 
     private Join createJoin(PluralAttribute attr, From from) {
-        switch (attr.getCollectionType()){
+        switch (attr.getCollectionType()) {
             case COLLECTION:
                 return from.join((CollectionAttribute) attr);
             case SET:
@@ -158,5 +145,4 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
             else return arg;
         }).collect(Collectors.toList());
     }
-
 }
