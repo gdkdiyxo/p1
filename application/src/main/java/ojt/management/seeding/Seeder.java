@@ -2,19 +2,28 @@ package ojt.management.seeding;
 
 import com.github.javafaker.Faker;
 import ojt.management.common.enums.RoleEnum;
-import ojt.management.common.exceptions.*;
+import ojt.management.common.exceptions.CompanyNotExistedException;
+import ojt.management.common.exceptions.EmailAlreadyExistedException;
+import ojt.management.common.exceptions.EmptyRoleException;
+import ojt.management.common.exceptions.MajorNotExistedException;
+import ojt.management.common.exceptions.UsernameAlreadyExistedException;
 import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.controllers.AuthController;
 import ojt.management.data.entities.Company;
 import ojt.management.data.entities.Major;
+import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.CompanyRepository;
 import ojt.management.data.repositories.MajorRepository;
+import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -24,13 +33,15 @@ public class Seeder {
     private final AccountRepository accountRepository;
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
+    private final SemesterRepository semesterRepository;
 
 
-    public Seeder(AuthController authController, AccountRepository accountRepository, MajorRepository majorRepository, CompanyRepository companyRepository) {
+    public Seeder(AuthController authController, AccountRepository accountRepository, MajorRepository majorRepository, CompanyRepository companyRepository, SemesterRepository semesterRepository) {
         this.authController = authController;
         this.accountRepository = accountRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
+        this.semesterRepository = semesterRepository;
     }
 
     @EventListener
@@ -44,6 +55,21 @@ public class Seeder {
         if (accountRepository.count() == 0) {
             seedAccount();
         }
+        if (semesterRepository.count() == 0) {
+            seedSemester();
+        }
+    }
+
+    private void seedSemester() {
+        ZonedDateTime today = ZonedDateTime.now();
+        List<Semester> semesters = new ArrayList<>();
+        int number = 1;
+        for (int i = -2; i < 3; i++) {
+            Date startDate = Date.from(today.plusMonths(i * 3).toInstant());
+            Date endDate = Date.from(today.plusMonths((i + 1) * 3).toInstant());
+            semesters.add(new Semester(String.format("Semester %d", number++), startDate, endDate));
+        }
+        semesterRepository.saveAll(semesters);
     }
 
     private void seedMajor() {
