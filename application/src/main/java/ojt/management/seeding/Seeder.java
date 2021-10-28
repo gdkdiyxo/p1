@@ -41,7 +41,8 @@ public class Seeder {
                   AccountRepository accountRepository,
                   MajorRepository majorRepository,
                   CompanyRepository companyRepository,
-                  SemesterRepository semesterRepository, EmailService emailService,
+                  SemesterRepository semesterRepository,
+                  EmailService emailService,
                   SpringTemplateEngine templateEngine) {
         this.authController = authController;
         this.accountRepository = accountRepository;
