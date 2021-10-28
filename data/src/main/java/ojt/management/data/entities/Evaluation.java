@@ -44,7 +44,7 @@ public class Evaluation implements Serializable {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "is_pass")
+    @Column(name = "is_pass",columnDefinition="BOOLEAN DEFAULT false")
     private boolean isPass;
 
     //----------[Start]Mapping relationship----------

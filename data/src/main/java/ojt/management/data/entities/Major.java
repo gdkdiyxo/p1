@@ -46,7 +46,7 @@ public class Major implements Serializable {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "is_disabled")
+    @Column(name = "is_disabled", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
