@@ -2,14 +2,7 @@ package ojt.management.controllers;
 
 
 import ojt.management.business.services.AccountService;
-import ojt.management.common.exceptions.AccountIdNotExistedException;
-import ojt.management.common.exceptions.CompanyNotExistedException;
-import ojt.management.common.exceptions.CrudException;
-import ojt.management.common.exceptions.EmailAlreadyExistedException;
-import ojt.management.common.exceptions.EmptyRoleException;
-import ojt.management.common.exceptions.MajorNotExistedException;
-import ojt.management.common.exceptions.TokenRefreshException;
-import ojt.management.common.exceptions.UsernameAlreadyExistedException;
+import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.DataResponse;
 import ojt.management.common.payload.JwtResponse;
 import ojt.management.common.payload.Response;
@@ -129,7 +122,8 @@ public class AuthController {
             EmailAlreadyExistedException,
             EmptyRoleException,
             CompanyNotExistedException,
-            MajorNotExistedException {
+            MajorNotExistedException,
+            SemesterNotExistedException {
         if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(
                 accountRepository.existsByStudent_StudentCode(signUpRequest.getStudentCode()))) {
             throw new UsernameAlreadyExistedException();

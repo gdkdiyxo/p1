@@ -7,13 +7,16 @@ import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.controllers.AuthController;
 import ojt.management.data.entities.Company;
 import ojt.management.data.entities.Major;
+import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.CompanyRepository;
 import ojt.management.data.repositories.MajorRepository;
+import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,22 +27,31 @@ public class Seeder {
     private final AccountRepository accountRepository;
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
+    private final SemesterRepository semesterRepository;
 
 
-    public Seeder(AuthController authController, AccountRepository accountRepository, MajorRepository majorRepository, CompanyRepository companyRepository) {
+    public Seeder(AuthController authController,
+                  AccountRepository accountRepository,
+                  MajorRepository majorRepository,
+                  CompanyRepository companyRepository,
+                  SemesterRepository semesterRepository) {
         this.authController = authController;
         this.accountRepository = accountRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
+        this.semesterRepository = semesterRepository;
     }
 
     @EventListener
     private void seed(ApplicationReadyEvent event) {
-        if (companyRepository.count() == 0) {
-            seedCompany();
+        if (semesterRepository.count() == 0) {
+            seedSemester();
         }
         if (majorRepository.count() == 0) {
             seedMajor();
+        }
+        if (companyRepository.count() == 0) {
+            seedCompany();
         }
         if (accountRepository.count() == 0) {
             seedAccount();
@@ -60,6 +72,14 @@ public class Seeder {
                 new Company("Company B", "Description for company B")
         );
         companyRepository.saveAll(companies);
+    }
+
+    private void seedSemester() {
+        List<Semester> semesters = Arrays.asList(
+                new Semester("Fall 2021", Date.valueOf("2021-09-13"), Date.valueOf("2021-12-31")),
+                new Semester("Spring 2022", Date.valueOf("2022-01-10"), Date.valueOf("2022-04-22"))
+        );
+        semesterRepository.saveAll(semesters);
     }
 
     private void seedAccount() {
@@ -117,14 +137,18 @@ public class Seeder {
                 new AccountRequest("student48@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150138", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student49@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150139", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student50@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150140", Long.valueOf(1), Long.valueOf(1)),
-                new AccountRequest("student51@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150141", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("representative1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12)),
                 new AccountRequest("representative2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12)));
 
         accountRequests.stream().forEach(accountRequest -> {
             try {
                 authController.registerUser(accountRequest);
-            } catch (UsernameAlreadyExistedException | EmailAlreadyExistedException | EmptyRoleException | CompanyNotExistedException | MajorNotExistedException e) {
+            } catch (UsernameAlreadyExistedException |
+                    EmailAlreadyExistedException |
+                    EmptyRoleException |
+                    CompanyNotExistedException |
+                    MajorNotExistedException |
+                    SemesterNotExistedException e) {
                 e.printStackTrace();
             }
         });
