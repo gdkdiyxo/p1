@@ -44,17 +44,17 @@ public class Seeder {
 
     @EventListener
     private void seed(ApplicationReadyEvent event) {
-        if (companyRepository.count() == 0) {
-            seedCompany();
+        if (semesterRepository.count() == 0) {
+            seedSemester();
         }
         if (majorRepository.count() == 0) {
             seedMajor();
         }
+        if (companyRepository.count() == 0) {
+            seedCompany();
+        }
         if (accountRepository.count() == 0) {
             seedAccount();
-        }
-        if (semesterRepository.count() == 0) {
-            seedSemester();
         }
     }
 
@@ -137,7 +137,6 @@ public class Seeder {
                 new AccountRequest("student48@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150138", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student49@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150139", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("student50@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150140", Long.valueOf(1), Long.valueOf(1)),
-                new AccountRequest("student51@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.STUDENT.name(), faker.phoneNumber().subscriberNumber(12), faker.address().fullAddress(), "SE150141", Long.valueOf(1), Long.valueOf(1)),
                 new AccountRequest("representative1@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12)),
                 new AccountRequest("representative2@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12)));
 
