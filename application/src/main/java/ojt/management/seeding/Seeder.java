@@ -6,7 +6,6 @@ import ojt.management.common.enums.RoleEnum;
 import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.controllers.AuthController;
-import ojt.management.data.entities.Company;
 import ojt.management.data.entities.Major;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.AccountRepository;
@@ -37,7 +36,7 @@ public class Seeder {
     private final SpringTemplateEngine templateEngine;
 
 
-    public Seeder(AuthController authController, 
+    public Seeder(AuthController authController,
                   AccountRepository accountRepository,
                   MajorRepository majorRepository,
                   CompanyRepository companyRepository,
@@ -60,9 +59,6 @@ public class Seeder {
         }
         if (majorRepository.count() == 0) {
             seedMajor();
-        }
-        if (companyRepository.count() == 0) {
-            seedCompany();
         }
         if (accountRepository.count() == 0) {
             seedAccount();
@@ -89,17 +85,21 @@ public class Seeder {
     private void seedMajor() {
         List<Major> majors = Arrays.asList(
                 new Major("Software Engineering"),
-                new Major("Business Administration")
+                new Major("Digital Art Design"),
+                new Major("Information Security"),
+                new Major("Information System"),
+                new Major("Artificial Intelligence"),
+                new Major("IoT"),
+                new Major("Business Administration"),
+                new Major("International Business"),
+                new Major("Digital Marketing"),
+                new Major("Tourism and Holiday Service Administration"),
+                new Major("Multifunctional Communication Administration"),
+                new Major("Hotel Management"),
+                new Major("Japanese"),
+                new Major("Korean")
         );
         majorRepository.saveAll(majors);
-    }
-
-    private void seedCompany() {
-        List<Company> companies = Arrays.asList(
-                new Company("Company A", "Description for company A"),
-                new Company("Company B", "Description for company B")
-        );
-        companyRepository.saveAll(companies);
     }
 
     private void seedAccount() {
