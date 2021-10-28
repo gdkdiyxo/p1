@@ -1,21 +1,14 @@
 package ojt.management.data.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -52,7 +45,7 @@ public class Job implements Serializable {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "is_disabled")
+    @Column(name = "is_disabled", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
