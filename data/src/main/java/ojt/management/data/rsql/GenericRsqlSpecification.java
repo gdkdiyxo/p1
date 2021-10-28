@@ -5,8 +5,23 @@ import org.hibernate.query.criteria.internal.path.PluralAttributePath;
 import org.hibernate.query.criteria.internal.path.SingularAttributePath;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
-import javax.persistence.metamodel.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.MapAttribute;
+import javax.persistence.metamodel.PluralAttribute;
+import javax.persistence.metamodel.SetAttribute;
+import javax.persistence.metamodel.SingularAttribute;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,20 +63,40 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
                 else return builder.notEqual(propertyExpression, argument);
 
             case GREATER_THAN:
-                return builder.greaterThan(propertyExpression,
-                        argument.toString());
+                if (argument instanceof String)
+                    return builder.greaterThan(propertyExpression,
+                            argument.toString());
+                else {
+                    return builder.greaterThan(propertyExpression,
+                            propertyExpression.getJavaType().cast(argument));
+                }
 
             case GREATER_THAN_OR_EQUAL:
-                return builder.greaterThanOrEqualTo(propertyExpression,
-                        argument.toString());
+                if (argument instanceof String)
+                    return builder.greaterThanOrEqualTo(propertyExpression,
+                            argument.toString());
+                else {
+                    return builder.greaterThanOrEqualTo(propertyExpression,
+                            propertyExpression.getJavaType().cast(argument));
+                }
 
             case LESS_THAN:
-                return builder.lessThan(propertyExpression,
-                        argument.toString());
+                if (argument instanceof String)
+                    return builder.lessThan(propertyExpression,
+                            argument.toString());
+                else {
+                    return builder.lessThan(propertyExpression,
+                            propertyExpression.getJavaType().cast(argument));
+                }
 
             case LESS_THAN_OR_EQUAL:
-                return builder.lessThanOrEqualTo(propertyExpression,
-                        argument.toString());
+                if (argument instanceof String)
+                    return builder.lessThanOrEqualTo(propertyExpression,
+                            argument.toString());
+                else {
+                    return builder.lessThanOrEqualTo(propertyExpression,
+                            propertyExpression.getJavaType().cast(argument));
+                }
             case IN:
                 return propertyExpression.in(args);
             case NOT_IN:
@@ -142,6 +177,7 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
             if (type.equals(Integer.class)) return Integer.parseInt(arg);
             else if (type.equals(Long.class)) return Long.parseLong(arg);
             else if (type.equals(Byte.class)) return Byte.parseByte(arg);
+            else if (type.equals(Date.class)) return Date.from(Instant.parse(arg));
             else return arg;
         }).collect(Collectors.toList());
     }
