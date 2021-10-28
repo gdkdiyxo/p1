@@ -1,6 +1,7 @@
 package ojt.management.seeding;
 
 import com.github.javafaker.Faker;
+import ojt.management.business.services.EmailService;
 import ojt.management.common.enums.RoleEnum;
 import ojt.management.common.exceptions.CompanyNotExistedException;
 import ojt.management.common.exceptions.EmailAlreadyExistedException;
@@ -19,6 +20,8 @@ import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -34,14 +37,18 @@ public class Seeder {
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
     private final SemesterRepository semesterRepository;
+    private final EmailService emailService;
+    private final SpringTemplateEngine templateEngine;
 
 
-    public Seeder(AuthController authController, AccountRepository accountRepository, MajorRepository majorRepository, CompanyRepository companyRepository, SemesterRepository semesterRepository) {
+    public Seeder(AuthController authController, AccountRepository accountRepository, MajorRepository majorRepository, CompanyRepository companyRepository, SemesterRepository semesterRepository, EmailService emailService, SpringTemplateEngine templateEngine) {
         this.authController = authController;
         this.accountRepository = accountRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
         this.semesterRepository = semesterRepository;
+        this.emailService = emailService;
+        this.templateEngine = templateEngine;
     }
 
     @EventListener
@@ -57,6 +64,11 @@ public class Seeder {
         }
         if (semesterRepository.count() == 0) {
             seedSemester();
+        }
+        try {
+            emailService.sendMessage("anonymousvhb@gmail.com", "Something", getTemplate());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -154,5 +166,10 @@ public class Seeder {
                 e.printStackTrace();
             }
         });
+    }
+
+    private String getTemplate() {
+        Context context = new Context();
+        return templateEngine.process("welcome.html", context);
     }
 }
