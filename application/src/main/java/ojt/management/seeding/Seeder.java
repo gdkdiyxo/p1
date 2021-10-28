@@ -3,11 +3,7 @@ package ojt.management.seeding;
 import com.github.javafaker.Faker;
 import ojt.management.business.services.EmailService;
 import ojt.management.common.enums.RoleEnum;
-import ojt.management.common.exceptions.CompanyNotExistedException;
-import ojt.management.common.exceptions.EmailAlreadyExistedException;
-import ojt.management.common.exceptions.EmptyRoleException;
-import ojt.management.common.exceptions.MajorNotExistedException;
-import ojt.management.common.exceptions.UsernameAlreadyExistedException;
+import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.controllers.AuthController;
 import ojt.management.data.entities.Company;
@@ -25,7 +21,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +37,12 @@ public class Seeder {
     private final SpringTemplateEngine templateEngine;
 
 
-    public Seeder(AuthController authController, AccountRepository accountRepository, MajorRepository majorRepository, CompanyRepository companyRepository, SemesterRepository semesterRepository, EmailService emailService, SpringTemplateEngine templateEngine) {
+    public Seeder(AuthController authController, 
+                  AccountRepository accountRepository,
+                  MajorRepository majorRepository,
+                  CompanyRepository companyRepository,
+                  SemesterRepository semesterRepository, EmailService emailService,
+                  SpringTemplateEngine templateEngine) {
         this.authController = authController;
         this.accountRepository = accountRepository;
         this.majorRepository = majorRepository;
@@ -65,9 +65,6 @@ public class Seeder {
         }
         if (accountRepository.count() == 0) {
             seedAccount();
-        }
-        if (semesterRepository.count() == 0) {
-            seedSemester();
         }
         try {
             emailService.sendMessage("anonymousvhb@gmail.com", "Something", getTemplate());
@@ -102,14 +99,6 @@ public class Seeder {
                 new Company("Company B", "Description for company B")
         );
         companyRepository.saveAll(companies);
-    }
-
-    private void seedSemester() {
-        List<Semester> semesters = Arrays.asList(
-                new Semester("Fall 2021", Date.valueOf("2021-09-13"), Date.valueOf("2021-12-31")),
-                new Semester("Spring 2022", Date.valueOf("2022-01-10"), Date.valueOf("2022-04-22"))
-        );
-        semesterRepository.saveAll(semesters);
     }
 
     private void seedAccount() {
