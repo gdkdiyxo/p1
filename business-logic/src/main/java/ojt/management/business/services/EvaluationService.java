@@ -12,7 +12,7 @@ public interface EvaluationService {
     Evaluation getEvaluationById(Long id, Long accountId)
             throws EvaluationIdNotExistedException, AccountIdNotExistedException;
 
-    List<Evaluation> searchEvaluation(Long accountId)
+    List<Evaluation> searchEvaluation(String studentCode, Long accountId)
             throws AccountIdNotExistedException;
 
     Evaluation updateEvaluation(Long id, EvaluationUpdateRequest evaluationUpdateRequest, Long accountId)

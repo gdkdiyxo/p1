@@ -17,8 +17,8 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 
     @Query("select e " +
             "FROM Evaluation e " +
-            "where e.application.job.company.id = :companyId")
-    List<Evaluation> searchEvaluationRep(@Param("companyId") Long companyId);
+            "where e.application.student.studentCode = :studentCode and e.application.job.company.id = :companyId")
+    List<Evaluation> searchEvaluationRep(@Param("companyId") Long companyId, @Param("studentCode") String studentCode);
 
     @Query("select e " +
             "FROM Evaluation e " +

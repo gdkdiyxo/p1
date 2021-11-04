@@ -33,10 +33,11 @@ public class EvaluationController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping()
-    public List<EvaluationDTO> searchEvaluation(Authentication authentication)
+    public List<EvaluationDTO> searchEvaluation(@PathVariable String studentCode,
+                                                Authentication authentication)
             throws AccountIdNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return evaluationService.searchEvaluation(accountId).stream().map(evaluationMapper::evaluationToEvaluationDTO).collect(Collectors.toList());
+        return evaluationService.searchEvaluation(studentCode,accountId).stream().map(evaluationMapper::evaluationToEvaluationDTO).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")

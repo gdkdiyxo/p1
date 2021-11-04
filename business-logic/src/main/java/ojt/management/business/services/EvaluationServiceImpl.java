@@ -24,13 +24,13 @@ public class EvaluationServiceImpl implements EvaluationService{
     }
 
     @Override
-    public List<Evaluation> searchEvaluation(Long accountId)
+    public List<Evaluation> searchEvaluation(String studentCode, Long accountId)
             throws AccountIdNotExistedException {
         if (Boolean.FALSE.equals(accountRepository.existsById(accountId))){
             throw new AccountIdNotExistedException();
         }
         if (accountRepository.getById(accountId).getRepresentative() != null){
-            return evaluationRepository.searchEvaluationRep(accountRepository.getById(accountId).getRepresentative().getCompany().getId());
+            return evaluationRepository.searchEvaluationRep(accountRepository.getById(accountId).getRepresentative().getCompany().getId(), studentCode);
         } else{
             return evaluationRepository.searchEvaluationStudent(accountRepository.getById(accountId).getStudent().getId());
         }
