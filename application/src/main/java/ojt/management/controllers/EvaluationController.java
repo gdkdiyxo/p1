@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.EvaluationService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
 import ojt.management.common.exceptions.EvaluationIdNotExistedException;
+import ojt.management.common.exceptions.NotPermissionException;
 import ojt.management.common.payload.dto.EvaluationDTO;
 import ojt.management.common.payload.request.EvaluationCreateRequest;
 import ojt.management.common.payload.request.EvaluationUpdateRequest;
@@ -25,8 +26,8 @@ public class EvaluationController {
     private final EvaluationService evaluationService;
     private final EvaluationMapper evaluationMapper;
 
-    public EvaluationController (EvaluationMapper evaluationMapper,
-                                 EvaluationService evaluationService){
+    public EvaluationController(EvaluationMapper evaluationMapper,
+                                EvaluationService evaluationService) {
         this.evaluationMapper = evaluationMapper;
         this.evaluationService = evaluationService;
     }
@@ -51,7 +52,7 @@ public class EvaluationController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PutMapping("/{id}")
     public EvaluationDTO updateEvaluation(@PathVariable Long id,
-                                         @RequestBody @Valid EvaluationUpdateRequest evaluationUpdateRequest,
+                                          @RequestBody @Valid EvaluationUpdateRequest evaluationUpdateRequest,
                                           Authentication authentication)
             throws EvaluationIdNotExistedException, AccountIdNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
@@ -61,7 +62,7 @@ public class EvaluationController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
     @PostMapping()
     public EvaluationDTO createEvaluation(@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest,
-                                          Authentication authentication){
+                                          Authentication authentication) throws NotPermissionException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return evaluationMapper.evaluationToEvaluationDTO(evaluationService.createEvaluation(evaluationCreateRequest, accountId));
     }

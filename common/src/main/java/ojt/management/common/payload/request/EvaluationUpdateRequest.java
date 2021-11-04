@@ -14,8 +14,11 @@ import java.io.Serializable;
 public class EvaluationUpdateRequest implements  Serializable{
     @NotNull
     @NotBlank
-    @Size(max =500)
-    private String Comment;
+    @Size(max = 500)
+    private String comment;
+
+    @NotNull
+    private Long grade;
 
     @NotNull
     private boolean isPass;
