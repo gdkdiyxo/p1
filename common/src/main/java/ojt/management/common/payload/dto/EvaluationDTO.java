@@ -9,11 +9,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationDTO implements Serializable{
+public class EvaluationDTO implements Serializable {
     private Long id;
-    private String experience;
-    private boolean isCompanyAccepted;
-    private boolean isStudentConfirmed;
-    private StudentDTO student;
-    private JobDTO job;
+    private String comment;
+    private Long grade;
+    private boolean isPass;
+    private ApplicationDTO applicationDTO;
 }
