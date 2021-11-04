@@ -11,15 +11,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EvaluationCreateRequest implements Serializable{
-    @NotNull
-    @NotBlank
-    @Size(max = 500)
-    private String comment;
-
-    @NotNull
-    private Long grade;
-
+public class EvaluationCreateRequest extends EvaluationUpdateRequest implements Serializable{
     @NotNull
     private Long applicationId;
 }
