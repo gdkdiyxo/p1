@@ -39,11 +39,13 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public Evaluation getEvaluationById(Long id, Long accountId)
-            throws EvaluationIdNotExistedException {
+            throws EvaluationIdNotExistedException, AccountIdNotExistedException {
         if (Boolean.FALSE.equals(evaluationRepository.existsById(id))) {
             throw new EvaluationIdNotExistedException();
         }
-
+        if (Boolean.FALSE.equals(accountRepository.existsById(accountId))) {
+            throw new AccountIdNotExistedException();
+        }
         if (accountRepository.getById(accountId).getRepresentative() != null) {
             return evaluationRepository.getEvaluationRep(accountRepository.getById(accountId).getRepresentative().getCompany().getId(), id);
         } else {
@@ -53,11 +55,13 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public Evaluation updateEvaluation(Long id, EvaluationUpdateRequest evaluationUpdateRequest, Long accountId)
-            throws EvaluationIdNotExistedException {
+            throws EvaluationIdNotExistedException, AccountIdNotExistedException {
         if (Boolean.FALSE.equals(evaluationRepository.existsById(id))) {
             throw new EvaluationIdNotExistedException();
         }
-
+        if (Boolean.FALSE.equals(accountRepository.existsById(accountId))) {
+            throw new AccountIdNotExistedException();
+        }
         Evaluation evaluation = evaluationRepository.getEvaluationRep(accountRepository.getById(accountId).getRepresentative().getCompany().getId(), id);
         evaluation.setComment(evaluationUpdateRequest.getComment());
         evaluation.setGrade(evaluationUpdateRequest.getGrade());
