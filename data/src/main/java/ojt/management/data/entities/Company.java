@@ -51,9 +51,10 @@ public class Company implements Serializable {
     private Set<Job> jobs;
     //----------[End]Mapping relationship----------
 
-    public Company(String name, String description) {
+    public Company(String name, String description, String address) {
         this.name = name;
         this.description = description;
+        this.address = address;
     }
 
     public Company(Long id) {

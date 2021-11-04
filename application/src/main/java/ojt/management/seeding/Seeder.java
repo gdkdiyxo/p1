@@ -1,11 +1,11 @@
 package ojt.management.seeding;
 
 import com.github.javafaker.Faker;
+import ojt.management.business.services.EmailService;
 import ojt.management.common.enums.RoleEnum;
 import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.controllers.AuthController;
-import ojt.management.data.entities.Company;
 import ojt.management.data.entities.Major;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.AccountRepository;
@@ -15,9 +15,13 @@ import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import java.sql.Date;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,18 +32,24 @@ public class Seeder {
     private final MajorRepository majorRepository;
     private final CompanyRepository companyRepository;
     private final SemesterRepository semesterRepository;
+    private final EmailService emailService;
+    private final SpringTemplateEngine templateEngine;
 
 
     public Seeder(AuthController authController,
                   AccountRepository accountRepository,
                   MajorRepository majorRepository,
                   CompanyRepository companyRepository,
-                  SemesterRepository semesterRepository) {
+                  SemesterRepository semesterRepository,
+                  EmailService emailService,
+                  SpringTemplateEngine templateEngine) {
         this.authController = authController;
         this.accountRepository = accountRepository;
         this.majorRepository = majorRepository;
         this.companyRepository = companyRepository;
         this.semesterRepository = semesterRepository;
+        this.emailService = emailService;
+        this.templateEngine = templateEngine;
     }
 
     @EventListener
@@ -50,36 +60,46 @@ public class Seeder {
         if (majorRepository.count() == 0) {
             seedMajor();
         }
-        if (companyRepository.count() == 0) {
-            seedCompany();
-        }
         if (accountRepository.count() == 0) {
             seedAccount();
         }
+        try {
+            emailService.sendMessage("anonymousvhb@gmail.com", "Something", getTemplate());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void seedSemester() {
+        ZonedDateTime today = ZonedDateTime.now();
+        List<Semester> semesters = new ArrayList<>();
+        int number = 1;
+        for (int i = -2; i < 3; i++) {
+            Date startDate = Date.from(today.plusMonths(i * 3).toInstant());
+            Date endDate = Date.from(today.plusMonths((i + 1) * 3).toInstant());
+            semesters.add(new Semester(String.format("Semester %d", number++), startDate, endDate));
+        }
+        semesterRepository.saveAll(semesters);
     }
 
     private void seedMajor() {
         List<Major> majors = Arrays.asList(
                 new Major("Software Engineering"),
-                new Major("Business Administration")
+                new Major("Digital Art Design"),
+                new Major("Information Security"),
+                new Major("Information System"),
+                new Major("Artificial Intelligence"),
+                new Major("IoT"),
+                new Major("Business Administration"),
+                new Major("International Business"),
+                new Major("Digital Marketing"),
+                new Major("Tourism and Holiday Service Administration"),
+                new Major("Multifunctional Communication Administration"),
+                new Major("Hotel Management"),
+                new Major("Japanese"),
+                new Major("Korean")
         );
         majorRepository.saveAll(majors);
-    }
-
-    private void seedCompany() {
-        List<Company> companies = Arrays.asList(
-                new Company("Company A", "Description for company A"),
-                new Company("Company B", "Description for company B")
-        );
-        companyRepository.saveAll(companies);
-    }
-
-    private void seedSemester() {
-        List<Semester> semesters = Arrays.asList(
-                new Semester("Fall 2021", Date.valueOf("2021-09-13"), Date.valueOf("2021-12-31")),
-                new Semester("Spring 2022", Date.valueOf("2022-01-10"), Date.valueOf("2022-04-22"))
-        );
-        semesterRepository.saveAll(semesters);
     }
 
     private void seedAccount() {
@@ -152,5 +172,10 @@ public class Seeder {
                 e.printStackTrace();
             }
         });
+    }
+
+    private String getTemplate() {
+        Context context = new Context();
+        return templateEngine.process("welcome.html", context);
     }
 }
