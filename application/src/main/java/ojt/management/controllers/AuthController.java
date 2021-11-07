@@ -137,7 +137,9 @@ public class AuthController {
         Account account = new Account(signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getName(),
-                signUpRequest.getPhone());
+                signUpRequest.getPhone(),
+                signUpRequest.getAvatar()
+        );
         account = accountRepository.save(account);
         String strRole = signUpRequest.getRole();
 
