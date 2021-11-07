@@ -87,14 +87,19 @@ public class JobServiceImpl implements JobService {
         job.setName(jobUpdateRequest.getName());
         job.setDescription(jobUpdateRequest.getDescription());
         job.setTitle(jobUpdateRequest.getTitle());
+        job.setBenefits(jobUpdateRequest.getBenefits());
+        job.setSkills(jobUpdateRequest.getSkills());
+
         List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
                 .filter(id -> !job.getSemesters().stream()
                         .map(Semester::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
         job.getSemesters().addAll(newSemesterIds.stream().map(Semester::new).collect(Collectors.toList()));
+
         List<Long> newMajorIds = jobUpdateRequest.getMajorIds().stream()
                 .filter(id -> !job.getMajors().stream()
                         .map(Major::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
         job.getMajors().addAll(newMajorIds.stream().map(Major::new).collect(Collectors.toList()));
+
         return jobRepository.save(job);
     }
 
@@ -130,12 +135,16 @@ public class JobServiceImpl implements JobService {
         job.setName(jobCreateRequest.getName());
         job.setDescription(jobCreateRequest.getDescription());
         job.setTitle(jobCreateRequest.getTitle());
+        job.setBenefits(jobCreateRequest.getBenefits());
+        job.setSkills(jobCreateRequest.getSkills());
+
         //Get company id of Rep
         if (account.getRepresentative() != null) {
             job.setCompany(new Company(companyId));
         } else {
             job.setCompany(new Company(jobCreateRequest.getCompanyId()));
         }
+
         job = jobRepository.save(job);
         List<Semester> semesters = semesterRepository.findAllByIdIn(jobCreateRequest.getSemesterIds());
         List<Major> majors = majorRepository.findAllByIdIn(jobCreateRequest.getMajorIds());

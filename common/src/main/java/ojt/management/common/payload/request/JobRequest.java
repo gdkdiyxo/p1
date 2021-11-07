@@ -21,13 +21,23 @@ public class JobRequest implements Serializable {
 
     @NotNull
     @NotBlank
+    @Size(max = 255)
+    private String title;
+
+    @NotNull
+    @NotBlank
     @Size(max = 2000)
     private String description;
 
     @NotNull
     @NotBlank
-    @Size(max = 255)
-    private String title;
+    @Size(max = 2000)
+    private String skills;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 2000)
+    private String benefits;
 
     @NotNull
     private List<Long> semesterIds;

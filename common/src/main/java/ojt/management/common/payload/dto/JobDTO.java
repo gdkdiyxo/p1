@@ -13,8 +13,10 @@ import java.util.Set;
 public class JobDTO implements Serializable {
     private Long id;
     private String name;
-    private String description;
     private String title;
+    private String description;
+    private String skills;
+    private String benefits;
     private Set<SemesterDTO> semesters;
     private Set<MajorDTO> majors;
     private CompanyDTO company;
