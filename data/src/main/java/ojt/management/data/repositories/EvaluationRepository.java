@@ -10,23 +10,26 @@ import java.util.List;
 
 @Repository
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
-    @Query("select e " +
+    @Query("SELECT e " +
             "FROM Evaluation e " +
-            "where e.application.student.id = :studentId")
+            "WHERE e.application.student.id = :studentId")
     List<Evaluation> searchEvaluationStudent(@Param("studentId") Long studentId);
 
-    @Query("select e " +
+    @Query("SELECT e " +
             "FROM Evaluation e " +
-            "where e.application.student.studentCode = :studentCode and e.application.job.company.id = :companyId")
+            "WHERE e.application.student.studentCode = :studentCode " +
+            "AND e.application.job.company.id = :companyId")
     List<Evaluation> searchEvaluationRep(@Param("companyId") Long companyId, @Param("studentCode") String studentCode);
 
-    @Query("select e " +
+    @Query("SELECT e " +
             "FROM Evaluation e " +
-            "where e.application.student.id = :studentId and e.id = :id")
-    Evaluation getEvaluationStudent(@Param("studentId") Long studentId,@Param("id") Long id);
+            "WHERE e.application.student.id = :studentId " +
+            "AND e.id = :id")
+    Evaluation getEvaluationStudent(@Param("studentId") Long studentId, @Param("id") Long id);
 
-    @Query("select e " +
+    @Query("SELECT e " +
             "FROM Evaluation e " +
-            "where e.application.job.company.id = :companyId and e.id = :id")
-    Evaluation getEvaluationRep(@Param("companyId") Long companyId,@Param("id") Long id);
+            "WHERE e.application.job.company.id = :companyId " +
+            "AND e.id = :id")
+    Evaluation getEvaluationRep(@Param("companyId") Long companyId, @Param("id") Long id);
 }

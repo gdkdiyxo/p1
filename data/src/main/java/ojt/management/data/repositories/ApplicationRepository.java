@@ -13,31 +13,31 @@ import java.util.List;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
-    @Query("select a " +
+    @Query("SELECT a " +
             "FROM Application a " +
-            "where a.job.company.id = :companyId")
+            "WHERE a.job.company.id = :companyId")
     List<Application> searchAppRep(@Param("companyId") Long companyId);
 
-    @Query("select a " +
+    @Query("SELECT a " +
             "FROM Application a " +
-            "where a.student.id = :studentId")
+            "WHERE a.student.id = :studentId")
     List<Application> searchAppStudent(@Param("studentId") Long studentId);
 
-    @Query("select a " +
+    @Query("SELECT a " +
             "FROM Application a " +
-            "where a.job.company.id = :companyId and a.id = :id")
+            "WHERE a.job.company.id = :companyId AND a.id = :id")
     Application getAppRep(@Param("id") Long id, @Param("companyId") Long companyId);
 
-    @Query("select a " +
+    @Query("SELECT a " +
             "FROM Application a " +
-            "where a.student.id = :studentId and a.id = :id")
+            "WHERE a.student.id = :studentId AND a.id = :id")
     Application getAppStudent(@Param("id") Long id, @Param("studentId") Long studentId);
 
     @Query("SELECT distinct a " +
             "FROM Application a " +
-            "inner join a.job j " +
-            "WHERE j.name like :name " +
-            "AND j.title like :title " +
+            "INNER JOIN a.job j " +
+            "WHERE j.name LIKE :name " +
+            "AND j.title LIKE :title " +
             "AND j.company.id = :companyId")
     List<Application> searchAppByRep(@Param("name") String name,
                                      @Param("title") String title,
@@ -45,10 +45,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query("SELECT distinct a " +
             "FROM Application a " +
-            "inner join a.job j " +
-            "inner join a.student s " +
-            "WHERE j.name like :name " +
-            "AND j.title like :title " +
+            "INNER JOIN a.job j " +
+            "INNER JOIN a.student s " +
+            "WHERE j.name LIKE :name " +
+            "AND j.title LIKE :title " +
             "AND s.id = :studentId")
     List<Application> searchAppByStu(@Param("name") String name,
                                      @Param("title") String title,

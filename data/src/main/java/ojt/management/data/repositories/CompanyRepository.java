@@ -12,8 +12,8 @@ import java.util.List;
 public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
     @Query("SELECT c " +
             "FROM Company c " +
-            "WHERE c.name like :name " +
-            "OR c.description like :description")
+            "WHERE c.name LIKE :name " +
+            "OR c.description LIKE :description")
     List<Company> searchCompany(@Param("name") String name, @Param("description") String description);
 
     boolean existsById(Long id);
