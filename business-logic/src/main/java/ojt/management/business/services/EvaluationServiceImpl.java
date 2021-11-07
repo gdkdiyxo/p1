@@ -55,13 +55,11 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public Evaluation updateEvaluation(Long id, EvaluationUpdateRequest evaluationUpdateRequest, Long accountId)
-            throws EvaluationIdNotExistedException, AccountIdNotExistedException {
+            throws EvaluationIdNotExistedException {
         if (Boolean.FALSE.equals(evaluationRepository.existsById(id))) {
             throw new EvaluationIdNotExistedException();
         }
-        if (Boolean.FALSE.equals(accountRepository.existsById(accountId))) {
-            throw new AccountIdNotExistedException();
-        }
+
         Evaluation evaluation = evaluationRepository.getEvaluationRep(accountRepository.getById(accountId).getRepresentative().getCompany().getId(), id);
         evaluation.setComment(evaluationUpdateRequest.getComment());
         evaluation.setGrade(evaluationUpdateRequest.getGrade());
@@ -71,7 +69,8 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public Evaluation createEvaluation(EvaluationCreateRequest evaluationCreateRequest, Long accountId) throws NotPermissionException {
+    public Evaluation createEvaluation(EvaluationCreateRequest evaluationCreateRequest, Long accountId)
+            throws NotPermissionException {
         Evaluation evaluation = new Evaluation();
         Long accountCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
         if (evaluation.getApplication().getJob().getCompany().getId() == accountCompanyId) {

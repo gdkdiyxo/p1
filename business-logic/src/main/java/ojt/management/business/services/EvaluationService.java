@@ -17,7 +17,7 @@ public interface EvaluationService {
             throws AccountIdNotExistedException;
 
     Evaluation updateEvaluation(Long id, EvaluationUpdateRequest evaluationUpdateRequest, Long accountId)
-            throws EvaluationIdNotExistedException, AccountIdNotExistedException;
+            throws EvaluationIdNotExistedException;
 
     Evaluation createEvaluation(EvaluationCreateRequest evaluationCreateRequest, Long accountId)
             throws NotPermissionException;
