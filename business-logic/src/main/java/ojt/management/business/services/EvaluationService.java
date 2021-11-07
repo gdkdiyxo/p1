@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface EvaluationService {
     Evaluation getEvaluationById(Long id, Long accountId)
-            throws EvaluationIdNotExistedException;
+            throws EvaluationIdNotExistedException, AccountIdNotExistedException;
 
     List<Evaluation> searchEvaluation(String studentCode, Long accountId)
             throws AccountIdNotExistedException;
 
     Evaluation updateEvaluation(Long id, EvaluationUpdateRequest evaluationUpdateRequest, Long accountId)
-            throws EvaluationIdNotExistedException;
+            throws EvaluationIdNotExistedException, AccountIdNotExistedException;
 
     Evaluation createEvaluation(EvaluationCreateRequest evaluationCreateRequest, Long accountId)
             throws NotPermissionException;
