@@ -13,8 +13,6 @@ public interface UserMapper {
     @Mapping(source = "student", target = "student")
     UserDTO userToUserDTO(Account account);
 
-    Account userDTOToUser(UserDTO userDTO);
-
     @Named(("role"))
     default String convertRole(Account account) {
         String role;

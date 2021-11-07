@@ -8,10 +8,12 @@ import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.JobRepository;
 import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.SemesterRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -34,22 +36,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId, Long accountId) {
-        Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
-        Account account = accountRepository.getById(accountId);
-        if (account.getRepresentative() != null) { //The Rep only get their own job
-            return jobRepository.searchJobByRep(Optional.ofNullable(name).orElse(""),
-                    Optional.ofNullable(title).orElse(""),
-                    semesterId,
-                    majorId,
-                    repCompanyId);
-        } else {
-            return jobRepository.searchJob(
-                    Optional.ofNullable(name).orElse(""),
-                    Optional.ofNullable(title).orElse(""),
-                    semesterId,
-                    majorId);
-        }
+    public Page<Job> searchJob(Specification<Job> specification, Pageable pageable) {
+        return jobRepository.findAll(specification, pageable);
     }
 
     @Override

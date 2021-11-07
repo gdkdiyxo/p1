@@ -6,6 +6,4 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ApplicationMapper {
     ApplicationDTO applicationToApplicationDTO (Application application);
-
-    Application applicationDTOToApplication (ApplicationDTO applicationDTO);
 }

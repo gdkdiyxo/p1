@@ -2,24 +2,13 @@ package ojt.management.data.repositories;
 
 import ojt.management.data.entities.Evaluation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
-    @Query("select e " +
-            "FROM Evaluation e " +
-            "where e.application.student.id = :studentId")
-    List<Evaluation> searchEvaluationStudent(@Param("studentId") Long studentId);
-
-    @Query("select e " +
-            "FROM Evaluation e " +
-            "where e.application.student.studentCode = :studentCode and e.application.job.company.id = :companyId")
-    List<Evaluation> searchEvaluationRep(@Param("companyId") Long companyId, @Param("studentCode") String studentCode);
-
+public interface EvaluationRepository extends JpaRepository<Evaluation, Long>, JpaSpecificationExecutor<Evaluation> {
     @Query("select e " +
             "FROM Evaluation e " +
             "where e.application.student.id = :studentId and e.id = :id")
