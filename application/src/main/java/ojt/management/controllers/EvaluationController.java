@@ -35,10 +35,10 @@ public class EvaluationController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping()
     public List<EvaluationDTO> searchEvaluation(@PathVariable String studentCode,
-                                                Authentication authentication)
-            throws AccountIdNotExistedException {
+                                                Authentication authentication) throws AccountIdNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return evaluationService.searchEvaluation(studentCode,accountId).stream().map(evaluationMapper::evaluationToEvaluationDTO).collect(Collectors.toList());
+        return evaluationService.searchEvaluation(studentCode, accountId).stream().map(
+                evaluationMapper::evaluationToEvaluationDTO).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
@@ -57,7 +57,8 @@ public class EvaluationController {
                                           Authentication authentication)
             throws EvaluationIdNotExistedException, AccountIdNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return evaluationMapper.evaluationToEvaluationDTO(evaluationService.updateEvaluation(id, evaluationUpdateRequest, accountId));
+        return evaluationMapper.evaluationToEvaluationDTO(
+                evaluationService.updateEvaluation(id, evaluationUpdateRequest, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
@@ -65,6 +66,7 @@ public class EvaluationController {
     public EvaluationDTO createEvaluation(@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest,
                                           Authentication authentication) throws NotPermissionException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return evaluationMapper.evaluationToEvaluationDTO(evaluationService.createEvaluation(evaluationCreateRequest, accountId));
+        return evaluationMapper.evaluationToEvaluationDTO(
+                evaluationService.createEvaluation(evaluationCreateRequest, accountId));
     }
 }

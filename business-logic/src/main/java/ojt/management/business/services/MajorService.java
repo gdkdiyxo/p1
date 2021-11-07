@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 public interface MajorService {
     Major getMajorById(Long id) throws MajorNotExistedException;
 
-    Page<Major> searchMajor(Specification<Major> specification, Pageable pageable) ;
+    Page<Major> searchMajor(Specification<Major> specification, Pageable pageable);
 
     Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException;
 
