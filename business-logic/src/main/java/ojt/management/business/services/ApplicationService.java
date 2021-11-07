@@ -13,7 +13,7 @@ public interface ApplicationService {
 
     Application getAppById(Long id, Long accountId) throws ApplicationNotExistedException, AccountIdNotExistedException;
 
-    List<Application> searchApplication(Long accountId) throws AccountIdNotExistedException;
+    List<Application> searchApplication(String name, String title, Long accountId);
 
     Application updateApplication(Long id, ApplicationUpdateRequest applicationUpdateRequest, Long accountId)
             throws ApplicationNotExistedException, NotPermissionException;
