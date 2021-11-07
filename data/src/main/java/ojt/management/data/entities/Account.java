@@ -31,6 +31,9 @@ public class Account implements Serializable {
     @Column(name = "password", length = 1024, nullable = false)
     private String password;
 
+    @Column(name = "avatar", length = 2048)
+    private String avatar;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -59,10 +62,11 @@ public class Account implements Serializable {
     private Representative representative;
     //----------[End]Mapping relationship----------
 
-    public Account(String email, String password, String name, String phone) {
+    public Account(String email, String password, String name, String phone, String avatar) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
+        this.avatar = avatar;
     }
 }

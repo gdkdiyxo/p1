@@ -34,9 +34,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account updateUser(Long id, AccountRequest accountUpdateRequest) throws AccountIdNotExistedException {
-        Account account = accountRepository.getById(id);
-
-        return accountRepository.save(account);
+        if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
+            throw new AccountIdNotExistedException();
+        } else {
+            Account account = accountRepository.getById(id);
+            return accountRepository.save(account);
+        }
     }
 
     @Override

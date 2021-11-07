@@ -15,7 +15,7 @@ public interface SemesterRepository  extends JpaRepository<Semester, Long>, JpaS
 
     @Query("SELECT s " +
             "FROM Semester s " +
-            "WHERE s.name like :name " +
+            "WHERE s.name LIKE :name " +
             "OR s.startDate = :startDate " +
             "OR s.endDate = :endDate")
     List<Semester> searchSemester(@Param("name") String name, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
