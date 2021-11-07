@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -32,16 +33,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<Application> searchApplication(Long accountId)
-            throws AccountIdNotExistedException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(accountId))) {
-            throw new AccountIdNotExistedException();
-        }
+    public List<Application> searchApplication(String name, String title, Long accountId) {
         Account account = accountRepository.getById(accountId);
-        if (account.getRepresentative() != null) {
-            return applicationRepository.searchAppRep(account.getRepresentative().getCompany().getId());
+        if (account.getRepresentative() != null){
+            return applicationRepository.searchAppByRep(Optional.ofNullable(name).orElse(""),
+                    Optional.ofNullable(title).orElse(""),
+                    account.getRepresentative().getCompany().getId());
         } else {
-            return applicationRepository.searchAppStudent(account.getStudent().getId());
+            return applicationRepository.searchAppByStu(Optional.ofNullable(name).orElse(""),
+                    Optional.ofNullable(title).orElse(""),
+                    account.getStudent().getId());
         }
     }
 
