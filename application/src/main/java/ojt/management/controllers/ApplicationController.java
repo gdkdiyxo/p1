@@ -34,10 +34,10 @@ public class ApplicationController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping()
-    public List<ApplicationDTO> searchApplication(Authentication authentication)
-            throws AccountIdNotExistedException {
+    public List<ApplicationDTO> searchApplication(@RequestParam(value = "name", required = false) String name,
+                                                  @RequestParam(value = "title", required = false) String title, Authentication authentication) {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return applicationService.searchApplication(accountId).stream().map(applicationMapper::applicationToApplicationDTO)
+        return applicationService.searchApplication(name, title, accountId).stream().map(applicationMapper::applicationToApplicationDTO)
                 .collect(Collectors.toList());
     }
 
