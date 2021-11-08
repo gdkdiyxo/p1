@@ -77,7 +77,7 @@ public class EvaluationController {
     public EvaluationDTO updateEvaluation(@PathVariable Long id,
                                           @RequestBody @Valid EvaluationUpdateRequest evaluationUpdateRequest,
                                           Authentication authentication)
-            throws EvaluationIdNotExistedException, AccountIdNotExistedException {
+            throws EvaluationIdNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
         return evaluationMapper.evaluationToEvaluationDTO(
                 evaluationService.updateEvaluation(id, evaluationUpdateRequest, accountId));

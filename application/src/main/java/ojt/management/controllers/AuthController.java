@@ -121,7 +121,6 @@ public class AuthController {
             throws UsernameAlreadyExistedException,
             EmailAlreadyExistedException,
             EmptyRoleException,
-            CompanyNotExistedException,
             MajorNotExistedException,
             SemesterNotExistedException {
         if (signUpRequest.getStudentCode() != null && Boolean.TRUE.equals(
@@ -166,6 +165,9 @@ public class AuthController {
                         throw new MajorNotExistedException();
                     }
                     Major major = majorRepository.getById(signUpRequest.getMajorId());
+                    if (!semesterRepository.existsById(signUpRequest.getSemesterId())) {
+                        throw new SemesterNotExistedException();
+                    }
                     Semester semester = semesterRepository.getById(signUpRequest.getSemesterId());
                     Student student = new Student();
                     student.setStudentCode(signUpRequest.getStudentCode());
