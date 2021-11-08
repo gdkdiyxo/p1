@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long>, JpaSpecificationExecutor<Evaluation> {
-    @Query("select e " +
+    @Query("SELECT e " +
             "FROM Evaluation e " +
-            "where e.application.student.id = :studentId and e.id = :id")
+            "WHERE e.application.student.id = :studentId " +
+            "AND e.id = :id")
     Evaluation getEvaluationStudent(@Param("studentId") Long studentId,@Param("id") Long id);
 
     @Query("SELECT e " +

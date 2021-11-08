@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long>, JpaSpecificationExecutor<Application> {
-    @Query("select a " +
+    @Query("SELECT a " +
             "FROM Application a " +
-            "where a.job.company.id = :companyId and a.id = :id")
+            "WHERE a.job.company.id = :companyId AND a.id = :id")
     Application getAppRep(@Param("id") Long id, @Param("companyId") Long companyId);
 
     @Query("SELECT a " +
