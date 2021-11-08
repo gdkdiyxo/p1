@@ -13,7 +13,7 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long>, J
             "FROM Evaluation e " +
             "WHERE e.application.student.id = :studentId " +
             "AND e.id = :id")
-    Evaluation getEvaluationStudent(@Param("studentId") Long studentId,@Param("id") Long id);
+    Evaluation getEvaluationStudent(@Param("studentId") Long studentId, @Param("id") Long id);
 
     @Query("SELECT e " +
             "FROM Evaluation e " +

@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface SemesterRepository  extends JpaRepository<Semester, Long>, JpaSpecificationExecutor<Semester> {
+public interface SemesterRepository extends JpaRepository<Semester, Long>, JpaSpecificationExecutor<Semester> {
 
     boolean existsByName(String name);
 

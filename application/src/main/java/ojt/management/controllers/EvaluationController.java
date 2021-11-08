@@ -47,9 +47,9 @@ public class EvaluationController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping()
     public PagedDataResponse<EvaluationDTO> searchEvaluation(@RequestParam(value = "search", required = false) String search,
-                                                @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-                                                @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
+                                                             @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
+                                                             @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+                                                             @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
         Specification<Evaluation> spec = Specification.where(null);
         if (Strings.isNotBlank(search)) {
             Node rootNode = new RSQLParser().parse(search);

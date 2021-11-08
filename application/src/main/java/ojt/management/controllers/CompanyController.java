@@ -7,8 +7,8 @@ import ojt.management.business.services.CompanyService;
 import ojt.management.common.exceptions.CrudException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.CompanyDTO;
-import ojt.management.common.utils.SortUtils;
 import ojt.management.common.payload.request.CompanyRequest;
+import ojt.management.common.utils.SortUtils;
 import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.Company;
 import ojt.management.data.rsql.CustomRsqlVisitor;
@@ -44,9 +44,9 @@ public class CompanyController {
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @GetMapping()
     public PagedDataResponse<CompanyDTO> searchUser(@RequestParam(value = "search", required = false) String search,
-                                                 @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                 @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
+                                                    @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
+                                                    @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+                                                    @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
         Specification<Company> spec = Specification.where(null);
         if (Strings.isNotBlank(search)) {
             Node rootNode = new RSQLParser().parse(search);
@@ -75,6 +75,6 @@ public class CompanyController {
                                     Authentication authentication)
             throws CrudException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return companyMapper.companyToCompanyDTO(companyService.updateCompany(id, companyUpdateRequest,accountId ));
+        return companyMapper.companyToCompanyDTO(companyService.updateCompany(id, companyUpdateRequest, accountId));
     }
 }

@@ -46,10 +46,10 @@ public class ApplicationController {
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE', 'STUDENT')")
     @GetMapping()
-    public PagedDataResponse<ApplicationDTO>  searchApplication(@RequestParam(value = "search", required = false) String search,
-                                                  @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
-                                                  @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
+    public PagedDataResponse<ApplicationDTO> searchApplication(@RequestParam(value = "search", required = false) String search,
+                                                               @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
+                                                               @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
+                                                               @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
         Specification<Application> spec = Specification.where(null);
         if (Strings.isNotBlank(search)) {
             Node rootNode = new RSQLParser().parse(search);
