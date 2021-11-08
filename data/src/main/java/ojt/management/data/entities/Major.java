@@ -1,7 +1,8 @@
 package ojt.management.data.entities;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,7 +25,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "major")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Major implements Serializable {
@@ -44,7 +46,7 @@ public class Major implements Serializable {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "is_disabled")
+    @Column(name = "is_disabled", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean disabled;
 
     //----------[Start]Mapping relationship----------
@@ -65,5 +67,10 @@ public class Major implements Serializable {
 
     public Major(Long id) {
         this.id = id;
+    }
+
+    public Major(Long id, Set<Job> jobs) {
+        this.id = id;
+        this.jobs = jobs;
     }
 }

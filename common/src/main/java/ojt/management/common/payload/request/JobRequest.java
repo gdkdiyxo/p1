@@ -13,16 +13,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobRequest  implements Serializable {
+public class JobRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 255)
     private String name;
-
-    @NotNull
-    @NotBlank
-    @Size(max = 2000)
-    private String description;
 
     @NotNull
     @NotBlank
@@ -31,9 +26,22 @@ public class JobRequest  implements Serializable {
 
     @NotNull
     @NotBlank
-    private List<Long> semesterIds;
+    @Size(max = 2000)
+    private String description;
 
     @NotNull
     @NotBlank
+    @Size(max = 2000)
+    private String skills;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 2000)
+    private String benefits;
+
+    @NotNull
+    private List<Long> semesterIds;
+
+    @NotNull
     private List<Long> majorIds;
 }
