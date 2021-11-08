@@ -8,9 +8,10 @@ import ojt.management.common.payload.request.EvaluationUpdateRequest;
 import ojt.management.data.entities.Evaluation;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.EvaluationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class EvaluationServiceImpl implements EvaluationService {
@@ -25,16 +26,8 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public List<Evaluation> searchEvaluation(String studentCode, Long accountId)
-            throws AccountIdNotExistedException {
-        if (Boolean.FALSE.equals(accountRepository.existsById(accountId))) {
-            throw new AccountIdNotExistedException();
-        }
-        if (accountRepository.getById(accountId).getRepresentative() != null){
-            return evaluationRepository.searchEvaluationRep(accountRepository.getById(accountId).getRepresentative().getCompany().getId(), studentCode);
-        } else{
-            return evaluationRepository.searchEvaluationStudent(accountRepository.getById(accountId).getStudent().getId());
-        }
+    public Page<Evaluation> searchEvaluation(Specification<Evaluation> specification, Pageable pageable) {
+        return evaluationRepository.findAll(specification, pageable);
     }
 
     @Override
