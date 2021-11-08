@@ -47,7 +47,7 @@ public class MajorController {
     }
 
     @GetMapping()
-    public PagedDataResponse<MajorDTO> searchUser(@RequestParam(value = "search", required = false) String search,
+    public PagedDataResponse<MajorDTO> searchMajor(@RequestParam(value = "search", required = false) String search,
                                                     @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
                                                     @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
                                                     @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {

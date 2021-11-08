@@ -20,6 +20,7 @@ import javax.persistence.metamodel.MapAttribute;
 import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -175,9 +176,12 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
 
         return arguments.stream().map(arg -> {
             if (type.equals(Integer.class)) return Integer.parseInt(arg);
+            else if (type.equals(Boolean.class)) return Boolean.parseBoolean(arg);
+            else if (type.getName().equals("boolean")) return Boolean.parseBoolean(arg);
             else if (type.equals(Long.class)) return Long.parseLong(arg);
             else if (type.equals(Byte.class)) return Byte.parseByte(arg);
             else if (type.equals(Date.class)) return Date.from(Instant.parse(arg));
+            else if (type.equals(Timestamp.class)) return Timestamp.from(Instant.parse((arg)));
             else return arg;
         }).collect(Collectors.toList());
     }
