@@ -129,7 +129,7 @@ public class JobServiceImpl implements JobService {
         if (account.getRepresentative() != null) {
             Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
             job.setCompany(new Company(companyId));
-        } else {
+        } else if (account.isAdmin()) {
             job.setCompany(new Company(jobCreateRequest.getCompanyId()));
         }
 
