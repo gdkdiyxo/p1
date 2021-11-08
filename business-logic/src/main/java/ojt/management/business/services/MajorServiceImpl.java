@@ -64,6 +64,20 @@ public class MajorServiceImpl implements MajorService {
     }
 
     @Override
+    public boolean recoverMajor(Long id) throws MajorNotExistedException {
+        if (Boolean.FALSE.equals(majorRepository.existsById(id))) {
+            throw new MajorNotExistedException();
+        } else {
+            Major major = majorRepository.getById(id);
+            if (major.isDisabled()) {
+                major.setDisabled(false);
+                majorRepository.save(major);
+            }
+            return true;
+        }
+    }
+
+    @Override
     public Major createMajor(String name) throws MajorNameAlreadyExistedException {
         if (Boolean.TRUE.equals(majorRepository.existsByName(name))) {
             throw new MajorNameAlreadyExistedException();

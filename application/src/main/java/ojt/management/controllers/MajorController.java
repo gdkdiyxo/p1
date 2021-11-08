@@ -79,6 +79,12 @@ public class MajorController {
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PatchMapping("/{id}/recover")
+    public boolean recoverMajor(@PathVariable Long id) throws MajorNotExistedException {
+        return majorService.recoverMajor(id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
     @PostMapping()
     public MajorDTO createMajor(@RequestBody MajorRequest majorRequest)
             throws MajorNameAlreadyExistedException {

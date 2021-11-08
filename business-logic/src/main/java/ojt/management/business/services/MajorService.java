@@ -17,5 +17,7 @@ public interface MajorService {
 
     boolean deleteMajor(Long id) throws MajorNotExistedException;
 
+    boolean recoverMajor(Long id) throws MajorNotExistedException;
+
     Major createMajor(String name) throws MajorNameAlreadyExistedException;
 }

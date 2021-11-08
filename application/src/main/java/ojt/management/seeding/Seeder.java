@@ -172,7 +172,6 @@ public class Seeder {
             } catch (UsernameAlreadyExistedException |
                     EmailAlreadyExistedException |
                     EmptyRoleException |
-                    CompanyNotExistedException |
                     MajorNotExistedException |
                     SemesterNotExistedException e) {
                 e.printStackTrace();
