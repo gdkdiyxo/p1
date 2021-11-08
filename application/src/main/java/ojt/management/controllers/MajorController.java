@@ -8,6 +8,7 @@ import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.MajorDTO;
+import ojt.management.common.payload.request.MajorDeletionRequest;
 import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.common.utils.SortUtils;
 import ojt.management.data.entities.Major;
@@ -76,6 +77,11 @@ public class MajorController {
     @DeleteMapping("/{id}")
     public boolean deleteMajor(@PathVariable Long id) throws MajorNotExistedException {
         return majorService.deleteMajor(id);
+    }
+
+    @DeleteMapping
+    public boolean deleteMajors(@RequestBody MajorDeletionRequest majorDeletionRequest) throws MajorNotExistedException {
+        return majorService.deleteMajors(majorDeletionRequest.getIds());
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")

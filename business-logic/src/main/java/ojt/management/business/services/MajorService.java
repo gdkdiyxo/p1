@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
+
 public interface MajorService {
     Major getMajorById(Long id) throws MajorNotExistedException;
 
@@ -16,6 +18,8 @@ public interface MajorService {
     Major updateMajor(Long id, MajorRequest majorRequest) throws MajorNotExistedException, MajorNameAlreadyExistedException;
 
     boolean deleteMajor(Long id) throws MajorNotExistedException;
+
+    boolean deleteMajors(List<Long> ids) throws MajorNotExistedException;
 
     boolean recoverMajor(Long id) throws MajorNotExistedException;
 
