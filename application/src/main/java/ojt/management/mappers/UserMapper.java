@@ -11,6 +11,7 @@ import org.mapstruct.Named;
 public interface UserMapper {
     @Mapping(source = "account", target = "role", qualifiedByName = "role")
     @Mapping(source = "student", target = "student")
+    @Mapping(source = "representative.company", target = "company")
     UserDTO userToUserDTO(Account account);
 
     @Named(("role"))
