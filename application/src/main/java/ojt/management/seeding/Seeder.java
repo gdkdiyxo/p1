@@ -2,14 +2,16 @@ package ojt.management.seeding;
 
 import com.github.javafaker.Faker;
 import ojt.management.business.services.EmailService;
+import ojt.management.business.services.JobService;
 import ojt.management.common.enums.RoleEnum;
 import ojt.management.common.exceptions.*;
 import ojt.management.common.payload.request.AccountRequest;
+import ojt.management.common.payload.request.JobCreateRequest;
 import ojt.management.controllers.AuthController;
 import ojt.management.data.entities.Major;
 import ojt.management.data.entities.Semester;
 import ojt.management.data.repositories.AccountRepository;
-import ojt.management.data.repositories.CompanyRepository;
+import ojt.management.data.repositories.JobRepository;
 import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.SemesterRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -28,26 +30,29 @@ import java.util.List;
 public class Seeder {
 
     private final AuthController authController;
+    private final JobService jobService;
     private final AccountRepository accountRepository;
     private final MajorRepository majorRepository;
-    private final CompanyRepository companyRepository;
     private final SemesterRepository semesterRepository;
+    private final JobRepository jobRepository;
     private final EmailService emailService;
     private final SpringTemplateEngine templateEngine;
 
 
     public Seeder(AuthController authController,
+                  JobService jobService,
                   AccountRepository accountRepository,
                   MajorRepository majorRepository,
-                  CompanyRepository companyRepository,
                   SemesterRepository semesterRepository,
+                  JobRepository jobRepository,
                   EmailService emailService,
                   SpringTemplateEngine templateEngine) {
         this.authController = authController;
+        this.jobService = jobService;
         this.accountRepository = accountRepository;
         this.majorRepository = majorRepository;
-        this.companyRepository = companyRepository;
         this.semesterRepository = semesterRepository;
+        this.jobRepository = jobRepository;
         this.emailService = emailService;
         this.templateEngine = templateEngine;
     }
@@ -62,6 +67,9 @@ public class Seeder {
         }
         if (accountRepository.count() == 0) {
             seedAccount();
+        }
+        if (jobRepository.count() == 0) {
+            seedJob();
         }
         try {
             emailService.sendMessage("anonymousvhb@gmail.com", "Something", getTemplate());
@@ -164,7 +172,8 @@ public class Seeder {
                 new AccountRequest("representative5@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12), null),
                 new AccountRequest("representative6@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12), null),
                 new AccountRequest("representative7@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12), null),
-                new AccountRequest("representative8@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12), null));
+                new AccountRequest("representative8@gmail.com", initialPassword, faker.name().fullName(), RoleEnum.COMPANY_REPRESENTATIVE.name(), faker.company().name(), faker.educator().university(), faker.address().fullAddress(), faker.phoneNumber().subscriberNumber(12), null)
+        );
 
         accountRequests.stream().forEach(accountRequest -> {
             try {
@@ -182,5 +191,39 @@ public class Seeder {
     private String getTemplate() {
         Context context = new Context();
         return templateEngine.process("welcome.html", context);
+    }
+
+    private void seedJob() {
+        Faker faker = new Faker();
+        List<Long> semesters = new ArrayList<>();
+        semesters.add(Long.valueOf(1));
+        List<Long> majors = new ArrayList<>();
+        majors.add(Long.valueOf(1));
+        List<JobCreateRequest> jobCreateRequests = Arrays.asList(
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(1)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(1)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(2)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(2)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(3)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(3)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(4)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(4)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(5)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(5)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(6)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(6)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(7)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(7)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(8)),
+                new JobCreateRequest(faker.job().position(), faker.job().title(), faker.job().field(), faker.job().keySkills(), faker.job().seniority(), semesters, majors, Long.valueOf(8))
+        );
+
+        jobCreateRequests.stream().forEach(jobCreateRequest -> {
+            try {
+                jobService.createJob(jobCreateRequest, Long.valueOf(1));
+            } catch (CrudException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

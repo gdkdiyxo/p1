@@ -117,7 +117,6 @@ public class JobServiceImpl implements JobService {
     public Job createJob(JobCreateRequest jobCreateRequest, Long accountId) throws CrudException {
         validateSemesterIdsAndMajorIds(jobCreateRequest);
         Account account = accountRepository.getById(accountId);
-        Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
         // create new job
         Job job = new Job();
         job.setName(jobCreateRequest.getName());
@@ -128,6 +127,7 @@ public class JobServiceImpl implements JobService {
 
         //Get company id of Rep
         if (account.getRepresentative() != null) {
+            Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
             job.setCompany(new Company(companyId));
         } else {
             job.setCompany(new Company(jobCreateRequest.getCompanyId()));
