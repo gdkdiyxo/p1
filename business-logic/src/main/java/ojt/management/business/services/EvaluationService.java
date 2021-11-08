@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface EvaluationService {
     Evaluation getEvaluationById(Long id, Long accountId)
-            throws EvaluationIdNotExistedException;
+            throws EvaluationIdNotExistedException, AccountIdNotExistedException;
 
     Page<Evaluation> searchEvaluation(Specification<Evaluation> specification, Pageable pageable);
 

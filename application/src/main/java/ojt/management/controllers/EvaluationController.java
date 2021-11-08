@@ -79,7 +79,8 @@ public class EvaluationController {
                                           Authentication authentication)
             throws EvaluationIdNotExistedException, AccountIdNotExistedException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return evaluationMapper.evaluationToEvaluationDTO(evaluationService.updateEvaluation(id, evaluationUpdateRequest, accountId));
+        return evaluationMapper.evaluationToEvaluationDTO(
+                evaluationService.updateEvaluation(id, evaluationUpdateRequest, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE')")
@@ -87,6 +88,7 @@ public class EvaluationController {
     public EvaluationDTO createEvaluation(@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest,
                                           Authentication authentication) throws NotPermissionException {
         Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
-        return evaluationMapper.evaluationToEvaluationDTO(evaluationService.createEvaluation(evaluationCreateRequest, accountId));
+        return evaluationMapper.evaluationToEvaluationDTO(
+                evaluationService.createEvaluation(evaluationCreateRequest, accountId));
     }
 }

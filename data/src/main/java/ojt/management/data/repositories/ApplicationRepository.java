@@ -14,8 +14,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long>,
             "where a.job.company.id = :companyId and a.id = :id")
     Application getAppRep(@Param("id") Long id, @Param("companyId") Long companyId);
 
-    @Query("select a " +
+    @Query("SELECT a " +
             "FROM Application a " +
-            "where a.student.id = :studentId and a.id = :id")
+            "WHERE a.student.id = :studentId AND a.id = :id")
     Application getAppStudent(@Param("id") Long id, @Param("studentId") Long studentId);
 }

@@ -31,11 +31,17 @@ public class Job implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "description", length = 2000, nullable = false)
     private String description;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "skills", length = 2000, nullable = false)
+    private String skills;
+
+    @Column(name = "benefits", length = 2000, nullable = false)
+    private String benefits;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -63,10 +69,12 @@ public class Job implements Serializable {
     private Set<Application> applications;
     //----------[End]Mapping relationship----------
 
-    public Job(String name, String description, String title) {
+    public Job(String name, String title, String description, String skills, String benefits) {
         this.name = name;
-        this.description = description;
         this.title = title;
+        this.description = description;
+        this.skills = skills;
+        this.benefits = benefits;
     }
 
     public Job(Long id) {
