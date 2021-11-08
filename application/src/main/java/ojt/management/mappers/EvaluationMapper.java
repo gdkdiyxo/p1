@@ -8,5 +8,4 @@ import org.mapstruct.Mapper;
 public interface EvaluationMapper {
     EvaluationDTO evaluationToEvaluationDTO(Evaluation evaluation);
 
-    Evaluation evaluationDTOToEvaluation(EvaluationDTO evaluationDTO);
 }

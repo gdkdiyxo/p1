@@ -1,6 +1,5 @@
 package ojt.management.configuration.security;
 
-import ojt.management.configuration.cors.CORSFilter;
 import ojt.management.configuration.security.jwt.AuthEntryPointJwt;
 import ojt.management.configuration.security.jwt.AuthTokenFilter;
 import ojt.management.configuration.security.services.UserDetailsServiceImpl;

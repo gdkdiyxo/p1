@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationDTO implements Serializable{
+public class ApplicationDTO implements Serializable {
     private Long id;
     private String experience;
     private boolean isCompanyAccepted;
