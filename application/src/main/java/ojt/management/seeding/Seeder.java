@@ -76,9 +76,9 @@ public class Seeder {
         if (accountRepository.count() == 0) {
             seedAccount();
         }
-        if (companyRepository.count() == 0) {
-            seedCompany();
-        }
+//        if (companyRepository.count() == 0) {
+//            seedCompany();
+//        }
         if (jobRepository.count() == 0) {
             seedJob();
         }
@@ -120,9 +120,9 @@ public class Seeder {
         });
     }
 
-    private void seedCompany() {
-        companyRepository.saveAll(CompanyData.getSeedData());
-    }
+//    private void seedCompany() {
+//        companyRepository.saveAll(CompanyData.getSeedData());
+//    }
 
     private void seedJob() {
         List<Company> companies = companyRepository.findAll();
