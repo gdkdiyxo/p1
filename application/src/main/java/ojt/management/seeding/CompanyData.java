@@ -42,7 +42,9 @@ public class CompanyData {
                 new Company("CodeHQ (formerly Augen)", "CodeHQ (formerly Augen Software Group) is a New Zealand-owned software services provider. " +
                         "Our parent office in New Zealand was established in Auckland in 1993 and our subsidiary office, CodeHQ Vietnam, was established in Ho Chi Minh City in 2005. " +
                         "Our customers are in many industry sectors, including Banking, Finance, Insurance, Healthcare, " +
-                        "IT Infrastructure, Manufacturing, Professional Services, Software Innovation, Transport and Logistics, to name a few.", faker.address().fullAddress())
+                        "IT Infrastructure, Manufacturing, Professional Services, Software Innovation, Transport and Logistics, to name a few.", faker.address().fullAddress()),
+                new Company("Nakivo", "NAKIVO has an impressive track record of 5-star community reviews and over 97% customer satisfaction with support, " +
+                        "and has also won a Best of VMworld 2018” Gold Award for Data Protection at VMworld 2018 US. Customers trust us and we aim to deliver on that trust.", faker.address().fullAddress())
         );
         return companies;
     }
