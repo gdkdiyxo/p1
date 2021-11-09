@@ -76,7 +76,6 @@ public class JobServiceImpl implements JobService {
         job.setDescription(jobUpdateRequest.getDescription());
         job.setTitle(jobUpdateRequest.getTitle());
         job.setBenefits(jobUpdateRequest.getBenefits());
-        job.setSkills(jobUpdateRequest.getSkills());
 
         List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
                 .filter(id -> !job.getSemesters().stream()
@@ -123,7 +122,6 @@ public class JobServiceImpl implements JobService {
         job.setDescription(jobCreateRequest.getDescription());
         job.setTitle(jobCreateRequest.getTitle());
         job.setBenefits(jobCreateRequest.getBenefits());
-        job.setSkills(jobCreateRequest.getSkills());
 
         //Get company id of Rep
         if (account.getRepresentative() != null) {

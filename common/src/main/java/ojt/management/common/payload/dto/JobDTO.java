@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -15,8 +16,7 @@ public class JobDTO implements Serializable {
     private String name;
     private String title;
     private String description;
-    private String skills;
-    private String benefits;
+    private List<String> benefits;
     private Set<SemesterDTO> semesters;
     private Set<MajorDTO> majors;
     private CompanyDTO company;

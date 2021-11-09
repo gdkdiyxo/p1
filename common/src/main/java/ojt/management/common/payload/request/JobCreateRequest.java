@@ -21,7 +21,7 @@ public class JobCreateRequest extends JobRequest implements Serializable {
                             String title,
                             String description,
                             String skills,
-                            String benefits,
+                            List<String> benefits,
                             List<Long> semesterIds,
                             List<Long> majorIds,
                             Long companyId) {

@@ -35,9 +35,7 @@ public class JobRequest implements Serializable {
     private String skills;
 
     @NotNull
-    @NotBlank
-    @Size(max = 2000)
-    private String benefits;
+    private List<String> benefits;
 
     @NotNull
     private List<Long> semesterIds;
