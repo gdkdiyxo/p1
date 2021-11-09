@@ -5,10 +5,12 @@ import cz.jirutka.rsql.parser.ast.Node;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ojt.management.business.services.AccountService;
 import ojt.management.common.exceptions.AccountIdNotExistedException;
+import ojt.management.common.exceptions.NotPermissionException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.UserDTO;
 import ojt.management.common.payload.request.AccountRequest;
 import ojt.management.common.utils.SortUtils;
+import ojt.management.configuration.security.services.UserDetailsImpl;
 import ojt.management.data.entities.Account;
 import ojt.management.data.rsql.CustomRsqlVisitor;
 import ojt.management.mappers.UserMapper;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,9 +82,11 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('COMPANY_REPRESENTATIVE','SYS_ADMIN', 'STUDENT')")
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id,
-                              @Valid @RequestBody AccountRequest accountUpdateRequest)
-            throws AccountIdNotExistedException {
-        return userMapper.userToUserDTO(accountService.updateUser(id, accountUpdateRequest));
+                              @Valid @RequestBody AccountRequest accountUpdateRequest,
+                              Authentication authentication)
+            throws AccountIdNotExistedException, NotPermissionException {
+        Long accountId = ((UserDetailsImpl) authentication.getPrincipal()).getId();
+        return userMapper.userToUserDTO(accountService.updateUser(id, accountUpdateRequest, accountId));
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
