@@ -15,7 +15,14 @@ public class JobDTO implements Serializable {
     private Long id;
     private String name;
     private String title;
+    private String salary;
+    private List<String> topReasons;
     private String description;
+    private String aboutOurTeam;
+    private List<String> responsibilities;
+    private List<String> mustHaveSkills;
+    private List<String> niceToHaveSkills;
+    private String whyYouWillLove;
     private List<String> benefits;
     private Set<SemesterDTO> semesters;
     private Set<MajorDTO> majors;
