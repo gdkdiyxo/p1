@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,19 +23,40 @@ public class JobRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 255)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @NotNull
     @NotBlank
+    @Size(max = 255)
+    @Column(name = "salary", nullable = false)
+    private String salary;
+
+    @Size(max = 1000)
+    private List<String> topReasons;
+
     @Size(max = 2000)
     private String description;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 2000)
-    private String skills;
+    @Size(max = 1000)
+    private List<String> descriptionItems;
 
-    @NotNull
+    @Size(max = 2000)
+    private String aboutOurTeam;
+
+    @Size(max = 1000)
+    private List<String> responsibilities;
+
+    @Size(max = 1000)
+    private List<String> mustHaveSkills;
+
+    @Size(max = 1000)
+    private List<String> niceToHaveSkills;
+
+    @Size(max = 2000)
+    private String whyYouWillLove;
+
+    @Size(max = 1000)
     private List<String> benefits;
 
     @NotNull

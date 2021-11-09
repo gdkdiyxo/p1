@@ -45,36 +45,36 @@ public class Job implements Serializable {
     private String salary;
 
     @Type(type = "json")
-    @Column(columnDefinition = "jsonb", name = "top_reasons")
+    @Column(columnDefinition = "jsonb", name = "top_reasons", length = 1000)
     private List<String> topReasons;
 
-    @Column(name = "description", length = 2000, nullable = false)
+    @Column(name = "description", length = 2000)
     private String description;
 
     @Type(type = "json")
-    @Column(columnDefinition = "jsonb", name = "description_items")
+    @Column(columnDefinition = "jsonb", name = "description_items", length = 1000)
     private List<String> descriptionItems;
 
     @Column(name = "about_our_team", length = 2000)
     private String aboutOurTeam;
 
     @Type(type = "json")
-    @Column(columnDefinition = "jsonb", name = "responsibilities")
+    @Column(columnDefinition = "jsonb", name = "responsibilities", length = 1000)
     private List<String> responsibilities;
 
     @Type(type = "json")
-    @Column(columnDefinition = "jsonb", name = "must_have_skills")
+    @Column(columnDefinition = "jsonb", name = "must_have_skills", length = 1000)
     private List<String> mustHaveSkills;
 
     @Type(type = "json")
-    @Column(columnDefinition = "jsonb", name = "nice_to_have_skills")
+    @Column(columnDefinition = "jsonb", name = "nice_to_have_skills", length = 1000)
     private List<String> niceToHaveSkills;
 
     @Column(name = "why_you_will_love", length = 2000)
     private String whyYouWillLove;
 
     @Type(type = "json")
-    @Column(columnDefinition = "jsonb", name = "benefits")
+    @Column(columnDefinition = "jsonb", name = "benefits", length = 1000)
     private List<String> benefits;
 
     @CreatedDate

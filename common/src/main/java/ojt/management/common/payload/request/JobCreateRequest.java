@@ -16,16 +16,4 @@ import java.util.List;
 public class JobCreateRequest extends JobRequest implements Serializable {
     @NotNull
     private Long companyId;
-
-    public JobCreateRequest(String name,
-                            String title,
-                            String description,
-                            String skills,
-                            List<String> benefits,
-                            List<Long> semesterIds,
-                            List<Long> majorIds,
-                            Long companyId) {
-        super(name, title, description, skills, benefits, semesterIds, majorIds);
-        this.companyId = companyId;
-    }
 }
