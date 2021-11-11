@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 
 public class GenericRsqlSpecification<T> implements Specification<T> {
 
-    private String property;
-    private ComparisonOperator operator;
-    private List<String> arguments;
+    private final String property;
+    private final ComparisonOperator operator;
+    private final List<String> arguments;
 
     public GenericRsqlSpecification(final String property, final ComparisonOperator operator, final List<String> arguments) {
         super();

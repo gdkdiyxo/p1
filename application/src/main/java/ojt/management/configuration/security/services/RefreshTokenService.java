@@ -17,7 +17,7 @@ import static ojt.management.constants.SecurityConstants.JWT_REFRESH_EXPIRATION_
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccountRepository accountRepository;
-    private int refreshTokenDurationMs = JWT_REFRESH_EXPIRATION_MS;
+    private final int refreshTokenDurationMs = JWT_REFRESH_EXPIRATION_MS;
 
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, AccountRepository accountRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
