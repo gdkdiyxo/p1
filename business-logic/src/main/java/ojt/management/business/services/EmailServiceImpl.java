@@ -13,7 +13,7 @@ import java.io.File;
 @Component
 public class EmailServiceImpl implements EmailService {
 
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
 
     public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;

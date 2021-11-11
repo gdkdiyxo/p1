@@ -77,7 +77,6 @@ public class AccountRequest implements Serializable {
      * End of student Section
      **/
 
-
     // Constructor or admin creation
     public AccountRequest(String email, String password, String name, String role, String phone, String avatar) {
         this.email = email;
