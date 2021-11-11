@@ -47,60 +47,67 @@ public class AccountServiceImpl implements AccountService {
         if (Boolean.FALSE.equals(accountRepository.existsById(id))) {
             throw new AccountIdNotExistedException();
         }
-        Account account = accountRepository.getById(id);
-        Account accountTest = accountRepository.getById(accountId);
+        Account accountUpdated = accountRepository.getById(id);
+        Account accountCurrent = accountRepository.getById(accountId);
         // Update student
-        if (accountRepository.getById(id).getStudent() != null) {
-            if( (accountTest.getStudent() == null &&
-                    accountTest.getRepresentative() == null) ||
-                    (accountTest.getStudent() != null &&
-                            account.equals(accountTest))) {
-                account.setEmail(accountUpdateRequest.getEmail());
-                account.setPassword(accountUpdateRequest.getPassword());
-                account.setAvatar(accountUpdateRequest.getAvatar());
-                account.setName(accountUpdateRequest.getName());
-                account.setPhone(accountUpdateRequest.getPhone());
-                account.getStudent().setAddress(accountUpdateRequest.getAddress());
-                account.getStudent().setStudentCode(accountUpdateRequest.getStudentCode());
-                account.getStudent().setMajor(majorRepository.getById(accountUpdateRequest.getMajorId()));
-                account.getStudent().setSemester(semesterRepository.getById(accountUpdateRequest.getSemesterId()));
-                accountRepository.save(account);
+        if (accountUpdated.getStudent() != null && !accountUpdated.isDisabled()) { //account updated is student
+            if ((accountCurrent.isAdmin())) {
+                //admin update profile for student
+                accountUpdated.setEmail(accountUpdateRequest.getEmail());
+                accountUpdated.setAvatar(accountUpdateRequest.getAvatar());
+                accountUpdated.setName(accountUpdateRequest.getName());
+                accountUpdated.setPhone(accountUpdateRequest.getPhone());
+                accountUpdated.getStudent().setAddress(accountUpdateRequest.getAddress());
+                accountUpdated.getStudent().setStudentCode(accountUpdateRequest.getStudentCode());
+                accountUpdated.getStudent().setMajor(majorRepository.getById(accountUpdateRequest.getMajorId()));
+                accountUpdated.getStudent().setSemester(semesterRepository.getById(accountUpdateRequest.getSemesterId()));
+                accountRepository.save(accountUpdated);
+            } else if ((accountCurrent.getStudent() != null && accountUpdated.equals(accountCurrent))) {
+                //student update own profile
+                accountUpdated.setPassword(accountUpdateRequest.getPassword());
+                accountUpdated.setAvatar(accountUpdateRequest.getAvatar());
+                accountUpdated.setPhone(accountUpdateRequest.getPhone());
+                accountUpdated.getStudent().setAddress(accountUpdateRequest.getAddress());
+                accountRepository.save(accountUpdated);
             } else {
                 throw new NotPermissionException();
             }
-        // Update Rep
-        } else if(accountRepository.getById(id).getRepresentative() != null) {
-            if( (accountTest.getStudent() == null &&
-                    accountTest.getRepresentative() == null) ||
-                    (accountTest.getRepresentative() != null &&
-                            account.equals(accountTest))) {
-                account.setEmail(accountUpdateRequest.getEmail());
-                account.setPassword(accountUpdateRequest.getPassword());
-                account.setAvatar(accountUpdateRequest.getAvatar());
-                account.setName(accountUpdateRequest.getName());
-                account.setPhone(accountUpdateRequest.getPhone());
-                account.getRepresentative().getCompany().setName(accountUpdateRequest.getCompanyName());
-                account.getRepresentative().getCompany().setAddress(accountUpdateRequest.getCompanyAddress());
-                account.getRepresentative().getCompany().setDescription(accountUpdateRequest.getDescription());
-                accountRepository.save(account);
+            // Update Rep
+        } else if (accountUpdated.getRepresentative() != null && !accountUpdated.isDisabled()) {
+            if ((accountCurrent.isAdmin())) {
+                //admin update profile for rep
+                accountUpdated.setEmail(accountUpdateRequest.getEmail());
+                accountUpdated.setAvatar(accountUpdateRequest.getAvatar());
+                accountUpdated.setName(accountUpdateRequest.getName());
+                accountUpdated.setPhone(accountUpdateRequest.getPhone());
+                accountUpdated.getRepresentative().getCompany().setName(accountUpdateRequest.getCompanyName());
+                accountUpdated.getRepresentative().getCompany().setAddress(accountUpdateRequest.getCompanyAddress());
+                accountUpdated.getRepresentative().getCompany().setDescription(accountUpdateRequest.getDescription());
+                accountRepository.save(accountUpdated);
+            } else if ((accountCurrent.getRepresentative() != null && accountUpdated.equals(accountCurrent))) {
+                //rep update own profile
+                accountUpdated.setPassword(accountUpdateRequest.getPassword());
+                accountUpdated.setAvatar(accountUpdateRequest.getAvatar());
+                accountUpdated.setPhone(accountUpdateRequest.getPhone());
+                accountUpdated.getRepresentative().getCompany().setName(accountUpdateRequest.getCompanyName());
+                accountRepository.save(accountUpdated);
             } else {
                 throw new NotPermissionException();
             }
-        // Update Admin
+            // Update Admin
         } else {
-            if (accountTest.getRepresentative() == null &&
-                    accountTest.getStudent() == null){
-                account.setEmail(accountUpdateRequest.getEmail());
-                account.setPassword(accountUpdateRequest.getPassword());
-                account.setAvatar(accountUpdateRequest.getAvatar());
-                account.setName(accountUpdateRequest.getName());
-                account.setPhone(accountUpdateRequest.getPhone());
-                accountRepository.save(account);
+            if (accountCurrent.isAdmin()) {
+                accountUpdated.setEmail(accountUpdateRequest.getEmail());
+                accountUpdated.setPassword(accountUpdateRequest.getPassword());
+                accountUpdated.setAvatar(accountUpdateRequest.getAvatar());
+                accountUpdated.setName(accountUpdateRequest.getName());
+                accountUpdated.setPhone(accountUpdateRequest.getPhone());
+                accountRepository.save(accountUpdated);
             } else {
                 throw new NotPermissionException();
             }
         }
-        return account;
+        return accountUpdated;
     }
 
     @Override

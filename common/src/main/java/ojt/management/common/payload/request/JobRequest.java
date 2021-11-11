@@ -23,13 +23,11 @@ public class JobRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 255)
-    @Column(name = "title", nullable = false)
     private String title;
 
     @NotNull
     @NotBlank
     @Size(max = 255)
-    @Column(name = "salary", nullable = false)
     private String salary;
 
     @Size(max = 1000)
