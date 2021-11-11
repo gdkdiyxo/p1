@@ -82,5 +82,10 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.12.105</version>
         </dependency>
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.14.0</version>
+        </dependency>
     </dependencies>
 </project>

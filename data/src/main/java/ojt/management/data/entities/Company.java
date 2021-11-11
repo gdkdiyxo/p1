@@ -29,7 +29,7 @@ public class Company implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", length = 500, nullable = false)
+    @Column(name = "description", length = 2000, nullable = false)
     private String description;
 
     @Column(name = "address", length = 500)

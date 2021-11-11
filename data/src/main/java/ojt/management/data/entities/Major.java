@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -55,7 +56,7 @@ public class Major implements Serializable {
             name = "job_major",
             joinColumns = @JoinColumn(name = "major_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))
-    private Set<Job> jobs;
+    private Set<Job> jobs = new HashSet<>();
 
     @OneToMany(mappedBy = "major")
     private Set<Student> students;

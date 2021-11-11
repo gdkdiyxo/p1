@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT')")
 @RequestMapping("/majors")
 @SecurityRequirement(name = "bearerAuth")
 public class MajorController {
@@ -41,12 +40,14 @@ public class MajorController {
         this.majorService = majorService;
     }
 
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT','COMPANY_REPRESENTATIVE')")
     @GetMapping("/{id}")
     public MajorDTO getMajorById(@PathVariable Long id)
             throws MajorNotExistedException {
         return majorMapper.majorToMajorDTO(majorService.getMajorById(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT','COMPANY_REPRESENTATIVE')")
     @GetMapping()
     public PagedDataResponse<MajorDTO> searchMajor(@RequestParam(value = "search", required = false) String search,
                                                     @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,

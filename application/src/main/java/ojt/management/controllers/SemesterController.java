@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE')")
 @RequestMapping("/semesters")
 @SecurityRequirement(name = "bearerAuth")
 public class SemesterController {
@@ -41,11 +40,13 @@ public class SemesterController {
         this.semesterMapper = semesterMapper;
     }
 
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE')")
     @GetMapping("/{id}")
     public SemesterDTO getById(@PathVariable Long id) throws SemesterNotExistedException {
         return semesterMapper.semesterToSemesterDTO(semesterService.getById(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'STUDENT', 'COMPANY_REPRESENTATIVE')")
     @GetMapping()
     public PagedDataResponse<SemesterDTO> searchUser(@RequestParam(value = "search", required = false) String search,
                                                      @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,

@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SecurityRequirement(name = "bearerAuth")
 public class BucketController {
 
-    private AmazonClientService amazonClientService;
+    private final AmazonClientService amazonClientService;
 
     @Autowired
     BucketController(AmazonClientService amazonClientService) {
