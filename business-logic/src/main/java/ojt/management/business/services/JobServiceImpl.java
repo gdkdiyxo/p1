@@ -8,11 +8,12 @@ import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.JobRepository;
 import ojt.management.data.repositories.MajorRepository;
 import ojt.management.data.repositories.SemesterRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,22 +35,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> searchJobs(String name, String title, Long semesterId, Long majorId, Long accountId) {
-        Long repCompanyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
-        Account account = accountRepository.getById(accountId);
-        if (account.getRepresentative() != null) { //The Rep only get their own job
-            return jobRepository.searchJobByRep(Optional.ofNullable(name).orElse(""),
-                    Optional.ofNullable(title).orElse(""),
-                    semesterId,
-                    majorId,
-                    repCompanyId);
-        } else {
-            return jobRepository.searchJob(
-                    Optional.ofNullable(name).orElse(""),
-                    Optional.ofNullable(title).orElse(""),
-                    semesterId,
-                    majorId);
-        }
+    public Page<Job> searchJob(Specification<Job> specification, Pageable pageable) {
+        return jobRepository.findAll(specification, pageable);
     }
 
     @Override
@@ -83,23 +70,10 @@ public class JobServiceImpl implements JobService {
 
         validateSemesterIdsAndMajorIds(jobUpdateRequest);
 
-        Job job = jobRepository.getById(idJob);
-        job.setName(jobUpdateRequest.getName());
-        job.setDescription(jobUpdateRequest.getDescription());
-        job.setTitle(jobUpdateRequest.getTitle());
-        job.setBenefits(jobUpdateRequest.getBenefits());
-        job.setSkills(jobUpdateRequest.getSkills());
+        Job job = initJob(jobUpdateRequest);
 
-        List<Long> newSemesterIds = jobUpdateRequest.getSemesterIds().stream()
-                .filter(id -> !job.getSemesters().stream()
-                        .map(Semester::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
-        job.getSemesters().addAll(newSemesterIds.stream().map(Semester::new).collect(Collectors.toList()));
-
-        List<Long> newMajorIds = jobUpdateRequest.getMajorIds().stream()
-                .filter(id -> !job.getMajors().stream()
-                        .map(Major::getId).collect(Collectors.toList()).contains(id)).collect(Collectors.toList());
-        job.getMajors().addAll(newMajorIds.stream().map(Major::new).collect(Collectors.toList()));
-
+        job.setSemesters(semesterRepository.findAllByIdIn(jobUpdateRequest.getSemesterIds()).stream().collect(Collectors.toSet()));
+        job.setMajors(majorRepository.findAllByIdIn(jobUpdateRequest.getMajorIds()).stream().collect(Collectors.toSet()));
         return jobRepository.save(job);
     }
 
@@ -125,34 +99,42 @@ public class JobServiceImpl implements JobService {
         return false;
     }
 
+    private Job initJob(JobRequest jobRequest) {
+        Job job = new Job();
+        job.setName(jobRequest.getName());
+        job.setTitle(jobRequest.getTitle());
+        job.setSalary(jobRequest.getSalary());
+        job.setDescription(jobRequest.getDescription());
+        job.setDescriptionItems(jobRequest.getDescriptionItems());
+        job.setAboutOurTeam(jobRequest.getAboutOurTeam());
+        job.setResponsibilities(jobRequest.getResponsibilities());
+        job.setMustHaveSkills(jobRequest.getMustHaveSkills());
+        job.setNiceToHaveSkills(jobRequest.getNiceToHaveSkills());
+        job.setWhyYouWillLove(jobRequest.getWhyYouWillLove());
+        job.setNiceToHaveSkills(jobRequest.getNiceToHaveSkills());
+        job.setBenefits(jobRequest.getBenefits());
+        return job;
+    }
+
     @Override
     public Job createJob(JobCreateRequest jobCreateRequest, Long accountId) throws CrudException {
         validateSemesterIdsAndMajorIds(jobCreateRequest);
         Account account = accountRepository.getById(accountId);
-        Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
         // create new job
-        Job job = new Job();
-        job.setName(jobCreateRequest.getName());
-        job.setDescription(jobCreateRequest.getDescription());
-        job.setTitle(jobCreateRequest.getTitle());
-        job.setBenefits(jobCreateRequest.getBenefits());
-        job.setSkills(jobCreateRequest.getSkills());
+        Job job = initJob(jobCreateRequest);
 
         //Get company id of Rep
         if (account.getRepresentative() != null) {
+            Long companyId = accountRepository.getById(accountId).getRepresentative().getCompany().getId();
             job.setCompany(new Company(companyId));
-        } else {
+        } else if (account.isAdmin()) {
             job.setCompany(new Company(jobCreateRequest.getCompanyId()));
         }
 
         job = jobRepository.save(job);
-        List<Semester> semesters = semesterRepository.findAllByIdIn(jobCreateRequest.getSemesterIds());
-        List<Major> majors = majorRepository.findAllByIdIn(jobCreateRequest.getMajorIds());
-        AtomicReference<Job> jobAtomicReference = new AtomicReference<>(job);
-        semesters.forEach(semester -> semester.getJobs().add(jobAtomicReference.get()));
-        majors.forEach(major -> major.getJobs().add(jobAtomicReference.get()));
-        job.setSemesters(semesters.stream().collect(Collectors.toSet()));
-        job.setMajors(majors.stream().collect(Collectors.toSet()));
+        job.setSemesters(semesterRepository.findAllByIdIn(jobCreateRequest.getSemesterIds()).stream().collect(Collectors.toSet()));
+        job.setMajors(majorRepository.findAllByIdIn(jobCreateRequest.getMajorIds()).stream().collect(Collectors.toSet()));
+
         return jobRepository.save(job);
     }
 

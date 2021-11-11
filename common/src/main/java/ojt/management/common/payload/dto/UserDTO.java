@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +18,6 @@ public class UserDTO implements Serializable {
     private String phone;
     private StudentDTO student;
     private CompanyDTO company;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }

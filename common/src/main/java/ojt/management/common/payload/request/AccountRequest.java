@@ -49,7 +49,7 @@ public class AccountRequest implements Serializable {
 
     @NotNull
     @NotBlank
-    @Size(max = 500)
+    @Size(max = 2000)
     private String description;
 
     @Size(max = 500)

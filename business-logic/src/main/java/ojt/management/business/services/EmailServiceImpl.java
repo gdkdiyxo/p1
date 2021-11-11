@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
         helper.setFrom("noreply@baeldung.com");
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(html,true);
+        helper.setText(html, true);
 
         emailSender.send(message);
     }

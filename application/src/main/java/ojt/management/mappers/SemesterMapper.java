@@ -7,6 +7,4 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SemesterMapper {
     SemesterDTO semesterToSemesterDTO(Semester semester);
-
-    Semester semesterDTOToSemester(SemesterDTO semesterDTO);
 }

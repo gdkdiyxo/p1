@@ -8,6 +8,8 @@ import ojt.management.common.exceptions.MajorNameAlreadyExistedException;
 import ojt.management.common.exceptions.MajorNotExistedException;
 import ojt.management.common.payload.PagedDataResponse;
 import ojt.management.common.payload.dto.MajorDTO;
+import ojt.management.common.payload.request.MajorDeletionRequest;
+import ojt.management.common.payload.request.MajorRequest;
 import ojt.management.common.utils.SortUtils;
 import ojt.management.data.entities.Major;
 import ojt.management.data.rsql.CustomRsqlVisitor;
@@ -18,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import ojt.management.common.payload.request.MajorRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class MajorController {
     }
 
     @GetMapping()
-    public PagedDataResponse<MajorDTO> searchUser(@RequestParam(value = "search", required = false) String search,
+    public PagedDataResponse<MajorDTO> searchMajor(@RequestParam(value = "search", required = false) String search,
                                                     @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
                                                     @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,
                                                     @RequestParam(value = "sortBy", required = false, defaultValue = "id ASC") String sortBy) {
@@ -76,6 +77,17 @@ public class MajorController {
     @DeleteMapping("/{id}")
     public boolean deleteMajor(@PathVariable Long id) throws MajorNotExistedException {
         return majorService.deleteMajor(id);
+    }
+
+    @DeleteMapping
+    public boolean deleteMajors(@RequestBody MajorDeletionRequest majorDeletionRequest) throws MajorNotExistedException {
+        return majorService.deleteMajors(majorDeletionRequest.getIds());
+    }
+
+    @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")
+    @PatchMapping("/{id}/recover")
+    public boolean recoverMajor(@PathVariable Long id) throws MajorNotExistedException {
+        return majorService.recoverMajor(id);
     }
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN')")

@@ -11,11 +11,12 @@ import ojt.management.data.entities.Job;
 import ojt.management.data.repositories.AccountRepository;
 import ojt.management.data.repositories.ApplicationRepository;
 import ojt.management.data.repositories.JobRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -33,17 +34,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<Application> searchApplication(String name, String title, Long accountId) {
-        Account account = accountRepository.getById(accountId);
-        if (account.getRepresentative() != null){
-            return applicationRepository.searchAppByRep(Optional.ofNullable(name).orElse(""),
-                    Optional.ofNullable(title).orElse(""),
-                    account.getRepresentative().getCompany().getId());
-        } else {
-            return applicationRepository.searchAppByStu(Optional.ofNullable(name).orElse(""),
-                    Optional.ofNullable(title).orElse(""),
-                    account.getStudent().getId());
-        }
+    public Page<Application> searchApplication(Specification<Application> specification, Pageable pageable) {
+        return applicationRepository.findAll(specification, pageable);
     }
 
     @Override

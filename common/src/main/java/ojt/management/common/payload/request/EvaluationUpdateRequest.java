@@ -1,4 +1,5 @@
 package ojt.management.common.payload.request;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EvaluationUpdateRequest implements  Serializable{
+public class EvaluationUpdateRequest implements Serializable {
     @NotNull
     @NotBlank
     @Size(max = 500)
