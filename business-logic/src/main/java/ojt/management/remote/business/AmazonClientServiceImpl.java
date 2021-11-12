@@ -67,6 +67,9 @@ public class AmazonClientServiceImpl implements AmazonClientService {
     public Attachment uploadFile(MultipartFile multipartFile, Long accountId) {
         String fileName = generateFileName(multipartFile);
         String key = UUID.randomUUID().toString();
+        while(attachmentRepository.existsById(key)){
+            key = UUID.randomUUID().toString();
+        }
         try {
             uploadFileTos3bucket(fileName, multipartFile, key, accountId);
         } catch (Exception e) {
